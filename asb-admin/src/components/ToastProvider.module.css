@@ -1,0 +1,38 @@
+.stack {
+  position: fixed;
+  right: 16px;
+  top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 80;
+}
+
+.toast {
+  width: min(380px, calc(100vw - 32px));
+  padding: 12px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(15, 23, 51, 0.95);
+  box-shadow: 0 18px 55px rgba(0,0,0,0.5);
+  color: #eaf0ff;
+  font-weight: 800;
+  font-size: 13px;
+}
+
+.msg { opacity: 0.95; line-height: 1.35; }
+
+.success {
+  border-color: rgba(40, 220, 140, 0.28);
+  background: rgba(15, 23, 51, 0.92);
+}
+
+.error {
+  border-color: rgba(255, 80, 80, 0.35);
+  background: rgba(15, 23, 51, 0.92);
+}
+
+.info {
+  border-color: rgba(194,77,255,0.30);
+  background: rgba(15, 23, 51, 0.92);
+}

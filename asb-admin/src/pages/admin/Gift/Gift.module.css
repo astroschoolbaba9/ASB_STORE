@@ -1,0 +1,144 @@
+.wrap {
+  padding: 18px;
+}
+
+.top {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.h1 {
+  margin: 0;
+  font-size: 26px;
+}
+
+.sub {
+  margin-top: 6px;
+  opacity: 0.7;
+}
+
+.topBtns {
+  display: flex;
+  gap: 10px;
+}
+
+.state {
+  padding: 18px;
+  opacity: 0.8;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.card {
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: 14px;
+  background: rgba(255,255,255,0.03);
+}
+
+.cardWide {
+  grid-column: 1 / -1;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: 14px;
+  background: rgba(255,255,255,0.03);
+}
+
+.cardTitle {
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 8px 0;
+}
+
+.field {
+  display: block;
+  margin: 10px 0;
+}
+
+.label {
+  font-size: 13px;
+  opacity: 0.75;
+  margin-bottom: 6px;
+}
+
+.input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(0,0,0,0.2);
+  color: inherit;
+  outline: none;
+}
+
+.textarea {
+  width: 100%;
+  min-height: 180px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(0,0,0,0.2);
+  color: inherit;
+  outline: none;
+  resize: vertical;
+  margin-top: 10px;
+}
+
+.btnGhost {
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.btnPrimary {
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: none;
+  background: #8657ff;
+  color: #fff;
+  cursor: pointer;
+}
+
+.errorBox {
+  border: 1px solid rgba(255,0,0,0.25);
+  background: rgba(255,0,0,0.08);
+  border-radius: 14px;
+  padding: 14px;
+}
+
+.errorTitle {
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+
+.errorMsg {
+  opacity: 0.85;
+}
+
+.okBox {
+  border: 1px solid rgba(0,255,140,0.25);
+  background: rgba(0,255,140,0.08);
+  border-radius: 14px;
+  padding: 12px 14px;
+  margin-bottom: 12px;
+}
+
+.muted {
+  opacity: 0.7;
+}

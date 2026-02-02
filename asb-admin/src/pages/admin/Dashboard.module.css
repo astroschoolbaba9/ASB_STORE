@@ -1,0 +1,178 @@
+.wrap {
+  padding: 6px;
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.h1 {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 900;
+}
+
+.sub {
+  margin-top: 6px;
+  opacity: 0.8;
+  font-size: 13px;
+}
+
+.refreshBtn {
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.06);
+  color: #eaf0ff;
+  padding: 10px 12px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.state {
+  padding: 14px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.10);
+  font-weight: 800;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.card {
+  padding: 14px;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.10);
+}
+
+.cardLabel {
+  font-size: 13px;
+  opacity: 0.8;
+  font-weight: 800;
+}
+
+.cardValue {
+  margin-top: 8px;
+  font-size: 34px;
+  font-weight: 950;
+}
+
+.cardHint {
+  margin-top: 6px;
+  font-size: 12px;
+  opacity: 0.75;
+}
+
+.links {
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.linkCard {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  padding: 14px;
+  border-radius: 16px;
+  background: rgba(194, 77, 255, 0.10);
+  border: 1px solid rgba(194, 77, 255, 0.25);
+}
+
+.linkCard:hover {
+  background: rgba(194, 77, 255, 0.14);
+}
+
+.linkTitle {
+  font-weight: 900;
+}
+
+.linkSub {
+  margin-top: 6px;
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+.errorBox {
+  padding: 14px;
+  border-radius: 16px;
+  background: rgba(255, 50, 50, 0.10);
+  border: 1px solid rgba(255, 50, 50, 0.30);
+}
+
+.errorTitle {
+  font-weight: 950;
+}
+
+.errorMsg {
+  margin-top: 6px;
+  opacity: 0.95;
+}
+
+.smallHint {
+  margin-top: 10px;
+  font-size: 12px;
+  opacity: 0.9;
+}
+
+.smallHint code {
+  margin-left: 6px;
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+  .links {
+    grid-template-columns: 1fr;
+  }
+}
+.tableCard {
+  margin-top: 14px;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: 14px;
+  background: rgba(255,255,255,0.03);
+}
+
+.tableTitle {
+  font-weight: 800;
+  margin-bottom: 10px;
+}
+
+.table {
+  display: grid;
+  gap: 8px;
+}
+
+.thead {
+  display: grid;
+  grid-template-columns: 1.2fr 0.6fr 0.8fr;
+  gap: 10px;
+  font-weight: 700;
+  opacity: 0.8;
+}
+
+.trow {
+  display: grid;
+  grid-template-columns: 1.2fr 0.6fr 0.8fr;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  background: rgba(0,0,0,0.15);
+}
+
+.muted {
+  opacity: 0.7;
+}
+
