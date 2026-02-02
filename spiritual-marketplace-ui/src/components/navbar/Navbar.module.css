@@ -1,0 +1,455 @@
+/* =========================
+   WRAPPER
+========================= */
+.wrap {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border);
+}
+
+.row {
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+/* =========================
+   BRAND
+========================= */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  min-width: 220px;
+}
+
+.logo {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  object-fit: contain;
+}
+
+.brandText {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.05;
+}
+
+.brandName {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--asb-violet);
+  background: linear-gradient(90deg, var(--asb-magenta), var(--asb-violet));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.brandTag {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* =========================
+   NAVBAR
+========================= */
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  white-space: nowrap;
+}
+
+.navItem {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+/* label + caret layout */
+.navLabel{
+  display: inline-block;
+}
+
+.caret{
+  display: inline-block;
+  margin-left: 7px;
+  font-size: 10px;
+  opacity: 0.75;
+  transform: translateY(-1px);
+  transition: transform 180ms ease, opacity 180ms ease;
+}
+
+.caretOpen{
+  transform: translateY(-1px) rotate(180deg);
+  opacity: 0.95;
+}
+
+/* shared for <Link> and <button> */
+.navLink {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  text-decoration: none;
+
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--text);
+
+  padding: 10px 12px;
+  border-radius: 999px;
+  white-space: nowrap;
+
+  transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.navLink:hover {
+  background: rgba(106, 92, 255, 0.08);
+  color: var(--asb-violet);
+  box-shadow: 0 8px 18px rgba(106, 92, 255, 0.08);
+}
+
+/* =========================
+   DROPDOWN
+========================= */
+.dropdown{
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 0;
+  min-width: 260px;
+  max-height: 360px;
+  overflow-y: auto;
+  pointer-events: auto;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 10px;
+
+  box-shadow: 0 14px 30px rgba(17, 24, 39, 0.12);
+
+  /* animation */
+  transform-origin: top;
+  animation: dropdownIn 160ms ease-out;
+}
+
+@keyframes dropdownIn{
+  from{
+    opacity: 0;
+    transform: translateY(6px) scale(0.98);
+  }
+  to{
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+.dropItem{
+  transition: background 160ms ease, color 160ms ease, transform 160ms ease;
+}
+
+.dropItem:hover{
+  transform: translateX(2px);
+}
+
+
+.dropList {
+  display: grid;
+  gap: 6px;
+}
+
+.dropItem {
+  appearance: none;
+  border: 0;
+  background: transparent;
+
+  text-decoration: none;
+  text-align: left;
+  cursor: pointer;
+
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--asb-text);
+
+  padding: 10px 12px;
+  border-radius: 10px;
+}
+
+.dropItem:hover {
+  background: linear-gradient(90deg, var(--asb-magenta), var(--asb-violet));
+  color: #ffffff;
+}
+
+/* =========================
+   RIGHT ICONS
+========================= */
+.right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 220px;
+  justify-content: flex-end;
+}
+
+.iconBtn {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.iconBtn:hover {
+  border-color: rgba(106, 92, 255, 0.35);
+  box-shadow: 0 8px 18px rgba(106, 92, 255, 0.1);
+}
+
+.hamburger {
+  display: none;
+}
+
+/* =========================
+   MOBILE MENU
+========================= */
+@media (max-width: 980px) {
+  .nav {
+    display: none;
+  }
+
+  .hamburger {
+    display: grid;
+  }
+
+  .brand,
+  .right {
+    min-width: unset;
+  }
+}
+
+.mobileBackdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(17, 24, 39, 0.45);
+  z-index: 999;
+  display: grid;
+  place-items: start end;
+  padding: 14px;
+}
+
+.mobilePanel {
+  width: min(360px, 92vw);
+  height: 100%;
+  background: var(--surface);
+  border-left: 1px solid var(--border);
+  box-shadow: -18px 0 38px rgba(17, 24, 39, 0.18);
+  height: calc(100dvh - 28px);
+  padding: 14px;
+
+  /* ✅ KEY FIX */
+  display: grid;
+  grid-template-rows: auto 1fr; /* top + scroll area */
+  gap: 12px;
+
+  /* optional (helps on iOS) */
+  overflow: hidden;
+}
+
+
+.mobileTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mobileTitle {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 18px;
+  font-weight: 900;
+  color: var(--asb-violet);
+}
+
+.mobileClose {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: #ffffff;
+  cursor: pointer;
+  font-weight: 900;
+}
+
+.mobileNav {
+  display: grid;
+  gap: 12px;
+
+  /* ✅ KEY FIX */
+  overflow-y: auto;
+  min-height: 0; /* IMPORTANT for grid children */
+  -webkit-overflow-scrolling: touch;
+}
+
+
+.mItem {
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 12px;
+  background: rgba(106, 92, 255, 0.04);
+  display: grid;
+  gap: 8px;
+}
+
+.mLink {
+  text-decoration: none;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.mDropList {
+  display: grid;
+  gap: 6px;
+}
+
+.mDropItem {
+  text-decoration: none;
+  border-radius: 12px;
+  padding: 10px 12px;
+  font-weight: 700;
+  color: var(--asb-text);
+  border: 1px solid var(--border);
+  background: rgba(106, 92, 255, 0.06);
+}
+
+.mDropItem:hover {
+  background: linear-gradient(90deg, var(--asb-magenta), var(--asb-violet));
+  color: #ffffff;
+}
+
+.badgeCount{
+  position: absolute;
+  transform: translate(14px, -12px);
+  min-width: 18px;
+  height: 18px;
+  padding: 0 6px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  font-size: 11px;
+  font-weight: 900;
+  color: #fff;
+  background: linear-gradient(90deg, var(--asb-magenta), var(--asb-violet));
+  border: 1px solid rgba(255,255,255,0.75);
+}
+
+.iconBtn{
+  position: relative;
+}
+.cartBtn{
+  position: relative;
+}
+
+.badge{
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  font-size: 11px;
+  font-weight: 900;
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.65);
+  background: linear-gradient(90deg, var(--asb-magenta), var(--asb-violet));
+}
+/* =========================
+   EXTERNAL NAV TRANSITION
+========================= */
+.xfade {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(12px);
+  display: grid;
+  place-items: center;
+  animation: xfadeIn 260ms ease-out forwards;
+}
+
+@keyframes xfadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+}
+
+.xfadeCard {
+  width: min(520px, 92vw);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--surface);
+  box-shadow: 0 18px 40px rgba(17, 24, 39, 0.12);
+  padding: 16px;
+}
+
+.xfadeTitle {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 18px;
+  font-weight: 900;
+  color: var(--asb-violet);
+  margin-bottom: 6px;
+}
+
+.xfadeSub {
+  color: var(--muted);
+  font-weight: 700;
+  margin: 0;
+}
+
+.xfadeBar {
+  height: 10px;
+  border-radius: 999px;
+  margin-top: 14px;
+  background: rgba(106, 92, 255, 0.12);
+  overflow: hidden;
+  position: relative;
+}
+
+.xfadeBar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-50%);
+  animation: xbar 780ms ease-in-out infinite;
+  background: linear-gradient(90deg, var(--asb-magenta), var(--asb-violet));
+}
+
+@keyframes xbar {
+  0% { transform: translateX(-70%); }
+  50% { transform: translateX(0%); }
+  100% { transform: translateX(70%); }
+}
+.navbar{
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+

@@ -1,0 +1,44 @@
+.panel{
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 0;
+  width: 280px;
+  max-height: 360px;
+  overflow: auto;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  padding: 10px;
+}
+
+.item{
+  display: flex;
+  align-items: center;
+  padding: 10px 12px;
+  border-radius: 12px;
+  font-size: 14px;
+  color: var(--text);
+  cursor: pointer;
+  transition: background 160ms ease, color 160ms ease;
+}
+
+.item:hover{
+  background: var(--purple);
+  color: white;
+}
+
+.sep{
+  height: 1px;
+  background: rgba(17,24,39,0.08);
+  margin: 8px 0;
+}
+
+.panel::-webkit-scrollbar{ width: 10px; }
+.panel::-webkit-scrollbar-thumb{
+  background: rgba(17,24,39,0.12);
+  border-radius: 10px;
+}
+.panel::-webkit-scrollbar-thumb:hover{
+  background: rgba(17,24,39,0.18);
+}

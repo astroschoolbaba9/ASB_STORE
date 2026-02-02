@@ -1,0 +1,133 @@
+.fab{
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 99999;
+
+  width: 54px;
+  height: 54px;
+  border-radius: 999px;
+
+  display: grid;
+  place-items: center;
+
+  /* ✅ ASB gradient */
+  background: linear-gradient(90deg, #C24DFF, #8657FF);
+  border: 1px solid rgba(255,255,255,0.22);
+  box-shadow: 0 18px 40px rgba(134,87,255,0.26);
+
+  text-decoration: none;
+
+  transform: translateY(0) scale(1);
+  opacity: 0.96;
+  transition: transform 180ms ease, opacity 180ms ease;
+}
+
+/* Hover lift */
+.fab:hover{
+  transform: translateY(-2px) scale(1.02);
+  opacity: 1;
+}
+
+/* ✅ Auto-hide animation */
+.hidden{
+  transform: translateY(18px) scale(0.92);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Icon bubble */
+.icon{
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+
+  display: grid;
+  place-items: center;
+
+  background: rgba(255,255,255,0.16);
+  border: 1px solid rgba(255,255,255,0.20);
+
+  font-size: 18px;
+  color: #fff;
+
+  position: relative;
+}
+
+/* ✅ Pulsing glow ring */
+.fab::before{
+  content:"";
+  position: absolute;
+  width: 64px;
+  height: 64px;
+  border-radius: 999px;
+
+  background: radial-gradient(circle, rgba(194,77,255,0.28), rgba(134,87,255,0.0) 65%);
+  animation: pulse 1.8s ease-out infinite;
+  pointer-events: none;
+  opacity: 0.9;
+}
+
+/* Reduce pulse on hover so it feels controlled */
+.fab:hover::before{
+  opacity: 0.55;
+}
+
+@keyframes pulse{
+  0%   { transform: scale(0.88); opacity: 0.75; }
+  70%  { transform: scale(1.20); opacity: 0.18; }
+  100% { transform: scale(1.28); opacity: 0; }
+}
+
+/* ✅ Tooltip "Need help?" on hover */
+.tooltip{
+  position: absolute;
+  right: 66px;
+  bottom: 50%;
+  transform: translateY(50%);
+
+  padding: 8px 10px;
+  border-radius: 12px;
+
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+
+  color: rgba(17,24,39,0.92);
+  background: rgba(255,255,255,0.92);
+  border: 1px solid rgba(124,58,237,0.14);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.10);
+
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 160ms ease, transform 160ms ease;
+  white-space: nowrap;
+}
+
+/* Tooltip arrow */
+.tooltip::after{
+  content:"";
+  position: absolute;
+  right: -6px;
+  top: 50%;
+  transform: translateY(-50%) rotate(45deg);
+  width: 10px;
+  height: 10px;
+  background: rgba(255,255,255,0.92);
+  border-right: 1px solid rgba(124,58,237,0.14);
+  border-top: 1px solid rgba(124,58,237,0.14);
+}
+
+.fab:hover .tooltip{
+  opacity: 1;
+  transform: translateY(50%) translateX(-2px);
+}
+
+/* Mobile: keep it clean */
+@media (max-width: 520px){
+  .tooltip{ display: none; }
+  .fab{
+    right: 14px;
+    bottom: 14px;
+  }
+}

@@ -1,0 +1,55 @@
+/* Global ASB Buttons (Use everywhere) */
+
+.btn-primary{
+  background: linear-gradient(90deg, var(--asb-magenta), var(--asb-violet));
+  border: none;
+  color: #ffffff;
+  box-shadow: 0 2px 10px rgba(106, 92, 255, 0.22);
+  border-radius: 10px;
+  padding: 0.55rem 1.05rem;
+  font-size: 0.95rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: filter 0.15s ease-in-out, transform 0.12s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-decoration: none;
+  min-height: 42px;
+}
+
+.btn-primary:hover{
+  filter: brightness(1.03);
+  transform: translateY(-1px);
+}
+
+.btn-outline{
+  background: transparent;
+  border: 1px solid var(--asb-gold);
+  color: var(--asb-text);
+  border-radius: 10px;
+  padding: 0.55rem 1.05rem;
+  font-size: 0.95rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: filter 0.15s ease-in-out, transform 0.12s ease, background 0.12s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-decoration: none;
+  min-height: 42px;
+}
+
+.btn-outline:hover{
+  background: rgba(230, 200, 122, 0.14);
+  transform: translateY(-1px);
+}
+
+/* Optional small button size */
+.btn-sm{
+  padding: 0.42rem 0.8rem;
+  min-height: 36px;
+  font-size: 0.9rem;
+}

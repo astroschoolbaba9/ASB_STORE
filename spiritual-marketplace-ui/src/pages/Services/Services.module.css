@@ -1,0 +1,111 @@
+.page{ display:grid; gap: 14px; }
+
+.hero{
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 14px;
+  box-shadow: 0 10px 22px rgba(17,24,39,0.06);
+}
+
+.tag{
+  display:inline-block;
+  background: rgba(106,92,255,0.10);
+  color: var(--asb-violet);
+  font-weight: 900;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+}
+
+.h1{ font-size: 34px; line-height: 1.1; margin: 10px 0 0; }
+.sub{ color: var(--muted); margin: 8px 0 0; max-width: 85ch; }
+
+.actions{ display:flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+.btnLink{ text-decoration:none; display:inline-flex; align-items:center; justify-content:center; }
+
+/* ✅ Quick jump pills */
+.jump{
+  display:flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.jumpBtn{
+  text-decoration: none;
+  font-weight: 900;
+  font-size: 12px;
+  padding: 8px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.72);
+  color: var(--asb-violet);
+}
+
+.jumpBtn:hover{
+  background: rgba(106,92,255,0.08);
+}
+
+/* ✅ Sections */
+.sections{
+  display: grid;
+  gap: 14px;
+}
+
+.section{
+  background: rgba(255,255,255,0.92);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 14px;
+  box-shadow: 0 10px 22px rgba(17,24,39,0.06);
+
+  /* Anchor scroll offset (helps if navbar is sticky) */
+  scroll-margin-top: 96px;
+}
+
+.h2{
+  font-family: "Playfair Display", Georgia, serif;
+  font-weight: 900;
+  color: var(--asb-violet);
+  margin: 0 0 6px;
+  font-size: 20px;
+}
+
+.copy{
+  color: var(--muted);
+  margin: 0;
+  max-width: 92ch;
+  line-height: 1.55;
+}
+
+.ctaRow{
+  display:flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+/* Keep your previous grid/card styles (harmless, in case used elsewhere) */
+.grid{ display:grid; gap: 14px; grid-template-columns: 1fr; }
+
+.card{
+  background: rgba(255,255,255,0.92);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 14px;
+  box-shadow: 0 10px 22px rgba(17,24,39,0.06);
+}
+
+.cardTitle{
+  font-family: "Playfair Display", Georgia, serif;
+  font-weight: 900;
+  color: var(--asb-violet);
+  margin-bottom: 6px;
+}
+
+.muted{ color: var(--muted); margin: 0; }
+
+@media (min-width: 1024px){
+  .grid{ grid-template-columns: 1fr 1fr 1fr; }
+}

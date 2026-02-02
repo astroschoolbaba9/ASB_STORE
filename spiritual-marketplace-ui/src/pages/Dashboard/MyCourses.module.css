@@ -1,0 +1,92 @@
+.page{ padding: 6px 0; }
+
+.head{
+  display:flex;
+  align-items:flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.title{
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 22px;
+  font-weight: 900;
+}
+
+.sub{
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+@media (max-width: 1024px){
+  .grid{ grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 680px){
+  .grid{ grid-template-columns: 1fr; }
+}
+
+.card{
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--surface);
+  box-shadow: var(--shadow-soft);
+  padding: 14px;
+}
+
+.cardTop{
+  display:flex;
+  align-items:center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.level{
+  padding: 7px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  font-weight: 900;
+  font-size: 12px;
+  background: rgba(106,92,255,0.06);
+}
+
+.progressText{
+  font-weight: 900;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.name{
+  font-weight: 900;
+  font-size: 15px;
+  line-height: 1.35;
+  margin-bottom: 10px;
+}
+
+.progressBar{
+  height: 12px;
+  border-radius: 999px;
+  background: rgba(17,24,39,0.08);
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.progressFill{
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--asb-magenta), var(--asb-violet));
+}
+
+.actions{
+  display:flex;
+  gap: 10px;
+  justify-content: space-between;
+}

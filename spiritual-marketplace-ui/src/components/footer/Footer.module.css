@@ -1,0 +1,184 @@
+.footer{
+  margin-top: 80px;
+  background: linear-gradient(
+    180deg,
+    rgba(124,58,237,0.08),
+    rgba(255,255,255,0)
+  );
+  border-top: 1px solid rgba(124,58,237,0.15);
+}
+
+.inner{
+  max-width: 1200px;
+  margin: auto;
+  padding: 36px 20px;
+  display: grid;
+  grid-template-columns: 1.2fr 2fr;
+  gap: 32px;
+}
+
+.brand{
+  max-width: 420px;
+}
+
+.logo{
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--purple);
+  letter-spacing: 0.5px;
+}
+
+.tagline{
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+.note{
+  margin-top: 10px;
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+/* ✅ Connect block */
+.connect{
+  margin-top: 14px;
+  border-top: 1px solid rgba(124,58,237,0.12);
+  padding-top: 12px;
+  display: grid;
+  gap: 10px;
+}
+
+.connectTitle{
+  font-size: 13px;
+  font-weight: 900;
+  color: rgba(17,24,39,0.8);
+  letter-spacing: 0.2px;
+}
+
+.contactRow{
+  display: grid;
+  gap: 4px;
+  text-decoration: none;
+  padding: 10px 10px;
+  border: 1px solid rgba(124,58,237,0.12);
+  border-radius: 14px;
+  background: rgba(255,255,255,0.65);
+}
+
+.contactRow:hover{
+  border-color: rgba(124,58,237,0.25);
+  background: rgba(124,58,237,0.06);
+}
+
+.contactLabel{
+  font-size: 12px;
+  font-weight: 900;
+  color: rgba(17,24,39,0.65);
+}
+
+.contactValue{
+  font-size: 13px;
+  font-weight: 900;
+  color: rgba(17,24,39,0.85);
+  line-height: 1.35;
+  overflow-wrap: anywhere; /* ✅ wraps long address/email */
+}
+
+.iconRow{
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.iconBtn{
+  width: 40px;
+  height: 40px;
+  border-radius: 14px;
+  border: 1px solid rgba(124,58,237,0.14);
+  background: rgba(255,255,255,0.7);
+  display: grid;
+  place-items: center;
+  color: rgba(17,24,39,0.78);
+  text-decoration: none;
+}
+
+.iconBtn:hover{
+  color: var(--purple);
+  border-color: rgba(124,58,237,0.30);
+  background: rgba(124,58,237,0.06);
+}
+
+.cols{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.col h4{
+  margin-bottom: 10px;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.col a{
+  display: block;
+  font-size: 14px;
+  margin-bottom: 8px;
+  color: rgba(17,24,39,0.75);
+  text-decoration: none;
+}
+
+.col a:hover{
+  color: var(--purple);
+}
+
+/* ✅ external link styling (still looks like others) */
+.extLink{
+  display: block;
+  font-size: 14px;
+  margin-bottom: 8px;
+  color: rgba(17,24,39,0.75);
+  text-decoration: none;
+}
+
+.extLink:hover{
+  color: var(--purple);
+}
+
+.bottom{
+  border-top: 1px solid rgba(124,58,237,0.12);
+  padding: 14px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  color: rgba(17,24,39,0.6);
+}
+
+.legal{
+  display: flex;
+  gap: 16px;
+}
+
+@media(max-width:900px){
+  .inner{
+    grid-template-columns: 1fr;
+  }
+  .cols{
+    grid-template-columns: 1fr 1fr;
+  }
+  .brand{
+    max-width: 100%;
+  }
+}
+
+@media(max-width:520px){
+  .cols{
+    grid-template-columns: 1fr;
+  }
+  .bottom{
+    flex-direction: column;
+    gap: 8px;
+  }
+}

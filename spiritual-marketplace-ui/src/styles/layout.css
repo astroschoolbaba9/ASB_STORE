@@ -1,0 +1,83 @@
+/* Container (already using inline in Container.jsx, but this is reusable too) */
+.container{
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+/* Responsive grid helpers */
+.grid{
+  display: grid;
+  gap: var(--gap);
+}
+
+.grid-2{
+  grid-template-columns: 1fr;
+}
+@media (min-width: 768px){
+  .grid-2{ grid-template-columns: 1fr 1fr; }
+}
+
+.grid-3{
+  grid-template-columns: 1fr;
+}
+@media (min-width: 768px){
+  .grid-3{ grid-template-columns: 1fr 1fr; }
+}
+@media (min-width: 1024px){
+  .grid-3{ grid-template-columns: 1fr 1fr 1fr; }
+}
+
+.grid-4{
+  grid-template-columns: 1fr;
+}
+@media (min-width: 768px){
+  .grid-4{ grid-template-columns: 1fr 1fr; }
+}
+@media (min-width: 1024px){
+  .grid-4{ grid-template-columns: 1fr 1fr 1fr; }
+}
+@media (min-width: 1280px){
+  .grid-4{ grid-template-columns: 1fr 1fr 1fr 1fr; }
+}
+
+/* Two-column page layout (filters + content) */
+.pageSplit{
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: 1fr;
+}
+@media (min-width: 1024px){
+  .pageSplit{
+    grid-template-columns: 280px 1fr; /* sidebar + content */
+    align-items: start;
+  }
+}
+
+/* Spacing helpers */
+.section{
+  padding: 28px 0;
+}
+@media (min-width: 768px){
+  .section{ padding: 40px 0; }
+}
+
+.stack{
+  display: grid;
+  gap: 12px;
+}
+.stackLg{
+  display: grid;
+  gap: 18px;
+}
+
+/* Hide/show helpers */
+.hideMobile{ display: none; }
+@media (min-width: 1024px){
+  .hideMobile{ display: initial; }
+}
+
+.hideDesktop{ display: initial; }
+@media (min-width: 1024px){
+  .hideDesktop{ display: none; }
+}
