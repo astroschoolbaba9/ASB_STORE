@@ -20,7 +20,7 @@ const adminRoutes = require("./routes/admin.routes");
 const authRoutes = require("./routes/auth.routes");
 const healthRoutes = require("./routes/health.routes");
 
-// ✅ NEW
+// Contact routes
 const contactRoutes = require("./routes/contact.routes");
 const adminContactRoutes = require("./routes/admin.contact.routes");
 
@@ -31,6 +31,7 @@ const { errorHandler } = require("./middleware/errorHandler");
 function createApp() {
   const app = express();
 
+  // If behind Nginx/Cloudflare
   app.set("trust proxy", 1);
 
   app.use(
@@ -39,36 +40,52 @@ function createApp() {
     })
   );
 
-  const ALLOW = new Set([
-  "http://localhost:3000",
-  "http://localhost:3001",
-  process.env.FRONTEND_BASE_URL, // if you set it
-]);
+  // ================= CORS (VPS PRODUCTION SAFE) =================
+  // Put your real frontends here
+  const ALLOW = new Set(
+    [
+      // local dev
+      "http://localhost:3000",
+      "http://localhost:3001",
 
-app.use(
-  cors({
+      // production domains
+      "https://asbcrystal.in",
+      "https://www.asbcrystal.in",
+
+      // if you ever host admin on subdomain
+      "https://admin.asbcrystal.in",
+      "https://www.admin.asbcrystal.in",
+
+      // optional env based (must be exact origin)
+      process.env.FRONTEND_BASE_URL,
+    ].filter(Boolean)
+  );
+
+  const corsOptions = {
     origin: (origin, cb) => {
-      // ✅ allow server-to-server (no Origin) and PayU sandbox simulation (Origin: null)
+      // allow server-to-server (curl, Postman without origin)
+      // allow PayU simulation (Origin: null)
       if (!origin || origin === "null") return cb(null, true);
 
       if (ALLOW.has(origin)) return cb(null, true);
 
-      // optional: allow payu domains if they ever send origin (rare)
+      // optional: PayU (rarely sends Origin)
       try {
         const host = new URL(origin).hostname;
         if (host.endsWith("payu.in")) return cb(null, true);
-      } catch {}
+      } catch (e) {}
 
       return cb(new Error("Not allowed by CORS: " + origin));
     },
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
-  })
-);
+  };
 
-// ✅ handle preflight
-app.options("*", cors());
+  app.use(cors(corsOptions));
+  // IMPORTANT: preflight must use the SAME config
+  app.options("*", cors(corsOptions));
+  // =============================================================
 
   app.use(express.json({ limit: "1mb" }));
   app.use(express.urlencoded({ extended: true }));
@@ -83,7 +100,11 @@ app.options("*", cors());
     max: env.RATE_LIMIT_MAX,
     standardHeaders: true,
     legacyHeaders: false,
-    message: { success: false, code: "RATE_LIMITED", message: "Too many requests" },
+    message: {
+      success: false,
+      code: "RATE_LIMITED",
+      message: "Too many requests",
+    },
     skip: (req) => req.method === "OPTIONS",
   });
   app.use("/api", limiter);
@@ -112,7 +133,7 @@ app.options("*", cors());
   app.use("/api", require("./routes/banner.routes"));
   app.use("/api", require("./routes/banner.public.routes"));
 
-  // ✅ NEW: public contact submit
+  // Contact
   app.use("/api", contactRoutes);
 
   // Public catalog / courses / reviews
@@ -128,8 +149,6 @@ app.options("*", cors());
 
   // Protected admin routes
   app.use("/api/admin", adminRoutes);
-
-  // ✅ NEW: admin contact messages
   app.use("/api/admin", adminContactRoutes);
 
   app.use(notFound);
@@ -139,3 +158,4 @@ app.options("*", cors());
 }
 
 module.exports = { createApp };
+

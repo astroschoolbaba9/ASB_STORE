@@ -1,18 +1,18 @@
 // backend/controllers/banner.controller.js
-const { asyncHandler } = require("../utils/asynchandler");
+const { asynchandler } = require("../utils/asyncHandler");
 const bannerService = require("../services/banner.service");
 
-const getActiveBanners = asyncHandler(async (req, res) => {
+const getActiveBanners = asynchandler(async (req, res) => {
   const items = await bannerService.listActiveBanners();
   res.json({ success: true, items });
 });
 
-const adminListBanners = asyncHandler(async (req, res) => {
+const adminListBanners = asynchandler(async (req, res) => {
   const items = await bannerService.adminListBanners();
   res.json({ success: true, items });
 });
 
-const adminCreateBanner = asyncHandler(async (req, res) => {
+const adminCreateBanner = asynchandler(async (req, res) => {
   // multer puts file at req.file
   const file = req.file;
 
@@ -38,7 +38,7 @@ const adminCreateBanner = asyncHandler(async (req, res) => {
   res.status(201).json({ success: true, banner });
 });
 
-const adminUpdateBanner = asyncHandler(async (req, res) => {
+const adminUpdateBanner = asynchandler(async (req, res) => {
   const patch = { ...req.body };
 
   if (patch.order != null) patch.order = Number(patch.order);
@@ -48,7 +48,7 @@ const adminUpdateBanner = asyncHandler(async (req, res) => {
   res.json({ success: true, banner });
 });
 
-const adminDeleteBanner = asyncHandler(async (req, res) => {
+const adminDeleteBanner = asynchandler(async (req, res) => {
   await bannerService.adminDeleteBanner(req.params.id);
   res.json({ success: true });
 });

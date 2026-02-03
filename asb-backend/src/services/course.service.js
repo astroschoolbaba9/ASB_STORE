@@ -2,7 +2,7 @@ const Course = require("../models/Course");
 const CourseEnrollment = require("../models/CourseEnrollment");
 const PaymentTx = require("../models/PaymentTx");
 const { AppError } = require("../utils/AppError");
-const { makePayuRequestHash } = require("../utils/payuhash");
+const { makePayuRequestHash } = require("../utils/payuHash");
 
 function payuActionUrl() {
   return (process.env.PAYU_ENV || "test") === "live"

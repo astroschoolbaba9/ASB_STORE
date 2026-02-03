@@ -1,9 +1,9 @@
-const { asyncHandler } = require("../utils/asynchandler");
+const { asynchandler } = require("../utils/asyncHandler");
 const { AppError } = require("../utils/AppError");
 const orderService = require("../services/order.service");
 
 // GET /api/admin/orders
-const listOrders = asyncHandler(async (req, res) => {
+const listOrders = asynchandler(async (req, res) => {
   const page = Number(req.query.page || 1);
   const limit = Number(req.query.limit || 20);
   const q = String(req.query.q || req.query.q === 0 ? req.query.q : req.query.q || "").trim();
@@ -13,13 +13,13 @@ const listOrders = asyncHandler(async (req, res) => {
 });
 
 // GET /api/admin/orders/:id
-const getOrderById = asyncHandler(async (req, res) => {
+const getOrderById = asynchandler(async (req, res) => {
   const order = await orderService.adminGetOrderById(req.params.id);
   res.json({ success: true, order });
 });
 
 // PATCH /api/admin/orders/:id/fulfilment
-const updateFulfilmentStatus = asyncHandler(async (req, res) => {
+const updateFulfilmentStatus = asynchandler(async (req, res) => {
   const next = String(req.body?.fulfilmentStatus || "").toUpperCase();
   const note = String(req.body?.note || "").slice(0, 300);
 
@@ -39,7 +39,7 @@ const updateFulfilmentStatus = asyncHandler(async (req, res) => {
 });
 
 // PATCH /api/admin/orders/:id/tracking
-const updateTracking = asyncHandler(async (req, res) => {
+const updateTracking = asynchandler(async (req, res) => {
   const courier = String(req.body?.courier || "").slice(0, 80);
   const trackingId = String(req.body?.trackingId || "").slice(0, 120);
   const trackingUrl = String(req.body?.trackingUrl || "").slice(0, 500);

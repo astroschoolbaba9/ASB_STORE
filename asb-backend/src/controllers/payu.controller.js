@@ -1,11 +1,11 @@
-const { asyncHandler } = require("../utils/asynchandler");
+const { asynchandler } = require("../utils/asyncHandler");
 const { AppError } = require("../utils/AppError");
 const PaymentTx = require("../models/PaymentTx");
 const Order = require("../models/Order");
 const Course = require("../models/Course");
 const orderService = require("../services/order.service");
 const courseService = require("../services/course.service");
-const { makePayuRequestHash, makePayuResponseHash } = require("../utils/payuhash");
+const { makePayuRequestHash, makePayuResponseHash } = require("../utils/payuHash");
 
 function payuActionUrl() {
   return (process.env.PAYU_ENV || "test") === "live"
@@ -17,7 +17,7 @@ function makeTxnId() {
   return `ASB${Date.now()}${Math.floor(Math.random() * 10000)}`;
 }
 
-const initiate = asyncHandler(async (req, res) => {
+const initiate = asynchandler(async (req, res) => {
   const { purpose, orderId, courseId, customer } = req.body || {};
 
   if (!["SHOP_ORDER", "COURSE_BUY"].includes(purpose)) {
@@ -166,7 +166,7 @@ const furl = `${BACKEND}/api/payments/payu/fail`;
   });
 });
 
-const success = asyncHandler(async (req, res) => {
+const success = asynchandler(async (req, res) => {
   const body = req.body || {};
   const {
     status,
@@ -241,7 +241,7 @@ const success = asyncHandler(async (req, res) => {
   return res.redirect(`${process.env.FRONTEND_BASE_URL}/payment/success?txnid=${encodeURIComponent(txnid)}`);
 });
 
-const fail = asyncHandler(async (req, res) => {
+const fail = asynchandler(async (req, res) => {
   const body = req.body || {};
   const { txnid, udf1, udf2, udf3, mihpayid } = body;
 

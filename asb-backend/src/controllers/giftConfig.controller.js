@@ -1,7 +1,7 @@
-const { asyncHandler } = require("../utils/asynchandler");
+const { asynchandler } = require("../utils/asyncHandler");
 const GiftConfig = require("../models/GiftConfig");
 
-const getPublicGiftConfig = asyncHandler(async (req, res) => {
+const getPublicGiftConfig = asynchandler(async (req, res) => {
   let cfg = await GiftConfig.findOne();
   if (!cfg) cfg = await GiftConfig.create({});
 

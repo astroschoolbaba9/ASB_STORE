@@ -7,7 +7,7 @@ import Toast from "../../components/ui/Toast";
 import { api } from "../../lib/api";
 import { normalizeList, normalizeCategory, normalizeProduct } from "../../lib/normalize";
 
-const API_BASE = process.env.REACT_APP_API_BASE || "http://localhost:8080";
+const API_BASE = process.env.REACT_APP_API_BASE || "http://api.asbcrystal.in";
 
 function absUrl(u) {
   const s = String(u || "").trim();

@@ -1,5 +1,5 @@
 
-const { asyncHandler } = require("../utils/asynchandler");
+const { asynchandler } = require("../utils/asyncHandler");
 const { registerSchema, loginSchema } = require("../validators/auth.validators");
 const { AppError } = require("../utils/AppError");
 const { registerWithPassword, loginWithPassword } = require("../services/auth.service");
@@ -8,7 +8,7 @@ const otpService = require("../services/otp.service");
 
 
 
-const register = asyncHandler(async (req, res) => {
+const register = asynchandler(async (req, res) => {
   const parsed = registerSchema.safeParse(req.body);
   if (!parsed.success) throw new AppError("Validation failed", 400, "VALIDATION_ERROR", parsed.error.flatten());
 
@@ -16,7 +16,7 @@ const register = asyncHandler(async (req, res) => {
   res.status(201).json({ success: true, ...result });
 });
 
-const login = asyncHandler(async (req, res) => {
+const login = asynchandler(async (req, res) => {
   const parsed = loginSchema.safeParse(req.body);
   if (!parsed.success) throw new AppError("Validation failed", 400, "VALIDATION_ERROR", parsed.error.flatten());
 
@@ -24,7 +24,7 @@ const login = asyncHandler(async (req, res) => {
   res.json({ success: true, ...result });
 });
 
-const me = asyncHandler(async (req, res) => {
+const me = asynchandler(async (req, res) => {
   res.json({
     success: true,
     user: {
@@ -40,7 +40,7 @@ const me = asyncHandler(async (req, res) => {
 
 
 
-const sendOtp = asyncHandler(async (req, res) => {
+const sendOtp = asynchandler(async (req, res) => {
   const parsed = sendOtpSchema.safeParse(req.body);
   if (!parsed.success) throw new AppError("Validation failed", 400, "VALIDATION_ERROR", parsed.error.flatten());
 
@@ -54,7 +54,7 @@ const sendOtp = asyncHandler(async (req, res) => {
   res.json({ success: true, message: "OTP sent (if identifier is valid)" });
 });
 
-const verifyOtp = asyncHandler(async (req, res) => {
+const verifyOtp = asynchandler(async (req, res) => {
 console.log("✅ AUTH verifyOtp CONTROLLER HIT:", req.body);
 
   const parsed = verifyOtpSchema.safeParse(req.body);

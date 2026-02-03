@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Review = require("../models/Review");
 const { AppError } = require("../utils/AppError");
-const { asyncHandler } = require("../utils/asynchandler");
+const { asynchandler } = require("../utils/asyncHandler");
 
 function isObjectIdLike(v) {
   return mongoose.Types.ObjectId.isValid(String(v || ""));
@@ -21,7 +21,7 @@ function clampInt(n, min, max, fallback) {
  *  - rating: 1..5 (filter)
  *  - withPhotos: true/false
  */
-exports.getProductReviews = asyncHandler(async (req, res) => {
+exports.getProductReviews = asynchandler(async (req, res) => {
   const productId = req.params.id;
   if (!isObjectIdLike(productId)) throw new AppError("Invalid product id", 400, "INVALID_ID");
 
@@ -102,7 +102,7 @@ exports.getProductReviews = asyncHandler(async (req, res) => {
  * - server sets userId from req.user._id
  * - upsert (1 review per user per product)
  */
-exports.upsertProductReview = asyncHandler(async (req, res) => {
+exports.upsertProductReview = asynchandler(async (req, res) => {
   const productId = req.params.id;
   if (!isObjectIdLike(productId)) throw new AppError("Invalid product id", 400, "INVALID_ID");
   if (!req.user?._id) throw new AppError("Unauthorized", 401, "UNAUTHORIZED");
@@ -144,7 +144,7 @@ exports.upsertProductReview = asyncHandler(async (req, res) => {
  * requireAuth (recommended)
  * - prevents multiple votes by same user using helpfulBy
  */
-exports.markReviewHelpful = asyncHandler(async (req, res) => {
+exports.markReviewHelpful = asynchandler(async (req, res) => {
   const reviewId = req.params.reviewId;
   if (!isObjectIdLike(reviewId)) throw new AppError("Invalid review id", 400, "INVALID_ID");
   if (!req.user?._id) throw new AppError("Unauthorized", 401, "UNAUTHORIZED");
