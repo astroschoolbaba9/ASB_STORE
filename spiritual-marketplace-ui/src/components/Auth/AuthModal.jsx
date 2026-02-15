@@ -74,8 +74,8 @@ export default function AuthModal() {
     mode === "loginPassword"
       ? "Login"
       : mode === "register"
-      ? "Create Account"
-      : "Login with OTP";
+        ? "Create Account"
+        : "Login with OTP";
 
   const isTargetValid = target.trim().length >= 4; // UI-only
   const isOtpValid = otp.trim().length >= 4;
@@ -344,7 +344,7 @@ export default function AuthModal() {
 
                   {sent && !error && (
                     <div className={styles.hint}>
-                      OTP sent. (Dev mode: OTP prints in backend console.)
+                      OTP sent successfully.
                     </div>
                   )}
                 </>
