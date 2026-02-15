@@ -72,10 +72,10 @@ export default function AuthModal() {
 
   const title =
     mode === "loginPassword"
-      ? "Login"
+      ? "Sign In"
       : mode === "register"
-        ? "Create Account"
-        : "Login with OTP";
+        ? "Create ASB Account"
+        : "Sign In with OTP";
 
   const isTargetValid = target.trim().length >= 4; // UI-only
   const isOtpValid = otp.trim().length >= 4;
@@ -182,8 +182,8 @@ export default function AuthModal() {
 
         <p className={styles.sub}>
           {mode === "register"
-            ? "Create your ASB account to continue."
-            : "Login to continue your purchase."}
+            ? "Join AGPK Academy to access your trainings and tools."
+            : "Sign in to access your ASB account."}
         </p>
 
         {/* MODE SWITCH */}
