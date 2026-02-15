@@ -182,8 +182,8 @@ export default function AuthModal() {
 
         <p className={styles.sub}>
           {mode === "register"
-            ? "Join AGPK Academy to access your trainings and tools."
-            : "Sign in to access your ASB account."}
+            ? "Create your ASB account to continue."
+            : "Login to continue your purchase."}
         </p>
 
         {/* MODE SWITCH */}
