@@ -1,73 +1,44 @@
-# Redeployment Guide (Hostinger VPS)
+# Final Deployment Guide (ASB - AGPK Academy)
 
-Follow these steps to pull the latest changes from GitHub and update your live site.
+Follow these steps to update your live site on the Hostinger VPS.
 
-## ⚡ Quick Update (For Branding/UI changes only)
-If you only changed the Logo, Favicon, or Text, run this:
+## ⚡ Quick Redeploy (After UI/Branding Changes)
+Run these commands to pull the latest branding and UI fixes:
+
 ```bash
 # 1. Update Backend
-cd /path/to/asb-backend && git pull origin main && pm2 restart all
+cd ~/ASB_STORE/asb-backend && git pull origin main && pm2 restart all
 
-# 2. Update Website & Clear Cache
-cd /path/to/spiritual-marketplace-ui && git pull origin main && npm run build
-# Important: Open in Incognito or press Ctrl+F5 to see the new logo/title.
+# 2. Update Main Website
+cd ~/ASB_STORE/spiritual-marketplace-ui && git pull origin main && rm -rf build && npm run build
 
-# 3. Update Admin
-cd /path/to/asb-admin && git pull origin main && npm run build
+# 3. Update Admin Panel
+cd ~/ASB_STORE/asb-admin && git pull origin main && rm -rf build && npm run build
 ```
+
 ---
 
-## Common Issues: "Still seeing React App"
-If the logo or title doesn't change after building:
-1. **Force Refresh**: Press `Ctrl + F5` on Windows or `Cmd + Shift + R` on Mac.
-2. **Incognito**: Open the site in a Private/Incognito window.
-3. **Check Path**: Ensure your Nginx/VPS is actually pointing to the `build` folder inside `ASB_STORE`.
+## 🛠️ Full Setup / Troubleshooting
 
-
-## 1. SSH into your VPS
-Open your terminal (PowerShell or CMD) and log in:
+### 1. Update Secrets
+If you change your SMS API keys or PayU keys, you MUST update them on the VPS:
 ```bash
-ssh root@your_vps_ip
-```
-
-## 2. Update the Backend (`asb-backend`)
-Navigate to your backend directory and pull changes:
-```bash
-cd /path/to/your/ASB_STORE/asb-backend
-git pull origin main
-
-# Restart the server using PM2
+cd ~/ASB_STORE/asb-backend
+nano .env
+# Edit the keys, then Save (Ctrl+O, Enter, Ctrl+X)
 pm2 restart all
-# or if you named it: pm2 restart asb-backend
-```
-> [!IMPORTANT]
-> Since we added new variables, make sure your `.env` on the VPS is updated with the real **API Key**, **Sender ID**, and **Template ID**.
-
-## 3. Update the Frontend (`spiritual-marketplace-ui`)
-```bash
-cd /path/to/your/ASB_STORE/spiritual-marketplace-ui
-git pull origin main
-
-# Install dependencies if any new ones were added
-npm install
-
-# Build the project
-npm run build
-```
-*If you are using Nginx, the new files in the `build` folder will automatically be served.*
-
-## 4. Update the Admin Panel (`asb-admin`)
-```bash
-cd /path/to/your/ASB_STORE/asb-admin
-git pull origin main
-
-# Install & Build
-npm install
-npm run build
 ```
 
-## 5. Verify
-Check the logs to make sure everything started correctly:
+### 2. "Still seeing React App?"
+If the browser tab still says "React App" after building:
+*   **Force Refresh**: Press `Ctrl + F5`.
+*   **Use Incognito**: Open the site in a Private window. 
+*   **Nginx Check**: Ensure your Nginx configuration points to `/root/ASB_STORE/spiritual-marketplace-ui/build`.
+
+---
+
+## 📞 Support
+If you get a `404` or `500` error, check the logs:
 ```bash
-pm2 logs
+pm2 logs asb-backend --lines 50
 ```
