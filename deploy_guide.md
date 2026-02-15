@@ -2,6 +2,21 @@
 
 Follow these steps to pull the latest changes from GitHub and update your live site.
 
+## ⚡ Quick Update (For Branding/UI changes only)
+If you only changed the Logo, Favicon, or Text, run this:
+```bash
+# 1. Update Backend
+cd /path/to/asb-backend && git pull origin main && pm2 restart all
+
+# 2. Update Website
+cd /path/to/spiritual-marketplace-ui && git pull origin main && npm run build
+
+# 3. Update Admin
+cd /path/to/asb-admin && git pull origin main && npm run build
+```
+---
+
+
 ## 1. SSH into your VPS
 Open your terminal (PowerShell or CMD) and log in:
 ```bash
