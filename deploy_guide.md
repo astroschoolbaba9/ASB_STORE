@@ -1,0 +1,51 @@
+# Redeployment Guide (Hostinger VPS)
+
+Follow these steps to pull the latest changes from GitHub and update your live site.
+
+## 1. SSH into your VPS
+Open your terminal (PowerShell or CMD) and log in:
+```bash
+ssh root@your_vps_ip
+```
+
+## 2. Update the Backend (`asb-backend`)
+Navigate to your backend directory and pull changes:
+```bash
+cd /path/to/your/ASB_STORE/asb-backend
+git pull origin main
+
+# Restart the server using PM2
+pm2 restart all
+# or if you named it: pm2 restart asb-backend
+```
+> [!IMPORTANT]
+> Since we added new variables, make sure your `.env` on the VPS is updated with the real **API Key**, **Sender ID**, and **Template ID**.
+
+## 3. Update the Frontend (`spiritual-marketplace-ui`)
+```bash
+cd /path/to/your/ASB_STORE/spiritual-marketplace-ui
+git pull origin main
+
+# Install dependencies if any new ones were added
+npm install
+
+# Build the project
+npm run build
+```
+*If you are using Nginx, the new files in the `build` folder will automatically be served.*
+
+## 4. Update the Admin Panel (`asb-admin`)
+```bash
+cd /path/to/your/ASB_STORE/asb-admin
+git pull origin main
+
+# Install & Build
+npm install
+npm run build
+```
+
+## 5. Verify
+Check the logs to make sure everything started correctly:
+```bash
+pm2 logs
+```

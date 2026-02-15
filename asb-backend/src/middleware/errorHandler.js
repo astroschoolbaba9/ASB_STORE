@@ -8,8 +8,8 @@ function errorHandler(err, req, res, next) {
   }
 
   if (res.locals?.setAuditError) {
-  res.locals.setAuditError(err?.message || "Error");
-}
+    res.locals.setAuditError(err?.message || "Error");
+  }
 
 
   if (err?.code === 11000) {
@@ -25,11 +25,14 @@ function errorHandler(err, req, res, next) {
 
   logError(err, req);
 
+  const isProd = env.NODE_ENV === "production";
+
   res.status(statusCode).json({
     success: false,
     code,
-    message: err.message || "Something went wrong",
-    details: err.details || null
+    // Hide details in production. Only show message if it's a 4xx error or not production
+    message: (isProd && statusCode === 500) ? "Internal Server Error" : (err.message || "Something went wrong"),
+    details: isProd ? null : (err.details || null)
   });
 }
 

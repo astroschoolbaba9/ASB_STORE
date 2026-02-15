@@ -7,7 +7,7 @@ export default function About() {
   return (
     <div className={styles.page}>
       <div className={styles.hero}>
-        <div className={styles.tag}>About ASB-Ages of AGPK Academy</div>
+        <div className={styles.tag}>About ASB - AGPK Academy</div>
 
         <h1 className={styles.h1}>A calm, premium spiritual marketplace</h1>
 
@@ -53,7 +53,7 @@ export default function About() {
         </div>
       </div>
 
-     
+
     </div>
   );
 }

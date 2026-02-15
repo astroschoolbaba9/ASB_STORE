@@ -114,7 +114,7 @@ export default function Footer() {
       <div className={styles.inner}>
         {/* Brand + Connect */}
         <div className={styles.brand}>
-          <div className={styles.logo}>ASB-Ages Of AGPK Academy</div>
+          <div className={styles.logo}>ASB - AGPK Academy</div>
           <p className={styles.tagline}>Spiritual Store &amp; Gifting</p>
           <p className={styles.note}>
             Sacred gifts, healing tools, and mindful trainings curated for calm living and positive energy.
