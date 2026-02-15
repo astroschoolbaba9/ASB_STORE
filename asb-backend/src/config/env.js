@@ -27,9 +27,25 @@ const env = {
 
   OTP_DEV_MODE: String(process.env.OTP_DEV_MODE || "false").toLowerCase() === "true",
   OTP_TTL_SECONDS: Number(process.env.OTP_TTL_SECONDS || 300),
+  OTP_HASH_SECRET: process.env.OTP_HASH_SECRET || "dev_otp_secret_change_me",
 
   RATE_LIMIT_WINDOW_MIN: Number(process.env.RATE_LIMIT_WINDOW_MIN || 15),
   RATE_LIMIT_MAX: Number(process.env.RATE_LIMIT_MAX || 200),
+
+  METAREACH_API_KEY: process.env.METAREACH_API_KEY || "",
+  METAREACH_SENDER_ID: process.env.METAREACH_SENDER_ID || "",
+  METAREACH_TEMPLATE_ID: process.env.METAREACH_TEMPLATE_ID || "",
+
+  ADMIN_PHONES: (process.env.ADMIN_PHONES || "9911500291")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean),
+
+  PAYU_ENV: process.env.PAYU_ENV || "test",
+  PAYU_KEY: process.env.PAYU_KEY || "",
+  PAYU_SALT: process.env.PAYU_SALT || "",
+  PAYU_SUCCESS_URL: process.env.PAYU_SUCCESS_URL || "",
+  PAYU_FAIL_URL: process.env.PAYU_FAIL_URL || "",
 };
 
 module.exports = { env };

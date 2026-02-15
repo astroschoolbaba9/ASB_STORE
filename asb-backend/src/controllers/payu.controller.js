@@ -28,10 +28,8 @@ const initiate = asynchandler(async (req, res) => {
   const salt = process.env.PAYU_SALT;
   if (!key || !salt) throw new AppError("PayU not configured", 500, "PAYU_NOT_CONFIGURED");
 
- const BACKEND = "http://localhost:8080"; // or your ngrok backend URL
-
-const surl = `${BACKEND}/api/payments/payu/success`;
-const furl = `${BACKEND}/api/payments/payu/fail`;
+  const surl = process.env.PAYU_SUCCESS_URL;
+  const furl = process.env.PAYU_FAIL_URL;
 
   if (!surl || !furl) {
     throw new AppError("PayU callback URLs missing", 500, "PAYU_URLS_MISSING", {

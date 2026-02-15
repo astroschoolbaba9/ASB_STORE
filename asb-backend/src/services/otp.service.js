@@ -6,10 +6,16 @@ const { AppError } = require("../utils/AppError");
 const { generateOtp } = require("../utils/otp");
 const { signAccessToken } = require("../utils/jwt");
 const { env } = require("../config/env");
+const smsService = require("./sms.service");
 
 console.log("✅ OTP SERVICE LOADED (Mongo-backed)");
 
-const ADMIN_PHONE = "9911500291"; // 🔐 ONLY THIS NUMBER IS ADMIN
+const ADMIN_PHONES = env.ADMIN_PHONES; // Array of admin numbers
+
+// Helper to check if a phone is an admin
+function isAdmin(phone) {
+  return ADMIN_PHONES.includes(phone);
+}
 
 function normalizeIdentifier(identifier) {
   let v = String(identifier || "").trim();
@@ -51,7 +57,19 @@ async function sendOtp({ identifier }) {
     { upsert: true }
   );
 
-  console.log(`📩 DEV OTP for ${norm.identifier} (${norm.channel}): ${otp}`);
+  if (norm.channel === "phone") {
+    if (env.OTP_DEV_MODE) {
+      console.log(`📩 DEV OTP for ${norm.identifier} (phone): ${otp}`);
+    } else {
+      // ✅ DLT MATCH: Must match your approved template exactly
+      const msg = `Welcome to AGPK Academy login. Your verification code is ${otp}. This OTP will expire in 5 minutes`;
+      await smsService.sendSms(norm.identifier, msg);
+    }
+  } else {
+    // For email/others, currently just logging as requested or implied
+    console.log(`📩 DEV OTP for ${norm.identifier} (${norm.channel}): ${otp}`);
+  }
+
   return { success: true };
 }
 
@@ -88,8 +106,8 @@ async function verifyOtp({ identifier, otp, code }) {
 
   const phoneStr = norm.channel === "phone" ? norm.identifier : "";
 
-  // ✅ LOWERCASE ONLY (matches User schema)
-  const role = phoneStr === ADMIN_PHONE ? "admin" : "user";
+  // ✅ Check if phone matches any admin in the list
+  const role = isAdmin(phoneStr) ? "admin" : "user";
 
   const setUpdate = { role };
   if (norm.channel === "email") setUpdate.email = norm.identifier;
@@ -102,7 +120,7 @@ async function verifyOtp({ identifier, otp, code }) {
   );
 
   // 🚫 HARD SAFETY: downgrade anyone else
-  if (user.phone !== ADMIN_PHONE && user.role === "admin") {
+  if (!isAdmin(user.phone) && user.role === "admin") {
     user.role = "user";
     await user.save();
   }
