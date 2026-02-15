@@ -23,7 +23,7 @@ export default function Services() {
 
   // ✅ SEO-friendly fallback (no extra deps)
   useEffect(() => {
-    document.title = "Services | ASB - AGPK Academy";
+    document.title = "Services | ASB Spiritual Store & Gifting";
     setMetaDescription(
       "Explore ASB services for spiritual gifting: gift wrapping, personalized messages, bulk & corporate orders, order support, trainings, and helpful calculators/tools."
     );
