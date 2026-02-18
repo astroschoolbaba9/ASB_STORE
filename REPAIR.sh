@@ -37,11 +37,15 @@ sudo chmod -R 755 /root/ASB_STORE
 echo "🔗 Re-linking asbstore config..."
 sudo ln -sf /etc/nginx/sites-available/asbstore /etc/nginx/sites-enabled/
 
-# 4. Rebuild Frontends (Required for .env changes)
-echo "🏗 Rebuilding Admin Frontend..."
-cd /root/ASB_STORE/asb-admin && npm run build
-echo "🏗 Rebuilding User Frontend..."
-cd /root/ASB_STORE/spiritual-marketplace-ui && npm run build
+# 4. Fresh Slate (Clean old builds)
+echo "🧹 Cleaning old builds and installing dependencies..."
+cd /root/ASB_STORE/asb-admin && rm -rf build node_modules
+npm install
+npm run build
+
+cd /root/ASB_STORE/spiritual-marketplace-ui && rm -rf build node_modules
+npm install
+npm run build
 
 # 5. Restart Nginx
 echo "🔄 Testing and Restarting Nginx..."
@@ -54,14 +58,17 @@ fi
 
 # 6. Ensure Backend is running
 echo "⚡ Restarting Backend with PM2..."
+cd /root/ASB_STORE/asb-backend
+npm install
 cd /root/ASB_STORE
 pm2 restart all || pm2 start ecosystem.config.js
 pm2 save
 
 echo ""
-echo "🏁 REPAIR COMPLETE!"
+echo "🏁 TOTAL REPAIR COMPLETE!"
 echo "------------------------------------------------"
 echo "🌐 VISIT YOUR SITE AT: http://asbcrystal.in"
 echo "🌐 ADMIN PANEL AT: http://admin.asbcrystal.in"
 echo "🌐 API STATUS: http://api.asbcrystal.in/api/health"
+echo "💡 If you still see old icons, press Ctrl+F5 in your browser."
 echo "------------------------------------------------"

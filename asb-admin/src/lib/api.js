@@ -102,6 +102,7 @@ async function request(path, { method = "GET", body, query, headers } = {}) {
     const err = new Error(e?.message || "Network error");
     err.status = 0;
     err.code = "NETWORK_ERROR";
+    err.friendlyMessage = getFriendlyMessage(err);
     err.response = null;
     throw err;
   }
