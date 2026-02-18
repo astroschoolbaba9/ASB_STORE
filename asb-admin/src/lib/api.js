@@ -4,10 +4,14 @@ import { getFriendlyMessage } from "../utils/errorMapping";
 const DEFAULT_BASE = "https://api.asbcrystal.in";
 
 // CRA supports REACT_APP_*; user asked VITE_API_BASE too (we'll support both)
-const API_BASE =
-  process.env.REACT_APP_API_BASE ||
-  process.env.VITE_API_BASE ||
-  DEFAULT_BASE;
+const API_BASE = (() => {
+  const base = process.env.REACT_APP_API_BASE || process.env.VITE_API_BASE || DEFAULT_BASE;
+  // FORCE HTTPS if we are talking to your production API
+  if (base.includes("asbcrystal.in") && base.startsWith("http://")) {
+    return base.replace("http://", "https://");
+  }
+  return base;
+})();
 
 const TOKEN_KEY = "asb_access_token";
 

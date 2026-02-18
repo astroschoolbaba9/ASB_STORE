@@ -1,6 +1,12 @@
 // src/lib/api.js
 import { getFriendlyMessage } from "../utils/errorMapping";
-const API_BASE = process.env.REACT_APP_API_BASE || "https://api.asbcrystal.in";
+const API_BASE = (() => {
+  const base = process.env.REACT_APP_API_BASE || "https://api.asbcrystal.in";
+  if (base.includes("asbcrystal.in") && base.startsWith("http://")) {
+    return base.replace("http://", "https://");
+  }
+  return base;
+})();
 
 function getToken() {
   return localStorage.getItem("asb_access_token") || "";
