@@ -74,10 +74,10 @@ pm2 restart all || pm2 start ecosystem.config.js
 pm2 save
 
 echo ""
-echo "🏁 TOTAL REPAIR COMPLETE!"
+echo "🏁 TOTAL HTTPS REPAIR COMPLETE!"
 echo "------------------------------------------------"
-echo "🌐 VISIT YOUR SITE AT: http://asbcrystal.in"
-echo "🌐 ADMIN PANEL AT: http://admin.asbcrystal.in"
-echo "🌐 API STATUS: http://api.asbcrystal.in/api/health"
+echo "🌐 VISIT YOUR SITE AT: https://asbcrystal.in"
+echo "🌐 ADMIN PANEL AT: https://admin.asbcrystal.in"
+echo "🌐 API STATUS: https://api.asbcrystal.in/api/health"
 echo "💡 If you still see old icons, press Ctrl+F5 in your browser."
 echo "------------------------------------------------"
