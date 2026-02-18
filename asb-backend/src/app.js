@@ -47,18 +47,15 @@ function createApp() {
       // allow PayU simulation (Origin: null)
       if (!origin || origin === "null") return cb(null, true);
 
-      const isAllowed = env.CORS_ORIGIN.some(o => {
-        try {
-          const allowedHost = new URL(o).hostname;
-          const currentHost = new URL(origin).hostname;
-          return allowedHost === currentHost;
-        } catch (e) {
-          return o === origin;
-        }
-      });
+      // Robust check: allow any of your subdomains
+      if (origin.includes("asbcrystal.in") || origin.includes("localhost")) {
+        return cb(null, true);
+      }
 
+      const isAllowed = env.CORS_ORIGIN.some(o => o === origin);
       if (isAllowed) return cb(null, true);
-      return cb(new Error("Not allowed by CORS: " + origin));
+
+      return cb(new Error("CORS Blocked: " + origin));
     },
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
