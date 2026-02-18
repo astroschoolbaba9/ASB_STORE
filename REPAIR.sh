@@ -37,7 +37,13 @@ sudo chmod -R 755 /root/ASB_STORE
 echo "🔗 Re-linking asbstore config..."
 sudo ln -sf /etc/nginx/sites-available/asbstore /etc/nginx/sites-enabled/
 
-# 4. Restart Nginx
+# 4. Rebuild Frontends (Required for .env changes)
+echo "🏗 Rebuilding Admin Frontend..."
+cd /root/ASB_STORE/asb-admin && npm run build
+echo "🏗 Rebuilding User Frontend..."
+cd /root/ASB_STORE/spiritual-marketplace-ui && npm run build
+
+# 5. Restart Nginx
 echo "🔄 Testing and Restarting Nginx..."
 if sudo nginx -t; then
     sudo systemctl restart nginx
@@ -46,7 +52,7 @@ else
     echo "❌ Nginx Config Test Failed. Please check manually."
 fi
 
-# 5. Ensure Backend is running
+# 6. Ensure Backend is running
 echo "⚡ Restarting Backend with PM2..."
 cd /root/ASB_STORE
 pm2 restart all || pm2 start ecosystem.config.js
@@ -56,6 +62,6 @@ echo ""
 echo "🏁 REPAIR COMPLETE!"
 echo "------------------------------------------------"
 echo "🌐 VISIT YOUR SITE AT: http://asbcrystal.in"
-echo "⚠️ IMPORTANT: Chrome may redirect you to https:// automatically."
-echo "If it fails, try using http:// (unsecured) or install SSL via Certbot."
+echo "🌐 ADMIN PANEL AT: http://admin.asbcrystal.in"
+echo "🌐 API STATUS: http://api.asbcrystal.in/api/health"
 echo "------------------------------------------------"
