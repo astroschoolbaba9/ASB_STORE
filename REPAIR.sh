@@ -7,14 +7,26 @@
 echo "🚀 Starting ASB Store VPS Repair..."
 
 # 1. Clear Nginx Conflicts
-echo "🔧 Hunt down conflicting Nginx configs..."
-# This finds all files in sites-enabled that contain your domain and removes them
-CONFLICTS=$(grep -l "asbcrystal.in" /etc/nginx/sites-enabled/* | grep -v "asbstore")
-if [ -n "$CONFLICTS" ]; then
-    echo "🗑 Removing conflicting files: $CONFLICTS"
-    sudo rm -f $CONFLICTS
+echo "🔍 Searching for all Nginx configs claiming your domains..."
+# This is more thorough: searches all of /etc/nginx
+ALL_CONFLICTS=$(sudo grep -r "asbcrystal.in" /etc/nginx | grep "server_name" | cut -d: -f1 | sort -u | grep -v "asbstore")
+if [ -n "$ALL_CONFLICTS" ]; then
+    echo "🗑 Removing conflicting files: $ALL_CONFLICTS"
+    for file in $ALL_CONFLICTS; do
+        sudo rm -f "$file"
+        # also check enabled links
+        filename=$(basename "$file")
+        sudo rm -f "/etc/nginx/sites-enabled/$filename"
+    done
 fi
 sudo rm -f /etc/nginx/sites-enabled/default
+
+# 1.5 Check if Backend is actually on 8080
+echo "🔌 Checking if Backend is listening on port 8080..."
+if ! sudo netstat -tpln | grep -q ":8080"; then
+    echo "⚠️ Warning: Nothing is listening on port 8080. Restarting PM2..."
+    pm2 restart all || pm2 start /root/ASB_STORE/ecosystem.config.js
+fi
 
 # 2. Fix Directory Permissions (Critical for /root folder)
 echo "📂 Setting permissions for Nginx to access build files..."
