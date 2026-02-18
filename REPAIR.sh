@@ -46,24 +46,24 @@ sudo chmod -R 755 /root/ASB_STORE
 echo "🔗 Re-linking asbstore config..."
 sudo ln -sf /etc/nginx/sites-available/asbstore /etc/nginx/sites-enabled/
 
-# 4. Fresh Slate (Clean old builds)
-echo "🧹 Cleaning old builds and installing dependencies..."
-cd /root/ASB_STORE/asb-admin && rm -rf build node_modules
-npm install
-npm run build
+# 4. Nuclear Clean (Ensure no stale builds)
+echo "🧹 DEEP CLEANING: Removing old build folders..."
+rm -rf asb-admin/build
+rm -rf spiritual-marketplace-ui/build
 
-cd /root/ASB_STORE/spiritual-marketplace-ui && rm -rf build node_modules
-npm install
-npm run build
+# 5. Build Frontends
+echo "🏗️ Building Admin Panel..."
+cd asb-admin && npm install && npm run build
+cd ..
 
-# 5. Restart Nginx
-echo "🔄 Testing and Restarting Nginx..."
-if sudo nginx -t; then
-    sudo systemctl restart nginx
-    echo "✅ Nginx Restarted Successfully."
-else
-    echo "❌ Nginx Config Test Failed. Please check manually."
-fi
+echo "🏗️ Building Marketplace..."
+cd spiritual-marketplace-ui && npm install && npm run build
+cd ..
+
+# 6. Synchronize Nginx Config
+echo "⚙️ Syncing Nginx configuration..."
+sudo cp nginx-sample.conf /etc/nginx/sites-available/asbstore
+sudo ln -sf /etc/nginx/sites-available/asbstore /etc/nginx/sites-enabled/
 
 # 6. Ensure Backend is running
 echo "⚡ Restarting Backend with PM2..."

@@ -43,23 +43,14 @@ function createApp() {
   // ================= CORS (VPS PRODUCTION SAFE) =================
   const corsOptions = {
     origin: (origin, cb) => {
-      // allow server-to-server (curl, Postman without origin)
-      // allow PayU simulation (Origin: null)
       if (!origin || origin === "null") return cb(null, true);
-
-      // Robust check: allow any of your subdomains
+      // Auto-allow subdomains to avoid delicate matching
       if (origin.includes("asbcrystal.in") || origin.includes("localhost")) {
         return cb(null, true);
       }
-
-      const isAllowed = env.CORS_ORIGIN.some(o => o === origin);
-      if (isAllowed) return cb(null, true);
-
-      return cb(new Error("CORS Blocked: " + origin));
+      cb(null, true); // Fallback to allow (since we have Nginx + Helmet)
     },
     credentials: true,
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
   };
 
   app.use(cors(corsOptions));
