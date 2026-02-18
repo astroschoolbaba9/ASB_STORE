@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./TablePage.module.css";
 import { api } from "../../lib/api";
+import { getFriendlyMessage } from "../../utils/errorMapping";
 import useRequireAuth from "../../hooks/useRequireAuth";
 
 function fmtDate(d) {
@@ -84,8 +85,7 @@ export default function Orders() {
         setPage(Number(res?.page || p));
         setPages(Number(res?.pages || 1));
       } catch (e) {
-        console.error("Failed to load orders:", e);
-        setError(e?.response?.message || e?.message || "Failed to load orders");
+        setError(getFriendlyMessage(e));
       } finally {
         setLoading(false);
       }
@@ -115,7 +115,7 @@ export default function Orders() {
           fields: payuRes?.fields
         });
       } catch (e) {
-        setError(e?.response?.message || e?.message || "Unable to start payment");
+        setError(getFriendlyMessage(e));
       } finally {
         setPayingId("");
       }
@@ -155,8 +155,8 @@ export default function Orders() {
                 fulfilment === "DELIVERED"
                   ? styles.statusDelivered
                   : fulfilment === "SHIPPED"
-                  ? styles.statusShipped
-                  : styles.statusProcessing;
+                    ? styles.statusShipped
+                    : styles.statusProcessing;
 
               const showPayNow = canPayNow(o);
 

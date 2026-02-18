@@ -1,5 +1,6 @@
 const { AppError } = require("../utils/AppError");
 const { logError } = require("../utils/logger");
+const { env } = require("../config/env");
 
 
 function errorHandler(err, req, res, next) {

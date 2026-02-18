@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import styles from "./ContactMessages.module.css";
 import Table from "../../components/Table";
 import { api, API_BASE } from "../../lib/api";
+import { getFriendlyMessage } from "../../utils/errorMapping";
 
 function fmtDate(iso) {
   try {
@@ -27,7 +28,7 @@ async function downloadExcel(url) {
     credentials: "include",
   });
 
-    console.log("Export status:", res.status, "content-type:", res.headers.get("content-type")); // ✅ HERE
+  console.log("Export status:", res.status, "content-type:", res.headers.get("content-type")); // ✅ HERE
 
 
   if (!res.ok) {
@@ -85,7 +86,7 @@ export default function ContactMessages() {
         pages: Number(res?.pages || 1),
       });
     } catch (e) {
-      setErr(e?.response?.message || e?.message || "Failed to load contact messages");
+      setErr(getFriendlyMessage(e));
       setData({ items: [], total: 0, pages: 1 });
     } finally {
       setLoading(false);
@@ -97,18 +98,18 @@ export default function ContactMessages() {
   }, [load]);
 
 
-const onExport = useCallback(async () => {
-  try {
-    const q = status === "ALL" ? "" : `?status=${encodeURIComponent(status)}`;
-    const url = `${API_BASE}/api/admin/contact-messages/export${q}`;
+  const onExport = useCallback(async () => {
+    try {
+      const q = status === "ALL" ? "" : `?status=${encodeURIComponent(status)}`;
+      const url = `${API_BASE}/api/admin/contact-messages/export${q}`;
 
-    console.log("Export URL:", url);
+      console.log("Export URL:", url);
 
-    await downloadExcel(url);
-  } catch (e) {
-    setErr(e?.message || "Export failed");
-  }
-}, [status]);
+      await downloadExcel(url);
+    } catch (e) {
+      setErr(getFriendlyMessage(e));
+    }
+  }, [status]);
 
 
 
@@ -133,7 +134,7 @@ const onExport = useCallback(async () => {
           }));
         }
       } catch (e) {
-        setErr(e?.response?.message || e?.message || "Failed to mark as read");
+        setErr(getFriendlyMessage(e));
         await load();
       }
     },
@@ -236,13 +237,13 @@ const onExport = useCallback(async () => {
         </div>
 
         <div className={styles.headerRight}>
-        <button className={styles.refreshBtn} type="button" onClick={load} disabled={loading}>
-        {loading ? "Refreshing..." : "Refresh"}
-        </button>
-        <button className={styles.exportBtn} type="button" onClick={onExport} disabled={loading}>
-    Export
-  </button>
-</div>
+          <button className={styles.refreshBtn} type="button" onClick={load} disabled={loading}>
+            {loading ? "Refreshing..." : "Refresh"}
+          </button>
+          <button className={styles.exportBtn} type="button" onClick={onExport} disabled={loading}>
+            Export
+          </button>
+        </div>
 
       </div>
 

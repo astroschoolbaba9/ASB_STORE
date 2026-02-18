@@ -6,6 +6,8 @@ import useRequireAuth from "../../hooks/useRequireAuth";
 import { useCart } from "../../context/CartContext";
 import Toast from "../../components/ui/Toast";
 import { api } from "../../lib/api";
+import { getFriendlyMessage } from "../../utils/errorMapping";
+
 
 function pickDefaultAddress(addresses = []) {
   const arr = Array.isArray(addresses) ? addresses : [];
@@ -321,8 +323,9 @@ export default function Checkout() {
         window.setTimeout(() => navigate("/dashboard/orders"), 350);
       } catch (e) {
         console.error("Checkout failed:", e);
-        setError(e?.response?.message || e?.message || "Checkout failed. Please try again.");
+        setError(getFriendlyMessage(e));
       } finally {
+
         setPlacing(false);
       }
     });

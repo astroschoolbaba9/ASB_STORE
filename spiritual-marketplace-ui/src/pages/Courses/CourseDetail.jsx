@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import styles from "./CourseDetail.module.css";
 import useRequireAuth from "../../hooks/useRequireAuth";
 import { API_BASE, api } from "../../lib/api";
+import { getFriendlyMessage } from "../../utils/errorMapping";
 
 function absUrl(u) {
   if (!u) return "";
@@ -54,9 +55,8 @@ export default function CourseDetail() {
 
         setCourse(res.course || null);
       } catch (e) {
-        console.error("Course detail load failed:", e);
         if (!alive) return;
-        setError(e?.message || "Failed to load course");
+        setError(getFriendlyMessage(e));
       } finally {
         if (alive) setLoading(false);
       }
@@ -108,11 +108,11 @@ export default function CourseDetail() {
 
         // ✅ IMPORTANT: call PayU initiate directly
         const payu = await api.post("/api/payments/payu/initiate", {
-  purpose: "COURSE_BUY",
-  courseId: id,
-  amount: Number(price || 0),
-  customer,
-});
+          purpose: "COURSE_BUY",
+          courseId: id,
+          amount: Number(price || 0),
+          customer,
+        });
 
 
         if (!payu?.actionUrl || !payu?.fields) {
@@ -125,9 +125,7 @@ export default function CourseDetail() {
         // Go to redirect page (auto submits form)
         navigate("/payment/redirect");
       } catch (e) {
-        console.error("Buy failed:", e);
-        const msg = e?.response?.message || e?.message || "Failed to start payment";
-        setError(msg);
+        setError(getFriendlyMessage(e));
       } finally {
         setBuying(false);
       }

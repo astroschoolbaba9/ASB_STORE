@@ -5,7 +5,9 @@ import Table from "../../components/Table";
 import Modal from "../../components/Modal";
 import ConfirmModal from "../../components/ConfirmModal";
 import { useToast } from "../../components/ToastProvider";
+import { getFriendlyMessage } from "../../utils/errorMapping";
 import styles from "./Products.module.css";
+
 
 const API_BASE = process.env.REACT_APP_API_BASE || "http://localhost:8080";
 
@@ -137,9 +139,9 @@ export default function Products() {
       const data = await api.get("/api/categories");
       const arr =
         Array.isArray(data) ? data :
-        Array.isArray(data?.categories) ? data.categories :
-        Array.isArray(data?.items) ? data.items :
-        Array.isArray(data?.data) ? data.data : [];
+          Array.isArray(data?.categories) ? data.categories :
+            Array.isArray(data?.items) ? data.items :
+              Array.isArray(data?.data) ? data.data : [];
 
       const normalized = arr
         .map(normalizeCategory)
@@ -172,9 +174,9 @@ export default function Products() {
 
       const toArr = (data) =>
         Array.isArray(data) ? data :
-        Array.isArray(data?.items) ? data.items :
-        Array.isArray(data?.products) ? data.products :
-        Array.isArray(data?.data) ? data.data : [];
+          Array.isArray(data?.items) ? data.items :
+            Array.isArray(data?.products) ? data.products :
+              Array.isArray(data?.data) ? data.data : [];
 
       const merged = [...toArr(shopRes), ...toArr(giftRes)]
         .map(normalizeProduct)
@@ -182,8 +184,9 @@ export default function Products() {
 
       setItems(merged);
     } catch (e) {
-      setErr(e?.response?.message || e?.message || "Failed to load products");
+      setErr(getFriendlyMessage(e));
       setItems([]);
+
     } finally {
       setLoading(false);
     }
@@ -360,9 +363,10 @@ export default function Products() {
       setModalOpen(false);
       await loadProducts();
     } catch (e) {
-      const msg = e?.response?.message || e?.message || "Save failed";
+      const msg = getFriendlyMessage(e);
       setFormErr(msg);
       toast.error(msg);
+
     } finally {
       setSaving(false);
     }
@@ -384,7 +388,8 @@ export default function Products() {
       setToDelete(null);
       await loadProducts();
     } catch (e) {
-      toast.error(e?.response?.message || e?.message || "Delete failed");
+      toast.error(getFriendlyMessage(e));
+
     } finally {
       setConfirmLoading(false);
     }
@@ -618,8 +623,8 @@ export default function Products() {
                   const res = await api.post("/api/admin/uploads/products", fd);
                   const urls = res?.images || [];
                   setImagesText((prev) => [...parseLines(prev), ...urls].join("\n"));
-                } catch {
-                  alert("Image upload failed");
+                } catch (e) {
+                  toast.error(getFriendlyMessage(e));
                 }
               }}
             />

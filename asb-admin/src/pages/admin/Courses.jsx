@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { api, API_BASE } from "../../lib/api";
+import { getFriendlyMessage } from "../../utils/errorMapping";
 import { slugify } from "../../lib/slugify";
 import Table from "../../components/Table";
 import Modal from "../../components/Modal";
@@ -95,7 +96,7 @@ export default function Courses() {
       const arr = normalizeList(data, ["courses"]);
       setItems(arr.map(normalizeCourse).filter((x) => x._id));
     } catch (e) {
-      setErr(e?.response?.message || e?.message || "Failed to load courses");
+      setErr(getFriendlyMessage(e));
       setItems([]);
     } finally {
       setLoading(false);
@@ -175,12 +176,12 @@ export default function Courses() {
     setLessons(
       Array.isArray(row.lessons)
         ? row.lessons.map((l) => ({
-            ...(l?._id ? { _id: l._id } : {}),
-            title: l?.title || "",
-            videoUrl: l?.videoUrl || "",
-            durationSec: typeof l?.durationSec === "number" ? l.durationSec : Number(l?.durationSec || 0),
-            isFreePreview: !!l?.isFreePreview
-          }))
+          ...(l?._id ? { _id: l._id } : {}),
+          title: l?.title || "",
+          videoUrl: l?.videoUrl || "",
+          durationSec: typeof l?.durationSec === "number" ? l.durationSec : Number(l?.durationSec || 0),
+          isFreePreview: !!l?.isFreePreview
+        }))
         : []
     );
 
@@ -216,7 +217,7 @@ export default function Courses() {
       setThumbnail(url);
       toast.success("Thumbnail uploaded");
     } catch (e) {
-      const msg = e?.response?.message || e?.message || "Thumbnail upload failed";
+      const msg = getFriendlyMessage(e);
       setFormErr(msg);
       toast.error(msg);
     } finally {
@@ -281,7 +282,7 @@ export default function Courses() {
       setModalOpen(false);
       await loadCourses();
     } catch (e) {
-      const msg = e?.response?.message || e?.message || "Save failed";
+      const msg = getFriendlyMessage(e);
       setFormErr(msg);
       toast.error(msg);
     } finally {
@@ -296,7 +297,7 @@ export default function Courses() {
       toast.success(nextVal ? "Shown on Home" : "Removed from Home");
     } catch (e) {
       setItems((prev) => prev.map((c) => (c._id === row._id ? { ...c, isFeatured: !!row.isFeatured } : c)));
-      toast.error(e?.response?.message || e?.message || "Failed to update");
+      toast.error(getFriendlyMessage(e));
     }
   }
 
@@ -307,7 +308,7 @@ export default function Courses() {
       await api.put(`/api/admin/courses/${row._id}`, { featuredOrder: next });
       toast.success("Order updated");
     } catch (e) {
-      toast.error(e?.response?.message || e?.message || "Failed to update order");
+      toast.error(getFriendlyMessage(e));
       await loadCourses();
     }
   }
@@ -327,7 +328,7 @@ export default function Courses() {
       setToDelete(null);
       await loadCourses();
     } catch (e) {
-      toast.error(e?.response?.message || e?.message || "Delete failed");
+      toast.error(getFriendlyMessage(e));
     } finally {
       setConfirmLoading(false);
     }

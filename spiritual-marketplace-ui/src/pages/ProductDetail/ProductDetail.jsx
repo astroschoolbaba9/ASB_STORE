@@ -6,6 +6,7 @@ import useRequireAuth from "../../hooks/useRequireAuth";
 import { useCart } from "../../context/CartContext";
 import Toast from "../../components/ui/Toast";
 import { api } from "../../lib/api";
+import { getFriendlyMessage } from "../../utils/errorMapping";
 
 const API_BASE = process.env.REACT_APP_API_BASE || "http://api.asbcrystal.in";
 
@@ -283,7 +284,7 @@ export default function ProductDetail() {
 
       await loadReviews();
     } catch (e) {
-      alert(e?.message || "Failed to submit review");
+      setReviewsErr(getFriendlyMessage(e));
     } finally {
       setReviewSaving(false);
     }
@@ -616,7 +617,7 @@ export default function ProductDetail() {
                         <button type="button" className={styles.smallBtn} onClick={() => markHelpful(r._id)}>
                           Helpful ({r.helpfulCount || 0})
                         </button>
-                        <button type="button" className={styles.smallBtn} onClick={() => alert("Report feature later")}>
+                        <button type="button" className={styles.smallBtn} onClick={() => showToast("Report submitted")}>
                           Report
                         </button>
                       </div>

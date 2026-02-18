@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import styles from "./MyCourses.module.css";
 import useRequireAuth from "../../hooks/useRequireAuth";
 import { api } from "../../lib/api";
+import { getFriendlyMessage } from "../../utils/errorMapping";
 
 export default function MyCourses() {
   const requireAuth = useRequireAuth();
@@ -38,8 +39,7 @@ export default function MyCourses() {
 
         setCourses(normalized);
       } catch (e) {
-        console.error("Failed to load my courses:", e);
-        setError(e?.message || "Failed to load courses");
+        setError(getFriendlyMessage(e));
         setCourses([]);
       } finally {
         setLoading(false);

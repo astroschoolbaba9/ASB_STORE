@@ -1,4 +1,5 @@
 // src/lib/api.js
+import { getFriendlyMessage } from "../utils/errorMapping";
 
 const DEFAULT_BASE = "http://localhost:8080";
 
@@ -46,9 +47,9 @@ function buildQuery(query = {}) {
 async function toApiError(res, fallbackMessage) {
   let data = null;
   try {
-    data = await res.json();
+    const text = await res.text();
+    data = text ? JSON.parse(text) : null;
   } catch {
-    // response may be empty or not JSON
     data = null;
   }
 
@@ -57,7 +58,8 @@ async function toApiError(res, fallbackMessage) {
   );
 
   err.status = res.status;
-  err.code = (data && (data.code || data.errorCode)) || "HTTP_ERROR";
+  err.code = (data && (data.code || data.errorCode)) || (res.status === 429 ? "RATE_LIMITED" : "HTTP_ERROR");
+  err.friendlyMessage = getFriendlyMessage(err);
   err.response = data;
 
   return err;

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { api } from "../../lib/api";
+import { getFriendlyMessage } from "../../utils/errorMapping";
 import styles from "./Dashboard.module.css";
 
 function money(n) {
@@ -21,7 +22,7 @@ export default function AdminDashboard() {
       const res = await api.get("/api/admin/dashboard-stats");
       setStats(res?.stats || null);
     } catch (e) {
-      setErr(e?.response?.message || e?.message || "Failed to load dashboard stats");
+      setErr(getFriendlyMessage(e));
       setStats(null);
     } finally {
       setLoading(false);

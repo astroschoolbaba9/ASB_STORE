@@ -1,5 +1,5 @@
-// src/lib/api.js
-const API_BASE = process.env.REACT_APP_API_BASE || "http://api.asbcrystal.in";
+import { getFriendlyMessage } from "../utils/errorMapping";
+const API_BASE = process.env.REACT_APP_API_BASE || "http://localhost:8080";
 
 function getToken() {
   return localStorage.getItem("asb_access_token") || "";
@@ -48,8 +48,10 @@ async function request(path, { method = "GET", body, token, query, headers } = {
   if (!res.ok) {
     const err = new Error(data?.message || "Request failed");
     err.status = res.status;
-    err.code = data?.code || "REQUEST_FAILED";
+    // Map backend code if available
+    err.code = data?.code || data?.errorCode || (res.status === 429 ? "RATE_LIMITED" : "REQUEST_FAILED");
     err.details = data?.details || null;
+    err.friendlyMessage = getFriendlyMessage(err);
 
     // ✅ important: keep raw response for UI decisions
     err.response = data;

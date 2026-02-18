@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import styles from "./OrderDetail.module.css";
 import { api } from "../../lib/api";
+import { getFriendlyMessage } from "../../utils/errorMapping";
 import useRequireAuth from "../../hooks/useRequireAuth";
 
 function money(n) {
@@ -62,7 +63,7 @@ export default function OrderDetail() {
         const res = await api.get(`/api/orders/${id}`);
         setOrder(res?.order || res?.data?.order || null);
       } catch (e) {
-        setErr(e?.response?.message || e?.message || "Failed to load order");
+        setErr(getFriendlyMessage(e));
         setOrder(null);
       } finally {
         setLoading(false);
@@ -115,7 +116,7 @@ export default function OrderDetail() {
           fields: payuRes?.fields
         });
       } catch (e) {
-        setErr(e?.response?.message || e?.message || "Unable to start payment. Please try again.");
+        setErr(getFriendlyMessage(e));
       } finally {
         setPaying(false);
       }

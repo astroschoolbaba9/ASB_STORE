@@ -2,6 +2,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import styles from "./AuthModal.module.css";
+import { getFriendlyMessage } from "../../utils/errorMapping";
+
 
 export default function AuthModal() {
   const {
@@ -93,8 +95,9 @@ export default function AuthModal() {
       setOtp("");
       setCooldown(30);
     } catch (e) {
-      setError(e?.message || "Failed to send OTP");
+      setError(getFriendlyMessage(e));
       setSent(false);
+
     } finally {
       setBusy(false);
     }
@@ -108,7 +111,8 @@ export default function AuthModal() {
       await verifyOtp({ identifier, otp: otp.trim() });
       closeAuthModal();
     } catch (e) {
-      setError(e?.message || "Invalid OTP");
+      setError(getFriendlyMessage(e));
+
     } finally {
       setBusy(false);
     }
@@ -123,7 +127,8 @@ export default function AuthModal() {
       await loginPassword({ identifier, password: password.trim() });
       closeAuthModal();
     } catch (e) {
-      setError(e?.message || "Login failed");
+      setError(getFriendlyMessage(e));
+
     } finally {
       setBusy(false);
     }
@@ -147,7 +152,8 @@ export default function AuthModal() {
       });
       closeAuthModal();
     } catch (e) {
-      setError(e?.message || "Registration failed");
+      setError(getFriendlyMessage(e));
+
     } finally {
       setBusy(false);
     }
@@ -401,7 +407,8 @@ export default function AuthModal() {
           )}
 
           {/* ERROR */}
-          {error ? <div className={styles.hint}>{error}</div> : null}
+          {error ? <div className={styles.errorText}>{error}</div> : null}
+
 
           {/* Close */}
           <button className="btn-outline" type="button" onClick={closeAuthModal} disabled={busy}>

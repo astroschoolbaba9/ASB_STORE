@@ -1,7 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { api } from "../../lib/api";
+import { getFriendlyMessage } from "../../utils/errorMapping";
+import { useToast } from "../../components/ToastProvider";
 import styles from "./OrderDetail.module.css";
+
 
 function money(n) {
   const x = Number(n || 0);
@@ -11,6 +14,7 @@ function money(n) {
 const FSTAT = ["PLACED", "CONFIRMED", "SHIPPED", "DELIVERED", "CANCELLED"];
 
 export default function OrderDetail() {
+  const toast = useToast();
   const { id } = useParams();
 
   const [loading, setLoading] = useState(true);
@@ -44,8 +48,9 @@ export default function OrderDetail() {
       setTrackingId(o?.tracking?.trackingId || "");
       setTrackingUrl(o?.tracking?.trackingUrl || "");
     } catch (e) {
-      setErr(e?.response?.message || e?.message || "Failed to load order");
+      setErr(getFriendlyMessage(e));
       setOrder(null);
+
     } finally {
       setLoading(false);
     }
@@ -98,9 +103,10 @@ export default function OrderDetail() {
       });
       setOrder(res?.order || order);
       setStatusNote("");
-      alert("Status updated");
+      toast.success("Status updated");
     } catch (e) {
-      alert(e?.response?.message || e?.message || "Failed to update status");
+      toast.error(getFriendlyMessage(e));
+
     } finally {
       setSavingStatus(false);
     }
@@ -117,9 +123,10 @@ export default function OrderDetail() {
       });
       setOrder(res?.order || order);
       setTrackingNote("");
-      alert("Tracking updated");
+      toast.success("Tracking updated");
     } catch (e) {
-      alert(e?.response?.message || e?.message || "Failed to update tracking");
+      toast.error(getFriendlyMessage(e));
+
     } finally {
       setSavingTracking(false);
     }
@@ -163,101 +170,101 @@ export default function OrderDetail() {
         </section>
 
         {/* Admin Controls */}
-<section className={styles.card}>
-  <div className={styles.cardTitle}>Admin Controls</div>
+        <section className={styles.card}>
+          <div className={styles.cardTitle}>Admin Controls</div>
 
-  <div className={styles.controlsGrid}>
-    {/* Fulfilment */}
-    <div className={styles.ctrlBlock}>
-      <div className={styles.ctrlRow}>
-        <div className={styles.ctrlLabel}>Fulfilment Status</div>
+          <div className={styles.controlsGrid}>
+            {/* Fulfilment */}
+            <div className={styles.ctrlBlock}>
+              <div className={styles.ctrlRow}>
+                <div className={styles.ctrlLabel}>Fulfilment Status</div>
 
-        <select
-          className={styles.ctrlSelect}
-          value={nextStatus}
-          onChange={(e) => setNextStatus(e.target.value)}
-        >
-          {FSTAT.map((s) => (
-            <option key={s} value={s}>
-              {s}
-            </option>
-          ))}
-        </select>
-      </div>
+                <select
+                  className={styles.ctrlSelect}
+                  value={nextStatus}
+                  onChange={(e) => setNextStatus(e.target.value)}
+                >
+                  {FSTAT.map((s) => (
+                    <option key={s} value={s}>
+                      {s}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-      <div style={{ marginTop: 10 }}>
-        <input
-          className={styles.ctrlInput}
-          value={statusNote}
-          onChange={(e) => setStatusNote(e.target.value)}
-          placeholder="Note (optional) e.g. packed & confirmed"
-        />
-      </div>
+              <div style={{ marginTop: 10 }}>
+                <input
+                  className={styles.ctrlInput}
+                  value={statusNote}
+                  onChange={(e) => setStatusNote(e.target.value)}
+                  placeholder="Note (optional) e.g. packed & confirmed"
+                />
+              </div>
 
-      <div className={styles.ctrlActions}>
-        <button
-          className={styles.ctrlBtnPrimary}
-          type="button"
-          onClick={saveFulfilment}
-          disabled={savingStatus}
-        >
-          {savingStatus ? "Saving..." : "Update Status"}
-        </button>
-      </div>
+              <div className={styles.ctrlActions}>
+                <button
+                  className={styles.ctrlBtnPrimary}
+                  type="button"
+                  onClick={saveFulfilment}
+                  disabled={savingStatus}
+                >
+                  {savingStatus ? "Saving..." : "Update Status"}
+                </button>
+              </div>
 
-      <div className={styles.ctrlHint}>
-        Tip: Use CONFIRMED → SHIPPED → DELIVERED. Use CANCELLED only if needed.
-      </div>
-    </div>
+              <div className={styles.ctrlHint}>
+                Tip: Use CONFIRMED → SHIPPED → DELIVERED. Use CANCELLED only if needed.
+              </div>
+            </div>
 
-    {/* Tracking */}
-    <div className={styles.ctrlBlock}>
-      <div className={styles.ctrlLabel}>Tracking</div>
+            {/* Tracking */}
+            <div className={styles.ctrlBlock}>
+              <div className={styles.ctrlLabel}>Tracking</div>
 
-      <div style={{ display: "grid", gap: 8, marginTop: 10 }}>
-        <input
-          className={styles.ctrlInput}
-          value={courier}
-          onChange={(e) => setCourier(e.target.value)}
-          placeholder="Courier (e.g. DTDC)"
-        />
-        <input
-          className={styles.ctrlInput}
-          value={trackingId}
-          onChange={(e) => setTrackingId(e.target.value)}
-          placeholder="Tracking ID"
-        />
-        <input
-          className={styles.ctrlInput}
-          value={trackingUrl}
-          onChange={(e) => setTrackingUrl(e.target.value)}
-          placeholder="Tracking URL (optional)"
-        />
-        <input
-          className={styles.ctrlInput}
-          value={trackingNote}
-          onChange={(e) => setTrackingNote(e.target.value)}
-          placeholder="Tracking note (optional)"
-        />
-      </div>
+              <div style={{ display: "grid", gap: 8, marginTop: 10 }}>
+                <input
+                  className={styles.ctrlInput}
+                  value={courier}
+                  onChange={(e) => setCourier(e.target.value)}
+                  placeholder="Courier (e.g. DTDC)"
+                />
+                <input
+                  className={styles.ctrlInput}
+                  value={trackingId}
+                  onChange={(e) => setTrackingId(e.target.value)}
+                  placeholder="Tracking ID"
+                />
+                <input
+                  className={styles.ctrlInput}
+                  value={trackingUrl}
+                  onChange={(e) => setTrackingUrl(e.target.value)}
+                  placeholder="Tracking URL (optional)"
+                />
+                <input
+                  className={styles.ctrlInput}
+                  value={trackingNote}
+                  onChange={(e) => setTrackingNote(e.target.value)}
+                  placeholder="Tracking note (optional)"
+                />
+              </div>
 
-      <div className={styles.ctrlActions}>
-        <button
-          className={styles.ctrlBtnPrimary}
-          type="button"
-          onClick={saveTracking}
-          disabled={savingTracking}
-        >
-          {savingTracking ? "Saving..." : "Save Tracking"}
-        </button>
-      </div>
+              <div className={styles.ctrlActions}>
+                <button
+                  className={styles.ctrlBtnPrimary}
+                  type="button"
+                  onClick={saveTracking}
+                  disabled={savingTracking}
+                >
+                  {savingTracking ? "Saving..." : "Save Tracking"}
+                </button>
+              </div>
 
-      <div className={styles.ctrlHint}>
-        If tracking URL is present, user dashboard can show “Track Package”.
-      </div>
-    </div>
-  </div>
-</section>
+              <div className={styles.ctrlHint}>
+                If tracking URL is present, user dashboard can show “Track Package”.
+              </div>
+            </div>
+          </div>
+        </section>
 
 
         {/* Items + totals */}

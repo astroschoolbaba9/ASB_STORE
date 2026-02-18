@@ -47,9 +47,16 @@ async function sendOtp({ identifier }) {
   const norm = normalizeIdentifier(identifier);
 
   const ttl = Number(env.OTP_TTL_SECONDS || 600);
-  const otp = String(generateOtp());
+  let otp = String(generateOtp());
+
+  // ✅ TEST HOOK: Fixed OTP for specific test number in DEV mode
+  if (env.OTP_DEV_MODE && norm.identifier === "9999999999") {
+    otp = "123456";
+  }
+
   const expiresAt = new Date(Date.now() + ttl * 1000);
   const otpHash = hashOtp(otp);
+
 
   await OtpRequest.updateOne(
     { identifier: norm.identifier, channel: norm.channel },

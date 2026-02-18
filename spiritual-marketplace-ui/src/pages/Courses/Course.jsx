@@ -4,6 +4,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import styles from "./Course.module.css";
 import useRequireAuth from "../../hooks/useRequireAuth";
 import { api, API_BASE } from "../../lib/api";
+import { getFriendlyMessage } from "../../utils/errorMapping";
 import { normalizeList, normalizeCourse } from "../../lib/normalize";
 
 const COURSE_CATEGORIES = ["All", "General", "Beginner Programs", "Advanced Programs", "Certifications", "Workshops"];
@@ -99,9 +100,8 @@ export default function Course() {
         const arr = normalizeList(res, ["courses"]);
         setCourses(arr.map(normalizeCourse).filter((x) => x._id));
       } catch (e) {
-        console.error("Courses load failed:", e);
         if (!alive) return;
-        setError(e?.response?.message || e?.message || "Failed to load courses");
+        setError(getFriendlyMessage(e));
       } finally {
         if (alive) setLoading(false);
       }

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { api } from "../../lib/api";
+import { getFriendlyMessage } from "../../utils/errorMapping";
 import Table from "../../components/Table";
 import styles from "./Orders.module.css";
 
@@ -58,7 +59,7 @@ export default function Orders() {
       setTotal(Number(res?.total || 0));
       setPages(Number(res?.pages || 1));
     } catch (e) {
-      setErr(e?.response?.message || e?.message || "Failed to load orders");
+      setErr(getFriendlyMessage(e));
       setItems([]);
       setPages(1);
       setTotal(0);

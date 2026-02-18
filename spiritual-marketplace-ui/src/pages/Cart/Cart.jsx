@@ -4,12 +4,24 @@ import styles from "./Cart.module.css";
 
 import useRequireAuth from "../../hooks/useRequireAuth";
 import { useCart } from "../../context/CartContext";
+import { getFriendlyMessage } from "../../utils/errorMapping";
+import Toast from "../../components/ui/Toast";
+import { useState } from "react";
+
 
 export default function Cart() {
   const requireAuth = useRequireAuth();
   const navigate = useNavigate();
 
   const { cart, loading, refreshCart, updateCartItem, removeCartItem, clearCart } = useCart();
+  const [toastOpen, setToastOpen] = useState(false);
+  const [toastMsg, setToastMsg] = useState("");
+
+  const showToast = (msg) => {
+    setToastMsg(msg);
+    setToastOpen(true);
+    setTimeout(() => setToastOpen(false), 3000);
+  };
 
   useEffect(() => {
     refreshCart();
@@ -86,18 +98,19 @@ export default function Cart() {
           if (stock <= 0) {
             await removeCartItem(itemId);
             await refreshCart();
-            alert("This item is now out of stock and was removed from your cart.");
+            showToast("This item is now out of stock and was removed from your cart.");
             return;
           }
 
           await updateCartItem(itemId, { qty: stock });
           await refreshCart();
-          alert(`Only ${stock} available. Quantity updated to ${stock}.`);
+          showToast(`Only ${stock} available. Quantity updated to ${stock}.`);
           return;
         }
 
-        alert(e?.message || "Failed to update quantity");
+        showToast(getFriendlyMessage(e));
       }
+
     });
   };
 
@@ -107,8 +120,9 @@ export default function Cart() {
         await removeCartItem(itemId);
         await refreshCart();
       } catch (e) {
-        alert(e?.message || "Failed to remove item");
+        showToast(getFriendlyMessage(e));
       }
+
     });
   };
 
@@ -237,6 +251,7 @@ export default function Cart() {
           </aside>
         </div>
       )}
+      <Toast open={toastOpen} message={toastMsg} />
     </div>
   );
 }

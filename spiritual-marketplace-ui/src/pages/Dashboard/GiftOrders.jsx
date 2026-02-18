@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./GiftOrders.module.css";
 import { api } from "../../lib/api";
+import { getFriendlyMessage } from "../../utils/errorMapping";
 import useRequireAuth from "../../hooks/useRequireAuth";
 
 function fmtDate(d) {
@@ -44,8 +45,7 @@ export default function GiftOrders() {
         const res = await api.get("/api/orders", { query: { page: 1, limit: 50 } });
         setOrders(Array.isArray(res?.items) ? res.items : []);
       } catch (e) {
-        console.error("Failed to load gift orders:", e);
-        setError(e?.message || "Failed to load gift orders");
+        setError(getFriendlyMessage(e));
         setOrders([]);
       } finally {
         setLoading(false);
@@ -110,10 +110,10 @@ export default function GiftOrders() {
               s === "DELIVERED"
                 ? styles.statusDelivered
                 : s === "SHIPPED"
-                ? styles.statusShipped
-                : s === "CONFIRMED"
-                ? styles.statusProcessing
-                : styles.statusProcessing;
+                  ? styles.statusShipped
+                  : s === "CONFIRMED"
+                    ? styles.statusProcessing
+                    : styles.statusProcessing;
 
             return (
               <div key={o._id} className={styles.row}>

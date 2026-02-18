@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 import styles from "./SectionPage.module.css";
 import { api } from "../../lib/api";
+import { getFriendlyMessage } from "../../utils/errorMapping";
 
 function useQuery() {
   const { search } = useLocation();
@@ -60,7 +61,7 @@ export default function SectionPage() {
         if (!alive) return;
         // fallback to empty but still usable
         setCategories(["All"]);
-        setError(e?.message || "Failed to load categories");
+        setError(getFriendlyMessage(e));
       }
     };
 
@@ -96,7 +97,7 @@ export default function SectionPage() {
         console.error("Section products failed:", e);
         if (!alive) return;
         setProducts([]);
-        setError(e?.message || "Failed to load products");
+        setError(getFriendlyMessage(e));
       } finally {
         if (alive) setLoading(false);
       }

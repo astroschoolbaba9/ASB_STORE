@@ -5,6 +5,7 @@ import useRequireAuth from "../../hooks/useRequireAuth";
 import { useCart } from "../../context/CartContext";
 import Toast from "../../components/ui/Toast";
 import { api } from "../../lib/api";
+import { getFriendlyMessage } from "../../utils/errorMapping";
 import { normalizeList, normalizeCategory, normalizeProduct } from "../../lib/normalize";
 
 const API_BASE = process.env.REACT_APP_API_BASE || "http://api.asbcrystal.in";
@@ -149,7 +150,7 @@ export default function Shop() {
         setTotal(typeof res.total === "number" ? res.total : final.length);
       } catch (e) {
         if (!alive) return;
-setError(e?.response?.message || e?.message || "Failed to load products");
+        setError(getFriendlyMessage(e));
         setProducts([]);
         setTotal(0);
       } finally {

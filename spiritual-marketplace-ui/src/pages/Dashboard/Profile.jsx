@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import styles from "./ProfilePage.module.css";
 import useRequireAuth from "../../hooks/useRequireAuth";
 import { api } from "../../lib/api";
+import { getFriendlyMessage } from "../../utils/errorMapping";
 
 const emptyAddress = {
   _id: "",
@@ -67,7 +68,7 @@ export default function Profile() {
         const addrRes = await api.get("/api/me/addresses");
         setAddresses(Array.isArray(addrRes?.addresses) ? addrRes.addresses : []);
       } catch (e) {
-        setErr(e?.response?.message || e?.message || "Failed to load profile");
+        setErr(getFriendlyMessage(e));
       } finally {
         setLoading(false);
       }
@@ -104,7 +105,7 @@ export default function Profile() {
         setEmail(nextProfile.email);
         setPhone(nextProfile.phone);
       } catch (e) {
-        setErr(e?.response?.message || e?.message || "Failed to save profile");
+        setErr(getFriendlyMessage(e));
       } finally {
         setSaving(false);
       }
@@ -164,7 +165,7 @@ export default function Profile() {
         setAddresses(Array.isArray(res?.addresses) ? res.addresses : []);
         setAddrOpen(false);
       } catch (e) {
-        setErr(e?.response?.message || e?.message || "Failed to save address");
+        setErr(getFriendlyMessage(e));
       } finally {
         setSaving(false);
       }
@@ -182,7 +183,7 @@ export default function Profile() {
         const res = await api.del(`/api/me/addresses/${id}`);
         setAddresses(Array.isArray(res?.addresses) ? res.addresses : []);
       } catch (e) {
-        setErr(e?.response?.message || e?.message || "Failed to remove address");
+        setErr(getFriendlyMessage(e));
       } finally {
         setSaving(false);
       }
@@ -197,7 +198,7 @@ export default function Profile() {
         const res = await api.patch(`/api/me/addresses/${id}/default`, {});
         setAddresses(Array.isArray(res?.addresses) ? res.addresses : []);
       } catch (e) {
-        setErr(e?.response?.message || e?.message || "Failed to set default");
+        setErr(getFriendlyMessage(e));
       } finally {
         setSaving(false);
       }
@@ -306,131 +307,131 @@ export default function Profile() {
       </div>
 
       {/* Modal */}
-{addrOpen ? (
-  <div
-    className={styles.modalBackdrop}
-    role="dialog"
-    aria-modal="true"
-    onMouseDown={() => setAddrOpen(false)}   // ✅ click outside closes
-  >
-    <div
-      className={styles.modalCard}
-      onMouseDown={(e) => e.stopPropagation()} // ✅ click inside doesn't close
-    >
-      <div className={styles.modalHead}>
-        <div className={styles.cardTitle}>
-          {addrMode === "edit" ? "Edit Address" : "Add Address"}
+      {addrOpen ? (
+        <div
+          className={styles.modalBackdrop}
+          role="dialog"
+          aria-modal="true"
+          onMouseDown={() => setAddrOpen(false)}   // ✅ click outside closes
+        >
+          <div
+            className={styles.modalCard}
+            onMouseDown={(e) => e.stopPropagation()} // ✅ click inside doesn't close
+          >
+            <div className={styles.modalHead}>
+              <div className={styles.cardTitle}>
+                {addrMode === "edit" ? "Edit Address" : "Add Address"}
+              </div>
+              <button type="button" className={styles.modalX} onClick={() => setAddrOpen(false)}>
+                ✕
+              </button>
+            </div>
+
+            <div className={styles.modalGrid}>
+              <div className={styles.field}>
+                <label className={styles.label}>Label</label>
+                <input
+                  className={styles.input}
+                  value={addrDraft.label}
+                  onChange={(e) => setAddrDraft((p) => ({ ...p, label: e.target.value }))}
+                  placeholder="Home / Office"
+                />
+              </div>
+
+              <div className={styles.field}>
+                <label className={styles.label}>Full Name</label>
+                <input
+                  className={styles.input}
+                  value={addrDraft.fullName}
+                  onChange={(e) => setAddrDraft((p) => ({ ...p, fullName: e.target.value }))}
+                />
+              </div>
+
+              <div className={styles.field}>
+                <label className={styles.label}>Phone</label>
+                <input
+                  className={styles.input}
+                  value={addrDraft.phone}
+                  onChange={(e) => setAddrDraft((p) => ({ ...p, phone: e.target.value }))}
+                />
+              </div>
+
+              <div className={styles.field}>
+                <label className={styles.label}>Address Line 1</label>
+                <input
+                  className={styles.input}
+                  value={addrDraft.line1}
+                  onChange={(e) => setAddrDraft((p) => ({ ...p, line1: e.target.value }))}
+                />
+              </div>
+
+              <div className={styles.field}>
+                <label className={styles.label}>Address Line 2</label>
+                <input
+                  className={styles.input}
+                  value={addrDraft.line2}
+                  onChange={(e) => setAddrDraft((p) => ({ ...p, line2: e.target.value }))}
+                />
+              </div>
+
+              <div className={styles.field}>
+                <label className={styles.label}>City</label>
+                <input
+                  className={styles.input}
+                  value={addrDraft.city}
+                  onChange={(e) => setAddrDraft((p) => ({ ...p, city: e.target.value }))}
+                />
+              </div>
+
+              <div className={styles.field}>
+                <label className={styles.label}>State</label>
+                <input
+                  className={styles.input}
+                  value={addrDraft.state}
+                  onChange={(e) => setAddrDraft((p) => ({ ...p, state: e.target.value }))}
+                />
+              </div>
+
+              <div className={styles.field}>
+                <label className={styles.label}>Pincode</label>
+                <input
+                  className={styles.input}
+                  value={addrDraft.pincode}
+                  onChange={(e) => setAddrDraft((p) => ({ ...p, pincode: e.target.value }))}
+                />
+              </div>
+
+              <div className={styles.field}>
+                <label className={styles.label}>Landmark</label>
+                <input
+                  className={styles.input}
+                  value={addrDraft.landmark}
+                  onChange={(e) => setAddrDraft((p) => ({ ...p, landmark: e.target.value }))}
+                />
+              </div>
+
+              <label className={styles.checkboxRow}>
+                <input
+                  type="checkbox"
+                  checked={!!addrDraft.isDefault}
+                  disabled={addrDraft._id && defaultAddressId === addrDraft._id}
+                  onChange={(e) => setAddrDraft((p) => ({ ...p, isDefault: e.target.checked }))}
+                />
+                <span>Set as default</span>
+              </label>
+            </div>
+
+            <div className={styles.actions}>
+              <button type="button" className="btn-outline" onClick={() => setAddrOpen(false)} disabled={saving}>
+                Cancel
+              </button>
+              <button type="button" className="btn-primary" onClick={saveAddress} disabled={saving}>
+                {saving ? "Saving…" : "Save"}
+              </button>
+            </div>
+          </div>
         </div>
-        <button type="button" className={styles.modalX} onClick={() => setAddrOpen(false)}>
-          ✕
-        </button>
-      </div>
-
-      <div className={styles.modalGrid}>
-        <div className={styles.field}>
-          <label className={styles.label}>Label</label>
-          <input
-            className={styles.input}
-            value={addrDraft.label}
-            onChange={(e) => setAddrDraft((p) => ({ ...p, label: e.target.value }))}
-            placeholder="Home / Office"
-          />
-        </div>
-
-        <div className={styles.field}>
-          <label className={styles.label}>Full Name</label>
-          <input
-            className={styles.input}
-            value={addrDraft.fullName}
-            onChange={(e) => setAddrDraft((p) => ({ ...p, fullName: e.target.value }))}
-          />
-        </div>
-
-        <div className={styles.field}>
-          <label className={styles.label}>Phone</label>
-          <input
-            className={styles.input}
-            value={addrDraft.phone}
-            onChange={(e) => setAddrDraft((p) => ({ ...p, phone: e.target.value }))}
-          />
-        </div>
-
-        <div className={styles.field}>
-          <label className={styles.label}>Address Line 1</label>
-          <input
-            className={styles.input}
-            value={addrDraft.line1}
-            onChange={(e) => setAddrDraft((p) => ({ ...p, line1: e.target.value }))}
-          />
-        </div>
-
-        <div className={styles.field}>
-          <label className={styles.label}>Address Line 2</label>
-          <input
-            className={styles.input}
-            value={addrDraft.line2}
-            onChange={(e) => setAddrDraft((p) => ({ ...p, line2: e.target.value }))}
-          />
-        </div>
-
-        <div className={styles.field}>
-          <label className={styles.label}>City</label>
-          <input
-            className={styles.input}
-            value={addrDraft.city}
-            onChange={(e) => setAddrDraft((p) => ({ ...p, city: e.target.value }))}
-          />
-        </div>
-
-        <div className={styles.field}>
-          <label className={styles.label}>State</label>
-          <input
-            className={styles.input}
-            value={addrDraft.state}
-            onChange={(e) => setAddrDraft((p) => ({ ...p, state: e.target.value }))}
-          />
-        </div>
-
-        <div className={styles.field}>
-          <label className={styles.label}>Pincode</label>
-          <input
-            className={styles.input}
-            value={addrDraft.pincode}
-            onChange={(e) => setAddrDraft((p) => ({ ...p, pincode: e.target.value }))}
-          />
-        </div>
-
-        <div className={styles.field}>
-          <label className={styles.label}>Landmark</label>
-          <input
-            className={styles.input}
-            value={addrDraft.landmark}
-            onChange={(e) => setAddrDraft((p) => ({ ...p, landmark: e.target.value }))}
-          />
-        </div>
-
-        <label className={styles.checkboxRow}>
-          <input
-            type="checkbox"
-            checked={!!addrDraft.isDefault}
-            disabled={addrDraft._id && defaultAddressId === addrDraft._id}
-            onChange={(e) => setAddrDraft((p) => ({ ...p, isDefault: e.target.checked }))}
-          />
-          <span>Set as default</span>
-        </label>
-      </div>
-
-      <div className={styles.actions}>
-        <button type="button" className="btn-outline" onClick={() => setAddrOpen(false)} disabled={saving}>
-          Cancel
-        </button>
-        <button type="button" className="btn-primary" onClick={saveAddress} disabled={saving}>
-          {saving ? "Saving…" : "Save"}
-        </button>
-      </div>
-    </div>
-  </div>
-) : null}
+      ) : null}
 
     </div>
   );

@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import styles from "./CourseViewer.module.css";
 import useRequireAuth from "../../hooks/useRequireAuth";
 import { api } from "../../lib/api";
+import { getFriendlyMessage } from "../../utils/errorMapping";
 
 function toEmbedUrl(url) {
   const u = String(url || "").trim();
@@ -103,13 +104,13 @@ export default function CourseViewer() {
 
         const normalizedLessons = Array.isArray(rawLessons)
           ? rawLessons.map((l, idx) => ({
-              id: l?._id || l?.id || `l${idx + 1}`,
-              title: l?.title || (typeof l === "string" ? l : `Lesson ${idx + 1}`),
-              durationSec: typeof l?.durationSec === "number" ? l.durationSec : Number(l?.durationSec || 0),
-              videoUrl: l?.videoUrl || "",
-              notes: l?.notes || "",
-              isFreePreview: !!l?.isFreePreview,
-            }))
+            id: l?._id || l?.id || `l${idx + 1}`,
+            title: l?.title || (typeof l === "string" ? l : `Lesson ${idx + 1}`),
+            durationSec: typeof l?.durationSec === "number" ? l.durationSec : Number(l?.durationSec || 0),
+            videoUrl: l?.videoUrl || "",
+            notes: l?.notes || "",
+            isFreePreview: !!l?.isFreePreview,
+          }))
           : [];
 
         setCourse({ title, lessons: normalizedLessons });
@@ -203,7 +204,7 @@ export default function CourseViewer() {
 
         const customer = ensurePayuCustomerFromMe(me);
         if (!customer) {
-          alert("Email and phone are required for online payment.");
+          setError("Email and phone are required for online payment.");
           return;
         }
 
@@ -226,7 +227,7 @@ export default function CourseViewer() {
         window.location.assign("/payment/redirect");
       } catch (e) {
         console.error("Payment start failed:", e);
-        alert(e?.response?.message || e?.message || "Failed to start payment");
+        setError(getFriendlyMessage(e));
       }
     });
   }

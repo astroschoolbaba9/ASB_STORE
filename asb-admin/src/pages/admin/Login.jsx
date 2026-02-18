@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { API_BASE } from "../../lib/api";
+import { getFriendlyMessage } from "../../utils/errorMapping";
 import styles from "./Login.module.css";
 
 const TOKEN_KEY = "asb_access_token";
@@ -45,11 +46,13 @@ export default function AdminLogin() {
 
       const data = await res.json().catch(() => ({}));
       console.log("SEND OTP status:", res.status, data);
-      if (!res.ok) throw new Error(data?.message || "Failed to send OTP");
+      if (!res.ok) {
+        throw { code: data?.code || "HTTP_ERROR", message: data?.message || "Failed to send OTP" };
+      }
 
       setStep("otp");
     } catch (err) {
-      setError(err?.message || "Failed to send OTP");
+      setError(getFriendlyMessage(err));
     } finally {
       setLoading(false);
     }
@@ -72,10 +75,10 @@ export default function AdminLogin() {
       });
 
       const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data?.message || "OTP verification failed");
-
       const accessToken = data?.accessToken || data?.token || "";
-      if (!accessToken) throw new Error("No accessToken returned from backend");
+      if (!accessToken) {
+        throw { code: "HTTP_ERROR", message: "No accessToken returned from backend" };
+      }
 
       // ✅ Save token in the SAME key your api.js reads
       localStorage.setItem(TOKEN_KEY, accessToken);
@@ -85,17 +88,19 @@ export default function AdminLogin() {
         headers: { Authorization: `Bearer ${accessToken}` }
       });
       const meData = await meRes.json().catch(() => ({}));
-      if (!meRes.ok) throw new Error(meData?.message || "Failed to load profile");
+      if (!meRes.ok) {
+        throw { code: meData?.code || "HTTP_ERROR", message: meData?.message || "Failed to load profile" };
+      }
 
       const role = String(meData?.user?.role || "").toLowerCase();
       if (role !== "admin") {
         localStorage.removeItem(TOKEN_KEY);
-        throw new Error("Access denied. Not an admin.");
+        throw { code: "FORBIDDEN", message: "Access denied. Not an admin." };
       }
 
       navigate(redirectTo, { replace: true });
     } catch (err) {
-      setError(err?.message || "OTP verification failed");
+      setError(getFriendlyMessage(err));
     } finally {
       setLoading(false);
     }

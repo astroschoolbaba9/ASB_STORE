@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { api } from "../../lib/api";
+import { getFriendlyMessage } from "../../utils/errorMapping";
 import { slugify } from "../../lib/slugify";
 import Table from "../../components/Table";
 import Modal from "../../components/Modal";
@@ -59,7 +60,7 @@ export default function Categories() {
 
       setItems(normalized);
     } catch (e) {
-      setErr(e?.response?.message || e?.message || "Failed to load categories");
+      setErr(getFriendlyMessage(e));
       setItems([]);
     } finally {
       setLoading(false);
@@ -141,7 +142,7 @@ export default function Categories() {
       setModalOpen(false);
       await load();
     } catch (e) {
-      const msg = e?.response?.message || e?.message || "Save failed";
+      const msg = getFriendlyMessage(e);
       setFormErr(msg);
       toast.error(msg);
     } finally {
@@ -165,7 +166,7 @@ export default function Categories() {
       setToDelete(null);
       await load();
     } catch (e) {
-      toast.error(e?.response?.message || e?.message || "Delete failed");
+      toast.error(getFriendlyMessage(e));
     } finally {
       setConfirmLoading(false);
     }

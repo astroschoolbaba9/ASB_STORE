@@ -41,39 +41,19 @@ function createApp() {
   );
 
   // ================= CORS (VPS PRODUCTION SAFE) =================
-  // Put your real frontends here
-  const ALLOW = new Set(
-    [
-      // local dev
-      "http://localhost:3000",
-      "http://localhost:3001",
-
-      // production domains
-      "https://asbcrystal.in",
-      "https://www.asbcrystal.in",
-
-      // if you ever host admin on subdomain
-      "https://admin.asbcrystal.in",
-      "https://www.admin.asbcrystal.in",
-
-      // optional env based (must be exact origin)
-      process.env.FRONTEND_BASE_URL,
-    ].filter(Boolean)
-  );
-
   const corsOptions = {
     origin: (origin, cb) => {
       // allow server-to-server (curl, Postman without origin)
       // allow PayU simulation (Origin: null)
       if (!origin || origin === "null") return cb(null, true);
 
-      if (ALLOW.has(origin)) return cb(null, true);
+      if (env.CORS_ORIGIN.includes(origin)) return cb(null, true);
 
       // optional: PayU (rarely sends Origin)
       try {
         const host = new URL(origin).hostname;
         if (host.endsWith("payu.in")) return cb(null, true);
-      } catch (e) {}
+      } catch (e) { }
 
       return cb(new Error("Not allowed by CORS: " + origin));
     },

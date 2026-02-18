@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { api } from "../../../lib/api";
+import { getFriendlyMessage } from "../../../utils/errorMapping";
 import styles from "./Gift.module.css";
 
 function toBool(v) {
@@ -42,7 +43,7 @@ export default function Gift() {
         presetsText: Array.isArray(c.presets) ? c.presets.join("\n") : ""
       });
     } catch (e) {
-      setErr(e?.response?.message || e?.message || "Failed to load gift settings");
+      setErr(getFriendlyMessage(e));
     } finally {
       setLoading(false);
     }
@@ -78,7 +79,7 @@ export default function Gift() {
         presetsText: Array.isArray(c.presets) ? c.presets.join("\n") : prev.presetsText
       }));
     } catch (e) {
-      setErr(e?.response?.message || e?.message || "Failed to save gift settings");
+      setErr(getFriendlyMessage(e));
     } finally {
       setSaving(false);
     }

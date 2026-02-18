@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { api, API_BASE } from "../../lib/api";
+import { getFriendlyMessage } from "../../utils/errorMapping";
 import Modal from "../../components/Modal";
 import ConfirmModal from "../../components/ConfirmModal";
 import Table from "../../components/Table";
@@ -94,7 +95,7 @@ export default function AdminBanners() {
       const arr = Array.isArray(res?.items) ? res.items : [];
       setItems(arr.map(normalizeBanner));
     } catch (e) {
-      setErr(e?.response?.message || e?.message || "Failed to load banners");
+      setErr(getFriendlyMessage(e));
       setItems([]);
     } finally {
       setLoading(false);
@@ -102,7 +103,7 @@ export default function AdminBanners() {
   }
 
   useEffect(() => {
-    load().catch(() => {});
+    load().catch(() => { });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -247,7 +248,7 @@ export default function AdminBanners() {
       resetForm();
       await load();
     } catch (e2) {
-      const msg = e2?.response?.message || e2?.message || "Save failed";
+      const msg = getFriendlyMessage(e2);
       setFormErr(msg);
       toast.error(msg);
     } finally {
@@ -261,7 +262,7 @@ export default function AdminBanners() {
       toast.success(b.isActive ? "Banner disabled" : "Banner enabled");
       await load();
     } catch (e) {
-      toast.error(e?.response?.message || e?.message || "Failed to update banner");
+      toast.error(getFriendlyMessage(e));
     }
   }
 
@@ -280,7 +281,7 @@ export default function AdminBanners() {
       setToDelete(null);
       await load();
     } catch (e) {
-      toast.error(e?.response?.message || e?.message || "Delete failed");
+      toast.error(getFriendlyMessage(e));
     } finally {
       setConfirmLoading(false);
     }
