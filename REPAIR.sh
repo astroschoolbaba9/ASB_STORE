@@ -7,15 +7,19 @@
 echo "🚀 Starting ASB Store VPS Repair..."
 
 # 1. Clear Nginx Conflicts
-echo "🔧 Removing default Nginx config to resolve conflicts..."
+echo "🔧 Hunt down conflicting Nginx configs..."
+# This finds all files in sites-enabled that contain your domain and removes them
+CONFLICTS=$(grep -l "asbcrystal.in" /etc/nginx/sites-enabled/* | grep -v "asbstore")
+if [ -n "$CONFLICTS" ]; then
+    echo "🗑 Removing conflicting files: $CONFLICTS"
+    sudo rm -f $CONFLICTS
+fi
 sudo rm -f /etc/nginx/sites-enabled/default
-sudo rm -f /etc/nginx/sites-enabled/asb-store # Remove any older versions
 
 # 2. Fix Directory Permissions (Critical for /root folder)
 echo "📂 Setting permissions for Nginx to access build files..."
-sudo chmod -R 755 /root
-sudo find /root/ASB_STORE -type d -exec chmod 755 {} +
-sudo find /root/ASB_STORE -type f -exec chmod 644 {} +
+sudo chmod o+x /root
+sudo chmod -R 755 /root/ASB_STORE
 
 # 3. Enable the correct config
 echo "🔗 Re-linking asbstore config..."
