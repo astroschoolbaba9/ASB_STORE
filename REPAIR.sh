@@ -6,6 +6,15 @@
 
 echo "🚀 Starting ASB Store VPS Repair..."
 
+# 0. Check for .env files (Security)
+for dir in "asb-backend" "asb-admin" "spiritual-marketplace-ui"; do
+    if [ ! -f "/root/ASB_STORE/$dir/.env" ]; then
+        echo "❌ Error: /root/ASB_STORE/$dir/.env is missing!"
+        echo "Please create it manually for security before running this script."
+        exit 1
+    fi
+done
+
 # 1. Clear Nginx Conflicts
 echo "🔍 Searching for all Nginx configs claiming your domains..."
 # This is more thorough: searches all of /etc/nginx
