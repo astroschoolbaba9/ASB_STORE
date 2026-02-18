@@ -47,15 +47,15 @@ function createApp() {
       // allow PayU simulation (Origin: null)
       if (!origin || origin === "null") return cb(null, true);
 
-      if (env.CORS_ORIGIN.includes(origin)) return cb(null, true);
-
-      // optional: PayU (rarely sends Origin)
-      try {
-        const host = new URL(origin).hostname;
-        if (host.endsWith("payu.in")) return cb(null, true);
-      } catch (e) { }
-
-      return cb(new Error("Not allowed by CORS: " + origin));
+      if (env.CORS_ORIGIN.some(o => {
+        try {
+          const allowedHost = new URL(o).hostname;
+          const currentHost = new URL(origin).hostname;
+          return allowedHost === currentHost;
+        } catch (e) {
+          return o === origin;
+        }
+      })) return cb(null, true);
     },
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],

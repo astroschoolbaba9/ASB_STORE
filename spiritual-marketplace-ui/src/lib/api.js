@@ -1,5 +1,5 @@
-import { getFriendlyMessage } from "../utils/errorMapping";
-const API_BASE = process.env.REACT_APP_API_BASE || "http://localhost:8080";
+// src/lib/api.js
+const API_BASE = process.env.REACT_APP_API_BASE || "http://api.asbcrystal.in";
 
 function getToken() {
   return localStorage.getItem("asb_access_token") || "";
@@ -30,12 +30,21 @@ async function request(path, { method = "GET", body, token, query, headers } = {
 
   if (authToken) finalHeaders.Authorization = `Bearer ${authToken}`;
 
-  const res = await fetch(url, {
-    method,
-    headers: finalHeaders,
-    body: body ? (isFormData ? body : JSON.stringify(body)) : undefined,
-    credentials: "include",
-  });
+  let res;
+  try {
+    res = await fetch(url, {
+      method,
+      headers: finalHeaders,
+      body: body ? (isFormData ? body : JSON.stringify(body)) : undefined,
+      credentials: "include",
+    });
+  } catch (e) {
+    const err = new Error(e?.message || "Network error");
+    err.status = 0;
+    err.code = "NETWORK_ERROR";
+    err.friendlyMessage = getFriendlyMessage(err);
+    throw err;
+  }
 
   const text = await res.text();
   let data = null;
