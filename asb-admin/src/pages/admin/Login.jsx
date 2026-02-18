@@ -135,10 +135,7 @@ export default function AdminLogin() {
               {loading ? "Sending..." : "Send OTP"}
             </button>
 
-            <div className={styles.meta}>
-              <div className={styles.metaLabel}>API:</div>
-              <code className={styles.code}>{API_BASE}</code>
-            </div>
+
           </form>
         ) : (
           <form className={styles.form} onSubmit={onVerifyOtp}>
@@ -176,10 +173,7 @@ export default function AdminLogin() {
               Change Email/Mobile
             </button>
 
-            <div className={styles.meta}>
-              <div className={styles.metaLabel}>API:</div>
-              <code className={styles.code}>{API_BASE}</code>
-            </div>
+
           </form>
         )}
       </div>

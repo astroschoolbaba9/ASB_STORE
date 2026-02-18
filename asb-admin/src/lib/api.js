@@ -1,7 +1,7 @@
 // src/lib/api.js
 import { getFriendlyMessage } from "../utils/errorMapping";
 
-const DEFAULT_BASE = "http://localhost:8080";
+const DEFAULT_BASE = "https://api.asbcrystal.in";
 
 // CRA supports REACT_APP_*; user asked VITE_API_BASE too (we'll support both)
 const API_BASE =
