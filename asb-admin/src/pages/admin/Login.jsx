@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { API_BASE } from "../../lib/api";
+import { api } from "../../lib/api";
 import { getFriendlyMessage } from "../../utils/errorMapping";
 import styles from "./Login.module.css";
 
@@ -38,18 +38,7 @@ export default function AdminLogin() {
 
     setLoading(true);
     try {
-      const res = await fetch(`${API_BASE}/api/auth/send-otp`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ identifier: id })
-      });
-
-      const data = await res.json().catch(() => ({}));
-      console.log("SEND OTP status:", res.status, data);
-      if (!res.ok) {
-        throw { code: data?.code || "HTTP_ERROR", message: data?.message || "Failed to send OTP" };
-      }
-
+      await api.post("/api/auth/send-otp", { identifier: id });
       setStep("otp");
     } catch (err) {
       setError(getFriendlyMessage(err));
@@ -68,29 +57,18 @@ export default function AdminLogin() {
 
     setLoading(true);
     try {
-      const res = await fetch(`${API_BASE}/api/auth/verify-otp`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ identifier: id, code })
-      });
+      const data = await api.post("/api/auth/verify-otp", { identifier: id, code });
 
-      const data = await res.json().catch(() => ({}));
       const accessToken = data?.accessToken || data?.token || "";
       if (!accessToken) {
-        throw { code: "HTTP_ERROR", message: "No accessToken returned from backend" };
+        throw new Error("No access token returned from backend");
       }
 
       // ✅ Save token in the SAME key your api.js reads
       localStorage.setItem(TOKEN_KEY, accessToken);
 
       // ✅ Verify admin using the stored token
-      const meRes = await fetch(`${API_BASE}/api/auth/me`, {
-        headers: { Authorization: `Bearer ${accessToken}` }
-      });
-      const meData = await meRes.json().catch(() => ({}));
-      if (!meRes.ok) {
-        throw { code: meData?.code || "HTTP_ERROR", message: meData?.message || "Failed to load profile" };
-      }
+      const meData = await api.get("/api/auth/me");
 
       const role = String(meData?.user?.role || "").toLowerCase();
       if (role !== "admin") {

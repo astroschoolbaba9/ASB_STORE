@@ -47,7 +47,7 @@ function createApp() {
       // allow PayU simulation (Origin: null)
       if (!origin || origin === "null") return cb(null, true);
 
-      if (env.CORS_ORIGIN.some(o => {
+      const isAllowed = env.CORS_ORIGIN.some(o => {
         try {
           const allowedHost = new URL(o).hostname;
           const currentHost = new URL(origin).hostname;
@@ -55,7 +55,10 @@ function createApp() {
         } catch (e) {
           return o === origin;
         }
-      })) return cb(null, true);
+      });
+
+      if (isAllowed) return cb(null, true);
+      return cb(new Error("Not allowed by CORS: " + origin));
     },
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
