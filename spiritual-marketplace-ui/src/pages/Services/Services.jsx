@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import styles from "./Services.module.css";
 import { buildSsoUrl } from "../../utils/ssoUrl";
 
-const TOOLS_URL = "https://asbreport.in/";
+const TOOLS_URL = "https://asbreports.in/";
 
 function setMetaDescription(content) {
   if (typeof document === "undefined") return;

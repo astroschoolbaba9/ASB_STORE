@@ -10,7 +10,7 @@ export const NAV_ITEMS = [
 
   {
     label: "Tools",
-    path: "https://asbreport.in/",
+    path: "https://asbreports.in/",
   },
 
   {
@@ -32,7 +32,7 @@ export const NAV_ITEMS = [
       { label: "All Services", path: "/services" },
       { label: "Gift Wrapping", path: "/services#gift-wrapping" },
       { label: "Courses / Trainings", path: "/courses" },
-      { label: "Calculator / Tools", path: "https://asbreport.in/" },
+      { label: "Calculator / Tools", path: "https://asbreports.in/" },
       { label: "Personalized Gift Message", path: "/services#gift-message" },
       { label: "Bulk Orders", path: "/services#bulk-orders" },
       { label: "Corporate Gifting", path: "/services#corporate-gifting" },

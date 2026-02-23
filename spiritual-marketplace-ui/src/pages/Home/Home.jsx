@@ -138,7 +138,7 @@ export default function Home() {
 
   function handleToolCalculation() {
     // same tab => browser back returns to home automatically
-    window.location.href = buildSsoUrl("https://asbreport.in/");
+    window.location.href = buildSsoUrl("https://asbreports.in/");
   }
 
   return (

@@ -191,7 +191,7 @@ export default function Footer() {
             <Link to="/services">Our Services</Link>
             <Link to="/contact">Contact</Link>
 
-            <a className={styles.extLink} href={buildSsoUrl("https://asbreport.in/")} target="_blank" rel="noreferrer">
+            <a className={styles.extLink} href={buildSsoUrl("https://asbreports.in/")} target="_blank" rel="noreferrer">
               Calculator / Tools
             </a>
           </div>
