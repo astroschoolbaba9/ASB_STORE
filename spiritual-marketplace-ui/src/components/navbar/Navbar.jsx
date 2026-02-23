@@ -9,6 +9,7 @@ import logo from "../../assets/brand/logo.jpg";
 import { useAuth } from "../../context/AuthContext";
 import { api } from "../../lib/api";
 import { normalizeList } from "../../lib/normalize";
+import { buildSsoUrl } from "../../utils/ssoUrl";
 
 function normCat(c) {
   return {
@@ -42,9 +43,10 @@ export default function Navbar() {
 
   const handleExternalNavigate = (url) => {
     if (!url) return;
+    const finalUrl = buildSsoUrl(url);
     setRedirecting(true);
     setRedirectTo(url);
-    window.setTimeout(() => window.location.assign(url), 260);
+    window.setTimeout(() => window.location.assign(finalUrl), 260);
   };
 
   useEffect(() => {

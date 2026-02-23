@@ -27,6 +27,8 @@ const userSchema = new mongoose.Schema(
     // ✅ IMPORTANT: do NOT default to null, or you'll get duplicate key for null
     email: { type: String, default: undefined, trim: true, lowercase: true },
     phone: { type: String, default: undefined, trim: true },
+    dob: { type: String, default: "" }, // DD-MM-YYYY
+    gender: { type: String, default: "" }, // male / female / other
 
     addresses: { type: [addressSchema], default: [] },
 

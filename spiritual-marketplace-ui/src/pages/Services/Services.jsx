@@ -1,8 +1,9 @@
 import { useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import styles from "./Services.module.css";
+import { buildSsoUrl } from "../../utils/ssoUrl";
 
-const TOOLS_URL = "https://asb-ui.onrender.com/";
+const TOOLS_URL = "https://asbreport.in/";
 
 function setMetaDescription(content) {
   if (typeof document === "undefined") return;
@@ -177,7 +178,7 @@ export default function Services() {
             gifting decisions without confusion.
           </p>
           <div className={styles.ctaRow}>
-            <a className={`btn-primary ${styles.btnLink}`} href={TOOLS_URL} target="_blank" rel="noreferrer">
+            <a className={`btn-primary ${styles.btnLink}`} href={buildSsoUrl(TOOLS_URL)} target="_blank" rel="noreferrer">
               Open Tools
             </a>
           </div>

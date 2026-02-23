@@ -45,7 +45,7 @@ function enforceSingleDefault(addresses) {
 }
 
 async function getMe(userId) {
-  const user = await User.findById(userId).select("name email phone role isBlocked addresses");
+  const user = await User.findById(userId).select("name email phone role isBlocked addresses dob gender");
   if (!user) throw new AppError("User not found", 404, "USER_NOT_FOUND");
 
   return {
@@ -53,6 +53,8 @@ async function getMe(userId) {
     name: user.name || "",
     email: user.email || "",
     phone: user.phone || "",
+    dob: user.dob || "",
+    gender: user.gender || "",
     role: user.role,
     isBlocked: !!user.isBlocked,
     addresses: Array.isArray(user.addresses) ? user.addresses : []
@@ -68,6 +70,9 @@ async function updateMe(userId, patch = {}) {
   if (patch.email != null) user.email = cleanStr(patch.email, 120) || null;
   if (patch.phone != null) user.phone = cleanStr(patch.phone, 40) || null;
 
+  if (patch.dob != null) user.dob = cleanStr(patch.dob, 20);
+  if (patch.gender != null) user.gender = cleanStr(patch.gender, 20);
+
   await user.save();
 
   return {
@@ -75,6 +80,8 @@ async function updateMe(userId, patch = {}) {
     name: user.name || "",
     email: user.email || "",
     phone: user.phone || "",
+    dob: user.dob || "",
+    gender: user.gender || "",
     role: user.role,
     isBlocked: !!user.isBlocked
   };

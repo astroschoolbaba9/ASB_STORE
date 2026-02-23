@@ -35,6 +35,8 @@ function userDto(user) {
     name: user.name || null,
     email: user.email || null,
     phone: user.phone || null,
+    dob: user.dob || null,
+    gender: user.gender || null,
   };
 }
 

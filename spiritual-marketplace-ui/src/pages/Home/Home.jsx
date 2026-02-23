@@ -4,6 +4,7 @@ import styles from "./Home.module.css";
 import { Link, useNavigate } from "react-router-dom";
 import { api, API_BASE } from "../../lib/api";
 import useRequireAuth from "../../hooks/useRequireAuth";
+import { buildSsoUrl } from "../../utils/ssoUrl";
 
 // Fallback (your current dummy data)
 import { FEATURED_PRODUCTS } from "../../data/products";
@@ -137,7 +138,7 @@ export default function Home() {
 
   function handleToolCalculation() {
     // same tab => browser back returns to home automatically
-    window.location.href = "https://asb-ui.onrender.com/";
+    window.location.href = buildSsoUrl("https://asbreport.in/");
   }
 
   return (

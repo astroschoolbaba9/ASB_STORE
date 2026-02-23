@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import styles from "./Footer.module.css";
 import { api } from "../../lib/api";
 import { normalizeList } from "../../lib/normalize";
+import { buildSsoUrl } from "../../utils/ssoUrl";
 
 function normCat(c) {
   return {
@@ -190,7 +191,7 @@ export default function Footer() {
             <Link to="/services">Our Services</Link>
             <Link to="/contact">Contact</Link>
 
-            <a className={styles.extLink} href="https://asb-ui.onrender.com/" target="_blank" rel="noreferrer">
+            <a className={styles.extLink} href={buildSsoUrl("https://asbreport.in/")} target="_blank" rel="noreferrer">
               Calculator / Tools
             </a>
           </div>
