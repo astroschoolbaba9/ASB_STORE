@@ -9,11 +9,11 @@ export function buildSsoUrl(baseUrl) {
 
     try {
         const url = new URL(baseUrl);
-        url.searchParams.set("token", token);
+        url.searchParams.set("sso_token", token);
         return url.toString();
     } catch {
         // fallback: just append manually
         const sep = baseUrl.includes("?") ? "&" : "?";
-        return `${baseUrl}${sep}token=${encodeURIComponent(token)}`;
+        return `${baseUrl}${sep}sso_token=${encodeURIComponent(token)}`;
     }
 }
