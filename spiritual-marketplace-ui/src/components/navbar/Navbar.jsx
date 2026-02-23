@@ -49,6 +49,18 @@ export default function Navbar() {
     window.setTimeout(() => window.location.assign(finalUrl), 260);
   };
 
+  // Reset the "Opening…" overlay when user presses browser Back
+  useEffect(() => {
+    const onPageShow = (e) => {
+      if (e.persisted) {
+        setRedirecting(false);
+        setRedirectTo("");
+      }
+    };
+    window.addEventListener("pageshow", onPageShow);
+    return () => window.removeEventListener("pageshow", onPageShow);
+  }, []);
+
   useEffect(() => {
     let alive = true;
 
