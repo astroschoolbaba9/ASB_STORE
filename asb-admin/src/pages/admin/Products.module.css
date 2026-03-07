@@ -1,4 +1,6 @@
-.wrap { padding: 6px; }
+.wrap {
+  padding: 6px;
+}
 
 .top {
   display: flex;
@@ -8,8 +10,17 @@
   margin-bottom: 12px;
 }
 
-.h1 { margin: 0; font-size: 26px; font-weight: 950; }
-.sub { margin-top: 6px; opacity: 0.8; font-size: 13px; }
+.h1 {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 950;
+}
+
+.sub {
+  margin-top: 6px;
+  opacity: 0.8;
+  font-size: 13px;
+}
 
 .tools {
   display: flex;
@@ -24,22 +35,22 @@
   min-width: 220px;
   padding: 11px 12px;
   border-radius: 12px;
-  border: 1px solid rgba(255,255,255,0.12);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   background: rgba(10, 14, 30, 0.65);
   color: #eaf0ff;
   outline: none;
 }
 
 .search:focus {
-  border-color: rgba(194,77,255,0.55);
-  box-shadow: 0 0 0 4px rgba(194,77,255,0.15);
+  border-color: rgba(194, 77, 255, 0.55);
+  box-shadow: 0 0 0 4px rgba(194, 77, 255, 0.15);
 }
 
 .select {
   min-width: 180px;
   padding: 11px 12px;
   border-radius: 12px;
-  border: 1px solid rgba(255,255,255,0.12);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   background: rgba(10, 14, 30, 0.65);
   color: #eaf0ff;
   outline: none;
@@ -48,8 +59,8 @@
 .state {
   padding: 14px;
   border-radius: 14px;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.10);
   font-weight: 800;
 }
 
@@ -60,10 +71,20 @@
   border: 1px solid rgba(255, 50, 50, 0.30);
 }
 
-.errorTitle { font-weight: 950; }
-.errorMsg { margin-top: 6px; opacity: 0.95; }
+.errorTitle {
+  font-weight: 950;
+}
 
-.actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.errorMsg {
+  margin-top: 6px;
+  opacity: 0.95;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
 
 .btnPrimary {
   border: 0;
@@ -76,8 +97,8 @@
 }
 
 .btnGhost {
-  border: 1px solid rgba(255,255,255,0.14);
-  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.06);
   color: #eaf0ff;
   padding: 10px 12px;
   border-radius: 12px;
@@ -99,13 +120,14 @@
   font-weight: 900;
 }
 
-.badgeOn, .badgeOff {
+.badgeOn,
+.badgeOff {
   display: inline-block;
   padding: 4px 10px;
   border-radius: 999px;
   font-size: 12px;
   font-weight: 900;
-  border: 1px solid rgba(255,255,255,0.12);
+  border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .badgeOn {
@@ -118,33 +140,63 @@
   border-color: rgba(255, 180, 60, 0.28);
 }
 
-.prodCell { display: flex; flex-direction: column; gap: 4px; }
-.prodTitle { font-weight: 950; }
-.prodMeta { font-size: 12px; opacity: 0.85; }
-.muted { opacity: 0.75; }
+.prodCell {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
 
-.formGrid { display: flex; flex-direction: column; gap: 12px; }
+.prodTitle {
+  font-weight: 950;
+}
 
-.field { display: flex; flex-direction: column; gap: 8px; }
+.prodMeta {
+  font-size: 12px;
+  opacity: 0.85;
+}
 
-.label { font-size: 13px; font-weight: 900; opacity: 0.9; }
+.muted {
+  opacity: 0.75;
+}
 
-.input, .textarea {
+.formGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.label {
+  font-size: 13px;
+  font-weight: 900;
+  opacity: 0.9;
+}
+
+.input,
+.textarea {
   width: 100%;
   padding: 11px 12px;
   border-radius: 12px;
-  border: 1px solid rgba(255,255,255,0.12);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   background: rgba(10, 14, 30, 0.65);
   color: #eaf0ff;
   outline: none;
 }
 
-.input:focus, .textarea:focus {
-  border-color: rgba(194,77,255,0.55);
-  box-shadow: 0 0 0 4px rgba(194,77,255,0.15);
+.input:focus,
+.textarea:focus {
+  border-color: rgba(194, 77, 255, 0.55);
+  box-shadow: 0 0 0 4px rgba(194, 77, 255, 0.15);
 }
 
-.textarea { resize: vertical; }
+.textarea {
+  resize: vertical;
+}
 
 .row2 {
   display: grid;
@@ -152,8 +204,17 @@
   gap: 10px;
 }
 
-.fieldRow { display: flex; align-items: center; }
-.checkRow { display: flex; align-items: center; gap: 10px; font-weight: 800; }
+.fieldRow {
+  display: flex;
+  align-items: center;
+}
+
+.checkRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 800;
+}
 
 .formErr {
   padding: 10px 12px;
@@ -166,7 +227,56 @@
 }
 
 @media (max-width: 900px) {
-  .top { flex-direction: column; align-items: stretch; }
-  .select { width: 100%; min-width: 0; }
-  .row2 { grid-template-columns: 1fr; }
+  .top {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .select {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .row2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.errorBox {
+  margin-top: 10px;
+}
+
+.dropZone {
+  border: 2px dashed rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  padding: 24px 20px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.03);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.dropZoneActive {
+  border-color: #C24DFF;
+  background: rgba(194, 77, 255, 0.08);
+}
+
+.dropZoneText {
+  font-size: 14px;
+  font-weight: 800;
+  opacity: 0.9;
+}
+
+.dropZoneSub {
+  font-size: 12px;
+  opacity: 0.6;
+}
+
+.hiddenInput {
+  display: none;
 }

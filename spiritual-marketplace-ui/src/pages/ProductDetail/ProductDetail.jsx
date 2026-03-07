@@ -314,14 +314,10 @@ export default function ProductDetail() {
         <div className={styles.main}>
           {/* Gallery */}
           <section className={styles.gallery}>
-            <div
-              className={styles.mainImg}
-              style={
-                mainImg
-                  ? { backgroundImage: `url(${mainImg})`, backgroundSize: "cover", backgroundPosition: "center" }
-                  : {}
-              }
-            >
+            <div className={styles.mainImg}>
+              {mainImg ? (
+                <img src={mainImg} alt={name} className={styles.mainImgFull} />
+              ) : null}
               <div className={styles.badge}>{categoryLabel}</div>
             </div>
 
@@ -332,9 +328,10 @@ export default function ProductDetail() {
                   type="button"
                   className={styles.thumb}
                   onClick={() => setImgIndex(i)}
-                  style={u ? { backgroundImage: `url(${u})`, backgroundSize: "cover", backgroundPosition: "center" } : {}}
                   aria-label={`Image ${i + 1}`}
-                />
+                >
+                  {u ? <img src={u} alt="" className={styles.thumbImg} /> : null}
+                </button>
               ))}
             </div>
 

@@ -127,6 +127,21 @@ export default function Products() {
 
   const [formErr, setFormErr] = useState("");
   const [saving, setSaving] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+
+  async function handleUpload(files) {
+    const fd = new FormData();
+    files.forEach((f) => fd.append("images", f));
+
+    try {
+      const res = await api.post("/api/admin/uploads/products", fd);
+      const urls = res?.images || [];
+      setImagesText((prev) => [...parseLines(prev), ...urls].slice(0, 4).join("\n"));
+      toast.success("Images uploaded");
+    } catch (e) {
+      toast.error(getFriendlyMessage(e));
+    }
+  }
 
   // delete confirm
   const [confirmOpen, setConfirmOpen] = useState(false);
@@ -606,43 +621,83 @@ export default function Products() {
           </div>
 
           <div className={styles.field}>
-            <label className={styles.label}>Images</label>
+            <label className={styles.label}>Images (Max 4)</label>
 
-            <input
-              type="file"
-              accept="image/*"
-              multiple
-              onChange={async (e) => {
-                const files = Array.from(e.target.files || []).slice(0, 4);
-                if (!files.length) return;
-
-                const fd = new FormData();
-                files.forEach((f) => fd.append("images", f));
-
-                try {
-                  const res = await api.post("/api/admin/uploads/products", fd);
-                  const urls = res?.images || [];
-                  setImagesText((prev) => [...parseLines(prev), ...urls].join("\n"));
-                } catch (e) {
-                  toast.error(getFriendlyMessage(e));
-                }
+            <div
+              className={`${styles.dropZone} ${isDragging ? styles.dropZoneActive : ""}`}
+              onDragOver={(e) => {
+                e.preventDefault();
+                setIsDragging(true);
               }}
-            />
+              onDragLeave={() => setIsDragging(false)}
+              onDrop={async (e) => {
+                e.preventDefault();
+                setIsDragging(false);
+                const files = Array.from(e.dataTransfer.files).slice(0, 4);
+                if (files.length) await handleUpload(files);
+              }}
+              onClick={() => document.getElementById("product-image-input").click()}
+            >
+              <div className={styles.dropZoneText}>
+                {saving ? "Uploading..." : "Click or Drag & Drop images here"}
+              </div>
+              <div className={styles.dropZoneSub}>Max 4 images. JPEG, PNG, WEBP.</div>
+              <input
+                id="product-image-input"
+                type="file"
+                accept="image/*"
+                multiple
+                className={styles.hiddenInput}
+                style={{ display: "none" }}
+                onChange={async (e) => {
+                  const files = Array.from(e.target.files || []).slice(0, 4);
+                  if (files.length) await handleUpload(files);
+                }}
+              />
+            </div>
 
             <div style={{ display: "flex", gap: 10, marginTop: 10, flexWrap: "wrap" }}>
               {parseLines(imagesText).map((url, i) => (
-                <img
-                  key={i}
-                  src={absUrl(url)}
-                  alt=""
-                  style={{
-                    width: 80,
-                    height: 80,
-                    objectFit: "cover",
-                    borderRadius: 10,
-                    border: "1px solid var(--border)",
-                  }}
-                />
+                <div key={i} style={{ position: "relative" }}>
+                  <img
+                    src={absUrl(url)}
+                    alt=""
+                    style={{
+                      width: 80,
+                      height: 80,
+                      objectFit: "contain",
+                      borderRadius: 10,
+                      border: "1px solid var(--border)",
+                      background: "rgba(255,255,255,0.05)",
+                    }}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const lines = parseLines(imagesText);
+                      lines.splice(i, 1);
+                      setImagesText(lines.join("\n"));
+                    }}
+                    style={{
+                      position: "absolute",
+                      top: -5,
+                      right: -5,
+                      width: 20,
+                      height: 20,
+                      borderRadius: "50%",
+                      background: "#ff4d4d",
+                      color: "#fff",
+                      border: "none",
+                      cursor: "pointer",
+                      fontSize: 10,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    ✕
+                  </button>
+                </div>
               ))}
             </div>
 
