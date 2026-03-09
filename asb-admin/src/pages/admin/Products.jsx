@@ -633,8 +633,46 @@ export default function Products() {
               onDrop={async (e) => {
                 e.preventDefault();
                 setIsDragging(false);
+
+                // 1. Check for physical files first
                 const files = Array.from(e.dataTransfer.files).slice(0, 4);
-                if (files.length) await handleUpload(files);
+                if (files.length) {
+                  await handleUpload(files);
+                  return;
+                }
+
+                // 2. Check for dragged URLs or HTML (e.g., from Google Drive or browser)
+                const html = e.dataTransfer.getData("text/html");
+                const uriList = e.dataTransfer.getData("text/uri-list");
+                const text = e.dataTransfer.getData("text/plain");
+
+                let draggedUrl = "";
+
+                if (uriList) {
+                  const urls = uriList.split("\\n").filter(line => line.trim() && !line.startsWith("#"));
+                  if (urls.length) draggedUrl = urls[0].trim();
+                }
+
+                if (!draggedUrl && html) {
+                  const match = html.match(/src\\s*=\\s*"([^"]+)"/i) || html.match(/src\\s*=\\s*'([^']+)'/i);
+                  if (match && match[1]) {
+                    draggedUrl = match[1];
+                  }
+                }
+
+                if (!draggedUrl && text && (text.startsWith("http://") || text.startsWith("https://"))) {
+                  draggedUrl = text.trim();
+                }
+
+                if (draggedUrl) {
+                  // If it's a URL, just append to imagesText (Max 4)
+                  setImagesText((prev) => {
+                    const lines = parseLines(prev);
+                    if (lines.length >= 4) return prev;
+                    if (!lines.includes(draggedUrl)) lines.push(draggedUrl);
+                    return lines.slice(0, 4).join("\\n");
+                  });
+                }
               }}
               onClick={() => document.getElementById("product-image-input").click()}
             >

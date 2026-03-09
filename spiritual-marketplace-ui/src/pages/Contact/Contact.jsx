@@ -1,16 +1,11 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import styles from "./Contact.module.css";
 import { CONTACT_INFO } from "../../data/contact";
 import { api } from "../../lib/api";
 
 const SUPPORT_EMAIL = "astroschoolbaba9@gmail.com";
-const SUPPORT_ADDRESS = "S7, 2nd floor, RPS Savana, Sector 88, Faridabad, Haryana-121002";
 
 export default function Contact() {
-  const mapsUrl = useMemo(() => {
-    const q = encodeURIComponent(SUPPORT_ADDRESS);
-    return `https://www.google.com/maps/search/?api=1&query=${q}`;
-  }, []);
 
   const [form, setForm] = useState({
     name: "",
@@ -165,27 +160,7 @@ export default function Contact() {
             <span className={styles.bold}>{CONTACT_INFO.phone}</span>
           </div>
 
-          <div className={styles.infoRow}>
-            <span className={styles.muted}>Address</span>
-            <a className={styles.link} href={mapsUrl} target="_blank" rel="noreferrer" title="Open in Google Maps">
-              {SUPPORT_ADDRESS}
-            </a>
-          </div>
-
           <div className={styles.divider} />
-
-          <div className={styles.cardTitle}>Hours</div>
-          <ul className={styles.ul}>
-            {CONTACT_INFO.hours.map((h) => (
-              <li key={h} className={styles.li}>
-                {h}
-              </li>
-            ))}
-          </ul>
-
-          <a className={styles.map} href={mapsUrl} target="_blank" rel="noreferrer">
-            Open in Google Maps
-          </a>
         </aside>
       </div>
     </div>

@@ -55,16 +55,10 @@ export default function Footer() {
   const [giftCats, setGiftCats] = useState([]);
 
   const SUPPORT_EMAIL = "astroschoolbaba9@gmail.com";
-  const SUPPORT_ADDRESS = "S7, 2nd floor, RPS Savana, Sector 88, Faridabad, Haryana-121002";
   const INSTAGRAM_URL = "https://www.instagram.com/astroschoolbaba/";
 
   // ✅ Your required WhatsApp number
   const WHATSAPP_NUMBER = "9919912996";
-
-  const mapsUrl = useMemo(() => {
-    const q = encodeURIComponent(SUPPORT_ADDRESS);
-    return `https://www.google.com/maps/search/?api=1&query=${q}`;
-  }, [SUPPORT_ADDRESS]);
 
   const whatsappUrl = useMemo(() => {
     // WhatsApp recommended: https://wa.me/<number> (country code optional; works for many numbers)
@@ -122,14 +116,7 @@ export default function Footer() {
           </p>
 
           <div className={styles.connect}>
-            <div className={styles.connectTitle}>Connect</div>
-
-            <a className={styles.contactRow} href={mapsUrl} target="_blank" rel="noreferrer" title="Open in Google Maps">
-              <span className={styles.contactLabel}>Address</span>
-              <span className={styles.contactValue}>{SUPPORT_ADDRESS}</span>
-            </a>
-
-            <a className={styles.contactRow} href={`mailto:${SUPPORT_EMAIL}`} title="Email us">
+            <div className={styles.connectTitle}>Connect</div>            <a className={styles.contactRow} href={`mailto:${SUPPORT_EMAIL}`} title="Email us">
               <span className={styles.contactLabel}>Email</span>
               <span className={styles.contactValue}>{SUPPORT_EMAIL}</span>
             </a>
