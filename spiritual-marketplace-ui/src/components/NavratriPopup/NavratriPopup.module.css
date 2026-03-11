@@ -1,0 +1,286 @@
+/* ══════════════════════════════════════════
+   Navratri Special Offer Popup — Styles
+   ══════════════════════════════════════════ */
+
+/* Fullscreen blurred backdrop */
+.backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.72);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    padding: 16px;
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* Modal card */
+.modal {
+    position: relative;
+    width: 100%;
+    max-width: 420px;
+    background: #1a1207;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow:
+        0 0 0 1px rgba(245, 158, 11, 0.25),
+        0 30px 80px rgba(0, 0, 0, 0.6),
+        0 0 60px rgba(245, 158, 11, 0.08);
+    animation: popIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Close ✕ button overlaying the image */
+.closeBtn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 5;
+    width: 34px;
+    height: 34px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.55);
+    color: #fff;
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, transform 0.2s;
+    backdrop-filter: blur(4px);
+}
+
+.closeBtn:hover {
+    background: rgba(0, 0, 0, 0.8);
+    transform: scale(1.1);
+}
+
+/* Offer image — full width */
+.offerImage {
+    width: 100%;
+    display: block;
+    object-fit: cover;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.offerImage:hover {
+    transform: scale(1.02);
+}
+
+/* Bottom action area */
+.actionArea {
+    padding: 18px 20px 22px;
+    background: linear-gradient(135deg, #1a1207 0%, #2d1f0a 100%);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* CTA button — golden gradient */
+.ctaBtn {
+    width: 100%;
+    padding: 14px 24px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #f59e0b, #d97706, #b45309);
+    color: #fff;
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: 0.3px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow:
+        0 4px 20px rgba(245, 158, 11, 0.35),
+        0 1px 3px rgba(0, 0, 0, 0.2);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    animation: pulse 2s infinite;
+    position: relative;
+    overflow: hidden;
+}
+
+.ctaBtn::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg,
+            transparent 30%,
+            rgba(255, 255, 255, 0.12) 50%,
+            transparent 70%);
+    animation: shimmer 3s infinite;
+}
+
+.ctaBtn:hover:not(:disabled) {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow:
+        0 8px 30px rgba(245, 158, 11, 0.5),
+        0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.ctaBtn:active:not(:disabled) {
+    transform: translateY(0) scale(0.98);
+}
+
+.ctaBtn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    animation: none;
+}
+
+/* Continue Shopping — subtle outline */
+.continueBtn {
+    width: 100%;
+    padding: 12px 24px;
+    border: 1.5px solid rgba(245, 158, 11, 0.3);
+    border-radius: 12px;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.continueBtn:hover {
+    border-color: rgba(245, 158, 11, 0.6);
+    color: #fff;
+    background: rgba(245, 158, 11, 0.08);
+}
+
+/* Spinner for loading */
+.spinner {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    border: 2.5px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+}
+
+/* ─── Animations ─── */
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes popIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9) translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        box-shadow: 0 4px 20px rgba(245, 158, 11, 0.35);
+    }
+
+    50% {
+        box-shadow: 0 4px 30px rgba(245, 158, 11, 0.55);
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        transform: translateX(-100%) rotate(45deg);
+    }
+
+    100% {
+        transform: translateX(100%) rotate(45deg);
+    }
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ─── Mobile ─── */
+
+@media (max-width: 480px) {
+    .backdrop {
+        padding: 12px;
+        align-items: flex-end;
+    }
+
+    .modal {
+        max-width: 100%;
+        border-radius: 16px 16px 0 0;
+        max-height: 92vh;
+        overflow-y: auto;
+    }
+
+    .actionArea {
+        padding: 14px 16px 20px;
+    }
+
+    .ctaBtn {
+        font-size: 15px;
+        padding: 13px 20px;
+    }
+}
+
+@media (max-width: 360px) {
+    .ctaBtn {
+        font-size: 14px;
+        padding: 12px 16px;
+    }
+}
+
+/* OUT OF STOCK STYLES */
+.outOfStockCard {
+    opacity: 0.9;
+}
+
+.greyscale {
+    filter: grayscale(100%) opacity(0.7);
+}
+
+.outOfStockOverlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.4);
+    z-index: 6;
+    /* stay above image */
+    border-radius: 12px 12px 0 0;
+}
+
+.outOfStockOverlay span {
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 8px 16px;
+    font-weight: 800;
+    font-size: 14px;
+    letter-spacing: 1px;
+    border-radius: 4px;
+    transform: rotate(-10deg);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}

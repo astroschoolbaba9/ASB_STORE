@@ -376,3 +376,34 @@
   object-fit: cover;
   display: block;
 }
+
+/* OUT OF STOCK STYLES */
+.outOfStockCard {
+  opacity: 0.85;
+}
+
+.greyscale {
+  filter: grayscale(100%) opacity(0.7);
+}
+
+.outOfStockOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.4);
+  z-index: 2;
+}
+
+.outOfStockOverlay span {
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 8px 16px;
+  font-weight: 800;
+  font-size: 14px;
+  letter-spacing: 1px;
+  border-radius: 4px;
+  transform: rotate(-10deg);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}

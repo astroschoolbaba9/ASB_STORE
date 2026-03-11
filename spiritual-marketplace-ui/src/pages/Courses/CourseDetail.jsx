@@ -8,6 +8,7 @@ import { getFriendlyMessage } from "../../utils/errorMapping";
 function absUrl(u) {
   if (!u) return "";
   if (u.startsWith("http://") || u.startsWith("https://")) return u;
+  if (u.startsWith("/banners/") || u.startsWith("/assets/")) return u;
   return `${API_BASE}${u.startsWith("/") ? "" : "/"}${u}`;
 }
 

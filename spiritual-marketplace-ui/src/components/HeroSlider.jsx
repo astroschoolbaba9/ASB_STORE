@@ -14,6 +14,7 @@ const API_BASE = process.env.REACT_APP_API_BASE || "http://api.asbcrystal.in";
 function absUrl(u) {
   if (!u) return "";
   if (u.startsWith("http://") || u.startsWith("https://")) return u;
+  if (u.startsWith("/banners/") || u.startsWith("/assets/")) return u;
   return `${API_BASE}${u.startsWith("/") ? "" : "/"}${u}`;
 }
 

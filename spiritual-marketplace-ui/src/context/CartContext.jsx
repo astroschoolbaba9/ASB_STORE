@@ -98,7 +98,8 @@ export function CartProvider({ children }) {
    * body: { productId, qty, isGift?, giftWrap?, giftMessage?, recipientName?, recipientPhone?, giftOccasion? }
    */
   const addToCart = async ({ productId, qty = 1, gift, ...rest } = {}) => {
-    if (!isAuthenticated) throw new Error("LOGIN_REQUIRED");
+    // Rely on local storage token to avoid stale closure issues during post-login pending actions
+    if (!localStorage.getItem("asb_access_token")) throw new Error("LOGIN_REQUIRED");
     if (!productId) throw new Error("INVALID_PRODUCT");
 
     setLoading(true);
@@ -155,37 +156,37 @@ export function CartProvider({ children }) {
     return "";
   };
 
-const updateCartItem = async (itemIdOrProductId, patch) => {
-  if (!isAuthenticated) throw new Error("LOGIN_REQUIRED");
+  const updateCartItem = async (itemIdOrProductId, patch) => {
+    if (!isAuthenticated) throw new Error("LOGIN_REQUIRED");
 
-  const cartItemId = resolveCartItemId(itemIdOrProductId);
-  if (!cartItemId) {
-    const err = new Error("Invalid itemId (cart line id not found).");
-    err.code = "INVALID_ITEM_ID";
-    throw err;
-  }
+    const cartItemId = resolveCartItemId(itemIdOrProductId);
+    if (!cartItemId) {
+      const err = new Error("Invalid itemId (cart line id not found).");
+      err.code = "INVALID_ITEM_ID";
+      throw err;
+    }
 
-  // ✅ best-effort qty clamp (real stock check should happen in backend cart service)
-  const safePatch = { ...(patch || {}) };
-  if (typeof safePatch.qty === "number") {
-    safePatch.qty = Math.max(1, Math.min(50, Math.floor(safePatch.qty)));
-  }
+    // ✅ best-effort qty clamp (real stock check should happen in backend cart service)
+    const safePatch = { ...(patch || {}) };
+    if (typeof safePatch.qty === "number") {
+      safePatch.qty = Math.max(1, Math.min(50, Math.floor(safePatch.qty)));
+    }
 
-  setLoading(true);
-  try {
-    const res = await api.put(`/api/cart/items/${cartItemId}`, safePatch);
-    const nextCart = res?.cart || EMPTY_CART;
+    setLoading(true);
+    try {
+      const res = await api.put(`/api/cart/items/${cartItemId}`, safePatch);
+      const nextCart = res?.cart || EMPTY_CART;
 
-    setCart({
-      ...nextCart,
-      totals: { ...EMPTY_CART.totals, ...(nextCart.totals || {}) }
-    });
+      setCart({
+        ...nextCart,
+        totals: { ...EMPTY_CART.totals, ...(nextCart.totals || {}) }
+      });
 
-    return nextCart;
-  } finally {
-    setLoading(false);
-  }
-};
+      return nextCart;
+    } finally {
+      setLoading(false);
+    }
+  };
 
 
   const removeCartItem = async (itemIdOrProductId) => {

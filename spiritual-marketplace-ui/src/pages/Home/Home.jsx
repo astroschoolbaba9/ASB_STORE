@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { api, API_BASE } from "../../lib/api";
 import useRequireAuth from "../../hooks/useRequireAuth";
 import { buildSsoUrl } from "../../utils/ssoUrl";
+import NavratriPopup from "../../components/NavratriPopup/NavratriPopup";
 
 // Fallback (your current dummy data)
 import { FEATURED_PRODUCTS } from "../../data/products";
@@ -21,6 +22,7 @@ function normalizeList(payload) {
 function absUrl(u) {
   if (!u) return "";
   if (u.startsWith("http://") || u.startsWith("https://")) return u;
+  if (u.startsWith("/banners/") || u.startsWith("/assets/")) return u;
   return `${API_BASE}${u.startsWith("/") ? "" : "/"}${u}`;
 }
 
@@ -143,6 +145,8 @@ export default function Home() {
 
   return (
     <div className={styles.page}>
+      {/* ✅ Navratri Special Offer Popup */}
+      <NavratriPopup />
       {/* ✅ Floating pill between banner (slider) and hero */}
       <div className={styles.floatingToolWrap}>
         <button

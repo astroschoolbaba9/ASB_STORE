@@ -14,6 +14,7 @@ function absUrl(u) {
   const s = String(u || "").trim();
   if (!s) return "";
   if (s.startsWith("http://") || s.startsWith("https://")) return s;
+  if (s.startsWith("/banners/") || s.startsWith("/assets/")) return s;
   const withSlash = s.startsWith("/") ? s : `/${s}`;
   return `${API_BASE}${withSlash}`;
 }
@@ -242,7 +243,10 @@ export default function ProductDetail() {
   const careHandling = product.careHandling || "";
   const shippingReturns = product.shippingReturns || "";
 
+  const isOutOfStock = product.stock <= 0;
+
   const addToCartHandler = async (goTo) => {
+    if (isOutOfStock) return;
     await requireAuth(async () => {
       const payload = {
         productId,
@@ -316,9 +320,14 @@ export default function ProductDetail() {
           <section className={styles.gallery}>
             <div className={styles.mainImg}>
               {mainImg ? (
-                <img src={mainImg} alt={name} className={styles.mainImgFull} />
+                <img src={mainImg} alt={name} className={`${styles.mainImgFull} ${isOutOfStock ? styles.greyscale : ""}`} />
               ) : null}
               <div className={styles.badge}>{categoryLabel}</div>
+              {isOutOfStock && (
+                <div className={styles.outOfStockOverlay}>
+                  <span>OUT OF STOCK</span>
+                </div>
+              )}
             </div>
 
             <div className={styles.thumbRow}>
@@ -330,7 +339,7 @@ export default function ProductDetail() {
                   onClick={() => setImgIndex(i)}
                   aria-label={`Image ${i + 1}`}
                 >
-                  {u ? <img src={u} alt="" className={styles.thumbImg} /> : null}
+                  {u ? <img src={u} alt="" className={`${styles.thumbImg} ${isOutOfStock ? styles.greyscale : ""}`} /> : null}
                 </button>
               ))}
             </div>
@@ -357,21 +366,21 @@ export default function ProductDetail() {
             {/* Qty + CTAs */}
             <div className={styles.buyRow}>
               <div className={styles.qty}>
-                <button type="button" className={styles.qtyBtn} onClick={() => setQty((q) => Math.max(1, q - 1))}>
+                <button type="button" className={styles.qtyBtn} disabled={isOutOfStock} onClick={() => setQty((q) => Math.max(1, q - 1))}>
                   −
                 </button>
-                <div className={styles.qtyVal}>{qty}</div>
-                <button type="button" className={styles.qtyBtn} onClick={() => setQty((q) => q + 1)}>
+                <div className={styles.qtyVal}>{isOutOfStock ? 0 : qty}</div>
+                <button type="button" className={styles.qtyBtn} disabled={isOutOfStock || qty >= (product.stock || 50)} onClick={() => setQty((q) => q + 1)}>
                   +
                 </button>
               </div>
 
-              <button className="btn-outline" type="button" onClick={() => addToCartHandler("/cart")}>
-                Add to Cart
+              <button className="btn-outline" type="button" disabled={isOutOfStock} onClick={() => addToCartHandler("/cart")}>
+                {isOutOfStock ? "Sold Out" : "Add to Cart"}
               </button>
 
-              <button className="btn-primary" type="button" onClick={() => addToCartHandler("/checkout")}>
-                Buy Now
+              <button className="btn-primary" type="button" disabled={isOutOfStock} onClick={() => addToCartHandler("/checkout")}>
+                {isOutOfStock ? "Sold Out" : "Buy Now"}
               </button>
             </div>
 

@@ -33,8 +33,14 @@ const courseStorage = multer.diskStorage({
   },
 });
 
-const productUpload = multer({ storage: productStorage });
-const courseUpload = multer({ storage: courseStorage });
+const productUpload = multer({
+  storage: productStorage,
+  limits: { fileSize: 10 * 1024 * 1024 } // 10MB
+});
+const courseUpload = multer({
+  storage: courseStorage,
+  limits: { fileSize: 10 * 1024 * 1024 } // 10MB
+});
 
 router.use(requireAuth, requireAdmin);
 

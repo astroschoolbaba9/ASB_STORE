@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const Order = require("../models/Order");
 const Product = require("../models/Product");
 const { AppError } = require("../utils/AppError");
-
+const emailService = require("./email.service");
 function num(n, d = 0) {
   const x = Number(n);
   return Number.isFinite(x) ? x : d;
@@ -143,6 +143,16 @@ async function checkoutFromCart(userId, payload) {
     notes: String(payload.notes || "")
   });
 
+  // Send email notification for COD orders immediately
+  const isCOD = String(payment.method || "COD").toUpperCase() === "COD";
+  if (isCOD) {
+    try {
+      await emailService.sendOrderNotification(order.toObject());
+    } catch (err) {
+      console.error("📧 COD Order Email Error:", err.message);
+    }
+  }
+
   return order;
 }
 
@@ -270,6 +280,15 @@ async function markOrderPaid(userId, orderId, meta = {}) {
   });
 
   await order.save();
+
+  // Send email notification to admin
+  try {
+    // We pass the plain object for safety
+    await emailService.sendOrderNotification(order.toObject());
+  } catch (err) {
+    console.error("📧 Order Paid Email Error:", err.message);
+  }
+
   return order.toObject();
 }
 

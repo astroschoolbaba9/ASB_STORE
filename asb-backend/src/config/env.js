@@ -46,6 +46,10 @@ const env = {
   PAYU_SALT: process.env.PAYU_SALT || "",
   PAYU_SUCCESS_URL: process.env.PAYU_SUCCESS_URL || "",
   PAYU_FAIL_URL: process.env.PAYU_FAIL_URL || "",
+
+  EMAIL_USER: process.env.EMAIL_USER || "",
+  EMAIL_PASS: process.env.EMAIL_PASS || "",
+  ADMIN_EMAIL: process.env.ADMIN_EMAIL || "astroschoolbaba9@gmail.com",
 };
 
 module.exports = { env };

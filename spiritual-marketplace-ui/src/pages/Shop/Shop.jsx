@@ -14,6 +14,7 @@ function absUrl(u) {
   const s = String(u || "").trim();
   if (!s) return "";
   if (s.startsWith("http://") || s.startsWith("https://")) return s;
+  if (s.startsWith("/banners/") || s.startsWith("/assets/")) return s;
   const withSlash = s.startsWith("/") ? s : `/${s}`;
   return `${API_BASE}${withSlash}`;
 }
@@ -287,20 +288,26 @@ export default function Shop() {
                 const rating = p.ratingAvg ?? 0;
                 const catLabel = p.category?.name || "General";
                 const imgSrc = absUrl(p.images?.[0]);
+                const isOutOfStock = p.stock <= 0;
 
                 return (
-                  <div key={id} className={styles.card}>
+                  <div key={id} className={`${styles.card} ${isOutOfStock ? styles.outOfStockCard : ""}`}>
                     <div className={styles.media}>
                       {imgSrc ? (
                         <img
                           src={imgSrc}
                           alt={title}
-                          className={styles.mediaImg}
+                          className={`${styles.mediaImg} ${isOutOfStock ? styles.greyscale : ""}`}
                           loading="lazy"
                           onError={(e) => { e.currentTarget.style.display = "none"; }}
                         />
                       ) : null}
                       <div className={styles.badge}>{catLabel}</div>
+                      {isOutOfStock && (
+                        <div className={styles.outOfStockOverlay}>
+                          <span>OUT OF STOCK</span>
+                        </div>
+                      )}
                     </div>
 
                     <div className={styles.body}>
@@ -318,15 +325,17 @@ export default function Shop() {
                         <button
                           className="btn-primary"
                           type="button"
-                          onClick={() =>
+                          disabled={isOutOfStock}
+                          onClick={() => {
+                            if (isOutOfStock) return;
                             requireAuth(async () => {
                               await addItem({ productId: id, qty: 1 });
                               showToast();
                               navigate("/cart");
-                            })
-                          }
+                            });
+                          }}
                         >
-                          Add to Cart
+                          {isOutOfStock ? "Sold Out" : "Add to Cart"}
                         </button>
                       </div>
                     </div>
