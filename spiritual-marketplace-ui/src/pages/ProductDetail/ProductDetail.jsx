@@ -10,13 +10,14 @@ import { getFriendlyMessage } from "../../utils/errorMapping";
 
 const API_BASE = process.env.REACT_APP_API_BASE || "http://api.asbcrystal.in";
 
+// ESLint: removed unused isPotli helper from here as it's defined inside component
+
 function absUrl(u) {
-  const s = String(u || "").trim();
-  if (!s) return "";
-  if (s.startsWith("http://") || s.startsWith("https://")) return s;
-  if (s.startsWith("/banners/") || s.startsWith("/assets/")) return s;
-  const withSlash = s.startsWith("/") ? s : `/${s}`;
-  return `${API_BASE}${withSlash}`;
+  if (!u) return "";
+  if (u.startsWith("http://") || u.startsWith("https://")) return u;
+  if (u.startsWith("/banners/") || u.startsWith("/assets/")) return u;
+  if (u === "/navratri-poster.jpg") return `${process.env.PUBLIC_URL}/navratri-poster.jpg`;
+  return `${API_BASE}${u.startsWith("/") ? "" : "/"}${u}`;
 }
 
 function StarRow({ value = 0 }) {
@@ -194,6 +195,21 @@ export default function ProductDetail() {
     return { avg, total, counts };
   }, [reviewsSummary, product]);
 
+  // 1. Identify if this is the campaign product
+  const isPotli = useMemo(() => {
+    if (!product) return false;
+    const s = String(product.slug || "").toLowerCase();
+    const t = String(product.title || product.name || "").toLowerCase();
+    return s === "kuber-potli-healing" || t.includes("kuber potli");
+  }, [product]);
+
+  const images = useMemo(() => {
+    if (!product) return [];
+    if (isPotli) return [`${process.env.PUBLIC_URL}/navratri-poster.jpg`];
+    const arr = product.images || [];
+    return arr.map(absUrl);
+  }, [product, isPotli]);
+
   if (loading) {
     return (
       <div className={styles.notFound}>
@@ -226,16 +242,14 @@ export default function ProductDetail() {
       </div>
     );
   }
+  const overrideName = isPotli ? "Kuber Potli — Infused With Sacred Blessings" : (product.title || product.name);
+  const overridePrice = isPotli ? 2100 : (product.price || 0);
 
   const productId = product._id || product.id;
-  const name = product.title || product.name || "Product";
-  const price = product.price ?? 0;
+  // ESLint: removed unused name, price from here as we use overrideName and overridePrice
   const rating = product.ratingAvg ?? product.rating ?? 0;
   const categoryLabel = product.categoryId?.name || product.category?.name || product.category || "General";
 
-  // ✅ make absolute URLs
-  const imagesRaw = Array.isArray(product.images) ? product.images.filter(Boolean) : [];
-  const images = imagesRaw.map(absUrl).filter(Boolean);
 
   const mainImg = images[imgIndex] || images[0] || "";
 
@@ -279,14 +293,13 @@ export default function ProductDetail() {
           title: reviewTitle,
           comment: reviewText
         });
+
+        setReviewOpen(false);
+        setReviewTitle("");
+        setReviewText("");
+        setReviewRating(5);
+        await loadReviews();
       });
-
-      setReviewOpen(false);
-      setReviewTitle("");
-      setReviewText("");
-      setReviewRating(5);
-
-      await loadReviews();
     } catch (e) {
       setReviewsErr(getFriendlyMessage(e));
     } finally {
@@ -312,7 +325,7 @@ export default function ProductDetail() {
           <span className={styles.dot}>•</span>
           <Link to="/shop" className={styles.bcrumbLink}>Shop</Link>
           <span className={styles.dot}>•</span>
-          <span className={styles.bcrumbCurrent}>{name}</span>
+          <span className={styles.bcrumbCurrent}>{overrideName}</span>
         </div>
 
         <div className={styles.main}>
@@ -320,7 +333,7 @@ export default function ProductDetail() {
           <section className={styles.gallery}>
             <div className={styles.mainImg}>
               {mainImg ? (
-                <img src={mainImg} alt={name} className={`${styles.mainImgFull} ${isOutOfStock ? styles.greyscale : ""}`} />
+                <img src={mainImg} alt={overrideName} className={`${styles.mainImgFull} ${isOutOfStock ? styles.greyscale : ""}`} />
               ) : null}
               <div className={styles.badge}>{categoryLabel}</div>
               {isOutOfStock && (
@@ -345,16 +358,16 @@ export default function ProductDetail() {
             </div>
 
             <div className={styles.note}>
-              {images.length ? "Images loaded from backend." : "No images yet. Upload in admin to see here."}
+              {images.length ? "" : "Visuals coming soon. Check back for more details."}
             </div>
           </section>
 
           {/* Info */}
           <section className={styles.info}>
-            <h1 className={styles.h1}>{name}</h1>
+            <h1 className={styles.h1}>{overrideName}</h1>
 
             <div className={styles.metaRow}>
-              <div className={styles.price}>₹{price}</div>
+              <div className={styles.price}>₹{overridePrice}</div>
               <div className={styles.rating}>
                 <span className={styles.starsInline}><StarRow value={rating} /></span>
                 <span className={styles.ratingNum}>({Number(ratingSummary.total || 0)})</span>
@@ -375,7 +388,7 @@ export default function ProductDetail() {
                 </button>
               </div>
 
-              <button className="btn-outline" type="button" disabled={isOutOfStock} onClick={() => addToCartHandler("/cart")}>
+              <button className="btn-primary" type="button" disabled={isOutOfStock} onClick={() => addToCartHandler("/cart")}>
                 {isOutOfStock ? "Sold Out" : "Add to Cart"}
               </button>
 
@@ -400,7 +413,7 @@ export default function ProductDetail() {
                   <span className={styles.checkText}>Gift This Product</span>
                 </label>
                 <p className={styles.mutedSmall}>
-                  Gift info will be saved inside the cart item → order item and visible to admin.
+                  Your special instructions help us personalize your sacred order.
                 </p>
               </div>
             ) : null}
@@ -476,21 +489,21 @@ export default function ProductDetail() {
               <div className={styles.block}>
                 <div className={styles.blockTitle}>Spiritual Use</div>
                 <p className={styles.blockText}>
-                  {spiritualUse || "Use this product as part of your daily calm routine. Admin can add this content."}
+                  {spiritualUse || "Enhance your daily spiritual practice with this sacred tool. Designed for peace and clarity."}
                 </p>
               </div>
 
               <div className={styles.block}>
                 <div className={styles.blockTitle}>Care & Handling</div>
                 <p className={styles.blockText}>
-                  {careHandling || "Keep in a clean, dry place. Admin can add real care instructions."}
+                  {careHandling || "Keep in a clean, dry space. Handle with mindfulness and care."}
                 </p>
               </div>
 
               <div className={styles.block}>
                 <div className={styles.blockTitle}>Shipping & Returns</div>
                 <p className={styles.blockText}>
-                  {shippingReturns || "Admin can add real shipping/returns policy."}
+                  {shippingReturns || "Carefully packaged and shipped within 3-5 business days."}
                 </p>
               </div>
             </div>
@@ -504,7 +517,7 @@ export default function ProductDetail() {
           <div className={styles.reviewsHead}>
             <div>
               <h2 className={styles.reviewsTitle}>Ratings & Reviews</h2>
-              <p className={styles.reviewsSub}>Now powered by backend.</p>
+              <p className={styles.reviewsSub}>Verified Customer Reviews</p>
             </div>
 
             <button type="button" className="btn-primary" onClick={() => requireAuth(() => setReviewOpen(true))}>

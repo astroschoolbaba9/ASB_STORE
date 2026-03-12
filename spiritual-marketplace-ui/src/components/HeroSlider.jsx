@@ -23,7 +23,7 @@ const DUMMY_SLIDES = [
     title: "Crystal Healing & Reiki",
     subtitle: "High-vibe crystals for peace, focus, and protection.",
     img: "/banners/banner1.jpg",
-    clickUrl: "",
+    clickUrl: "https://asbcrystal.in/product/69b1149a5b647aa77137a9e5",
     ctaPrimaryText: "Book Consultation",
     ctaPrimaryLink: "/contact",
     ctaSecondaryText: "Explore Products",
@@ -33,7 +33,7 @@ const DUMMY_SLIDES = [
     title: "Numerology Guidance",
     subtitle: "Your Numbers Speak — Your Life Has Patterns.",
     img: "/banners/banner2.jpg",
-    clickUrl: "",
+    clickUrl: "https://asbcrystal.in/product/69b1149a5b647aa77137a9e5",
     ctaPrimaryText: "Book Consultation",
     ctaPrimaryLink: "/contact",
     ctaSecondaryText: "Explore Products",
@@ -43,7 +43,7 @@ const DUMMY_SLIDES = [
     title: "Vastu & Energy Balancing",
     subtitle: "Align your space. Elevate your energy.",
     img: "/banners/banner3.jpg",
-    clickUrl: "",
+    clickUrl: "https://asbcrystal.in/product/69b1149a5b647aa77137a9e5",
     ctaPrimaryText: "Book Consultation",
     ctaPrimaryLink: "/contact",
     ctaSecondaryText: "Explore Products",
@@ -56,7 +56,7 @@ function normalizeAdminBanner(b) {
     title: b?.title || "",
     subtitle: b?.subtitle || "",
     img: absUrl(b?.imageUrl || ""), // admin banner image
-    clickUrl: b?.clickUrl || "",
+    clickUrl: b?.clickUrl || "https://asbcrystal.in/product/69b1149a5b647aa77137a9e5",
     ctaPrimaryText: b?.ctaPrimaryText || "Book Consultation",
     ctaPrimaryLink: b?.ctaPrimaryLink || "/contact",
     ctaSecondaryText: b?.ctaSecondaryText || "Explore Products",
@@ -178,8 +178,8 @@ export default function HeroSlider() {
 
       <style>{`
         :root{
-          --asb-start:#C24DFF;
-          --asb-end:#8657FF;
+          --asb-start:#6a5cff;
+          --asb-end:#c84cff;
           --asb-white:#fff;
         }
 
@@ -192,8 +192,8 @@ export default function HeroSlider() {
           overflow: hidden;
           background-size: cover;
           background-position: center;
-          box-shadow: 0 18px 45px rgba(134, 87, 255, 0.18);
-          border: 1px solid rgba(194, 77, 255, 0.15);
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+          border: 1px solid rgba(106, 92, 255, 0.2);
           cursor: pointer;
         }
 
@@ -201,9 +201,8 @@ export default function HeroSlider() {
           position:absolute;
           inset:0;
           background:
-            linear-gradient(90deg, rgba(194,77,255,0.55), rgba(134,87,255,0.55)),
-            radial-gradient(circle at 20% 30%, rgba(255,255,255,0.18), transparent 60%),
-            radial-gradient(circle at 80% 70%, rgba(255,255,255,0.12), transparent 60%);
+            linear-gradient(90deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.2) 60%, transparent 100%),
+            radial-gradient(circle at 20% 30%, rgba(255,255,255,0.1), transparent 60%);
         }
 
         .asb-content{
@@ -220,37 +219,38 @@ export default function HeroSlider() {
 
         .asb-badge{
           width: fit-content;
-          padding: 6px 10px;
+          padding: 6px 12px;
           border-radius: 999px;
           font-weight: 800;
           font-size: 12px;
-          letter-spacing: .3px;
-          background: rgba(255,255,255,0.16);
-          border: 1px solid rgba(255,255,255,0.22);
-          margin-bottom: 10px;
+          letter-spacing: .5px;
+          background: rgba(106, 92, 255, 0.25);
+          border: 1px solid rgba(106, 92, 255, 0.4);
+          color: #e0dbff;
+          margin-bottom: 12px;
         }
 
         .asb-title{
           margin: 0;
-          font-size: 34px;
-          line-height: 1.05;
+          font-size: 38px;
+          line-height: 1.1;
           font-weight: 900;
-          text-shadow: 0 10px 30px rgba(0,0,0,0.25);
+          text-shadow: 0 4px 12px rgba(0,0,0,0.4);
         }
 
         .asb-subtitle{
-          margin: 10px 0 0;
-          font-size: 15px;
+          margin: 12px 0 0;
+          font-size: 16px;
           font-weight: 600;
-          opacity: 0.95;
-          max-width: 520px;
-          text-shadow: 0 10px 30px rgba(0,0,0,0.25);
+          opacity: 0.9;
+          max-width: 500px;
+          text-shadow: 0 2px 8px rgba(0,0,0,0.4);
         }
 
         .asb-actions{
           display: flex;
-          gap: 10px;
-          margin-top: 18px;
+          gap: 12px;
+          margin-top: 24px;
           flex-wrap: wrap;
         }
 
@@ -258,44 +258,48 @@ export default function HeroSlider() {
           border: none;
           cursor: pointer;
           border-radius: 12px;
-          padding: 10px 14px;
+          padding: 12px 20px;
           font-weight: 800;
           font-size: 14px;
-          transition: transform 160ms ease;
+          transition: all 200ms ease;
         }
 
-        .asb-btn:active{ transform: translateY(1px); }
+        .asb-btn:hover{ transform: translateY(-2px); }
+        .asb-btn:active{ transform: translateY(0); }
 
         .asb-btn--primary{
           color: white;
-          background: linear-gradient(90deg, var(--asb-start), var(--asb-end));
-          box-shadow: 0 12px 28px rgba(134,87,255,0.25);
+          background: linear-gradient(135deg, #6a5cff, #c84cff);
+          box-shadow: 0 8px 20px rgba(106, 92, 255, 0.3);
         }
 
         .asb-btn--ghost{
           color: white;
-          background: rgba(255,255,255,0.16);
-          border: 1px solid rgba(255,255,255,0.25);
+          background: rgba(255,255,255,0.1);
+          border: 1px solid rgba(255,255,255,0.3);
+          backdrop-filter: blur(4px);
         }
 
         .asb-swiper .swiper-pagination-bullet{
-          background: rgba(255,255,255,0.55);
+          background: rgba(255,255,255,0.5);
           opacity: 1;
         }
         .asb-swiper .swiper-pagination-bullet-active{
-          background: #fff;
-          box-shadow: 0 0 0 4px rgba(194,77,255,0.25);
+          background: #6a5cff;
+          box-shadow: 0 0 0 4px rgba(106, 92, 255, 0.2);
         }
 
         .asb-swiper .swiper-button-prev,
         .asb-swiper .swiper-button-next{
           color: #fff;
+          transform: scale(0.8);
         }
 
         @media (max-width: 640px){
           .asb-slide{ height: 260px; border-radius: 14px; }
-          .asb-content{ padding: 18px; }
-          .asb-title{ font-size: 24px; }
+          .asb-content{ padding: 20px; }
+          .asb-title{ font-size: 26px; }
+          .asb-subtitle{ font-size: 14px; }
         }
       `}</style>
     </section>

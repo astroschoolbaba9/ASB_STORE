@@ -1,4 +1,4 @@
-:root{
+:root {
   --bg: #fffaf3;
   --surface: #ffffff;
   --text: #1f2937;
@@ -14,12 +14,12 @@
   --purple-700: #5649ff;
 
   --gold: #f2c94c;
-  --border: rgba(17,24,39,0.10);
+  --border: rgba(17, 24, 39, 0.10);
 
   --radius: 14px;
   --radius-lg: 18px;
-  --shadow: 0 14px 30px rgba(17,24,39,0.10);
-  --shadow-soft: 0 10px 24px rgba(17,24,39,0.08);
+  --shadow: 0 14px 30px rgba(17, 24, 39, 0.10);
+  --shadow-soft: 0 10px 24px rgba(17, 24, 39, 0.08);
 
   --container: 1180px;
 

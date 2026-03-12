@@ -39,7 +39,7 @@ export default function AdminDashboard() {
       <div className={styles.header}>
         <div>
           <h1 className={styles.h1}>Dashboard</h1>
-          <div className={styles.sub}>Revenue, orders, gifts, users & last 7 days</div>
+          <div className={styles.sub}>Revenue, orders, gifts & last 7 days</div>
         </div>
 
         <button className={styles.refreshBtn} onClick={loadDashboard} disabled={loading}>
@@ -107,9 +107,9 @@ export default function AdminDashboard() {
             </div>
 
             <div className={styles.card}>
-              <div className={styles.cardLabel}>Total Users</div>
-              <div className={styles.cardValue}>{stats.totalUsers}</div>
-              <div className={styles.cardHint}>Registered users</div>
+              <div className={styles.cardLabel}>Avg. Order Value</div>
+              <div className={styles.cardValue}>{money(stats.revenue / (stats.paidOrders || 1))}</div>
+              <div className={styles.cardHint}>Revenue divided by paid orders</div>
             </div>
           </div>
 

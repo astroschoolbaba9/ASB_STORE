@@ -30,7 +30,7 @@ const env = {
   OTP_HASH_SECRET: process.env.OTP_HASH_SECRET || "dev_otp_secret_change_me",
 
   RATE_LIMIT_WINDOW_MIN: Number(process.env.RATE_LIMIT_WINDOW_MIN || 15),
-  RATE_LIMIT_MAX: Number(process.env.RATE_LIMIT_MAX || 200),
+  RATE_LIMIT_MAX: Number(process.env.RATE_LIMIT_MAX || 400),
 
   METAREACH_API_KEY: process.env.METAREACH_API_KEY || "",
   METAREACH_SENDER_ID: process.env.METAREACH_SENDER_ID || "",

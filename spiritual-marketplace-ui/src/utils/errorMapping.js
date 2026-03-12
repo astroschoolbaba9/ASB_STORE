@@ -38,6 +38,7 @@ const ERROR_MAP = {
     "HTTP_ERROR": "Something went wrong on our end. Our team has been notified. Please try again later.",
     "UNAUTHORIZED": "Please sign in to access this feature.",
     "FORBIDDEN": "You don't have permission to perform this action.",
+    "FILE_TOO_LARGE": "The image you're trying to upload is too large. Please use a file smaller than 50MB.",
 };
 
 /**

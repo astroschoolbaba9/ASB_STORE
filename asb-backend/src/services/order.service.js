@@ -85,7 +85,8 @@ async function checkoutFromCart(userId, payload) {
   }
 
   const discount = num(payload.discount, 0);
-  const shipping = num(payload.shipping, 0);
+  // SECURITY: Ignore frontend shipping; force 150 if items exist
+  const shipping = orderItems.length > 0 ? 150 : 0;
   const total = Math.max(0, subtotal - discount + shipping + giftWrapTotal);
 
   const shippingAddress = payload.shippingAddress || {};
@@ -143,16 +144,7 @@ async function checkoutFromCart(userId, payload) {
     notes: String(payload.notes || "")
   });
 
-  // Send email notification for COD orders immediately
-  const isCOD = String(payment.method || "COD").toUpperCase() === "COD";
-  if (isCOD) {
-    try {
-      await emailService.sendOrderNotification(order.toObject());
-    } catch (err) {
-      console.error("📧 COD Order Email Error:", err.message);
-    }
-  }
-
+  // COD removal: No immediate notification trigger needed
   return order;
 }
 
@@ -256,37 +248,42 @@ async function adminUpdateTracking({ orderId, adminId, tracking, note = "" }) {
   return order.toObject();
 }
 
-async function markOrderPaid(userId, orderId, meta = {}) {
+async function markOrderPaid(userId, orderId, payment = {}) {
   const order = await Order.findOne({ _id: orderId, userId });
   if (!order) throw new AppError("Order not found", 404, "ORDER_NOT_FOUND");
 
-  order.status = "PAID";
-  order.fulfilmentStatus = order.fulfilmentStatus === "PLACED" ? "CONFIRMED" : order.fulfilmentStatus;
+  // ✅ GUARD: Prevent duplicate success emails if already PAID
+  if (order.payment.status === "PAID" || order.status === "PAID") {
+    console.log("[OrderService] Order already paid, skipping success email guard.");
+    return order;
+  }
 
+  order.status = "PAID";
+  order.fulfilmentStatus = order.fulfilmentStatus === "PLACED" ? "CONFIRMED" : order.fulfilmentStatus; // Keep original fulfilmentStatus logic
   order.payment = order.payment || {};
-  order.payment.method = order.payment.method || "ONLINE_PENDING";
+  order.payment.method = order.payment.method || "ONLINE_PENDING"; // Keep original method logic
   order.payment.status = "PAID";
-  order.payment.provider = meta.provider || "PAYU";
-  order.payment.transactionId = String(meta.txnid || meta.mihpayid || "");
-  order.payment.paidAt = new Date();
+  order.payment.provider = payment.provider || order.payment.provider;
+  order.payment.transactionId = payment.txnid || payment.mihpayid || order.payment.transactionId;
+  order.payment.paidAt = new Date(); // Keep original paidAt logic
 
   order.statusHistory = Array.isArray(order.statusHistory) ? order.statusHistory : [];
+  // Add history
   order.statusHistory.push({
-    by: userId,
+    by: userId, // Keep original by: userId
     action: "PAYMENT_SUCCESS",
-    note: "",
-    status: order.status,
-    fulfilmentStatus: order.fulfilmentStatus
+    note: `Paid via ${order.payment.provider}`,
+    status: order.status, // Keep original status
+    fulfilmentStatus: order.fulfilmentStatus // Keep original fulfilmentStatus
   });
 
   await order.save();
 
-  // Send email notification to admin
+  // 📧 Send email notification
   try {
-    // We pass the plain object for safety
     await emailService.sendOrderNotification(order.toObject());
   } catch (err) {
-    console.error("📧 Order Paid Email Error:", err.message);
+    console.error(`[OrderService] Email error for order ${orderId}:`, err.message);
   }
 
   return order.toObject();

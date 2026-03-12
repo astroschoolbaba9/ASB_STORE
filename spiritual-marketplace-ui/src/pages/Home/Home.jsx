@@ -4,8 +4,9 @@ import styles from "./Home.module.css";
 import { Link, useNavigate } from "react-router-dom";
 import { api, API_BASE } from "../../lib/api";
 import useRequireAuth from "../../hooks/useRequireAuth";
+import { useCart } from "../../context/CartContext";
+import Toast from "../../components/ui/Toast";
 import { buildSsoUrl } from "../../utils/ssoUrl";
-import NavratriPopup from "../../components/NavratriPopup/NavratriPopup";
 
 // Fallback (your current dummy data)
 import { FEATURED_PRODUCTS } from "../../data/products";
@@ -23,6 +24,7 @@ function absUrl(u) {
   if (!u) return "";
   if (u.startsWith("http://") || u.startsWith("https://")) return u;
   if (u.startsWith("/banners/") || u.startsWith("/assets/")) return u;
+  if (u === "/navratri-poster.jpg") return `${process.env.PUBLIC_URL}/navratri-poster.jpg`;
   return `${API_BASE}${u.startsWith("/") ? "" : "/"}${u}`;
 }
 
@@ -61,24 +63,54 @@ function getCourseLessonsCount(course) {
 export default function Home() {
   const [featuredProducts, setFeaturedProducts] = useState(null); // null = loading, [] = loaded empty
   const [featuredCourses, setFeaturedCourses] = useState(null);
+  const [toastOpen, setToastOpen] = useState(false);
 
+  const { addItem } = useCart();
   const requireAuth = useRequireAuth();
   const navigate = useNavigate();
+
+  const showToast = () => {
+    setToastOpen(true);
+    window.clearTimeout(window.__asb_toast);
+    window.__asb_toast = window.setTimeout(() => setToastOpen(false), 1200);
+  };
 
   useEffect(() => {
     let mounted = true;
 
     (async () => {
       try {
-        const prodRes = await api.get("/api/products", {
-          query: { page: 1, limit: 8, featured: true },
-        });
+        let prodRes;
+        try {
+          prodRes = await api.get("/api/products", {
+            query: { page: 1, limit: 60, featured: true },
+          });
+        } catch (err) {
+          // Fallback if backend doesn't support limit > 50
+          if (err.status === 400) {
+            prodRes = await api.get("/api/products", {
+              query: { page: 1, limit: 50, featured: true },
+            });
+          } else {
+            throw err;
+          }
+        }
 
         let courseRes = null;
         try {
-          courseRes = await api.get("/api/courses", {
-            query: { page: 1, limit: 4, featured: true },
-          });
+          try {
+            courseRes = await api.get("/api/courses", {
+              query: { page: 1, limit: 60, featured: true },
+            });
+          } catch (err) {
+            if (err.status === 400) {
+              courseRes = await api.get("/api/courses", {
+                query: { page: 1, limit: 50, featured: true },
+              });
+            } else {
+              throw err;
+            }
+          }
         } catch {
           try {
             courseRes = await api.get("/api/trainings", {
@@ -145,8 +177,6 @@ export default function Home() {
 
   return (
     <div className={styles.page}>
-      {/* ✅ Navratri Special Offer Popup */}
-      <NavratriPopup />
       {/* ✅ Floating pill between banner (slider) and hero */}
       <div className={styles.floatingToolWrap}>
         <button
@@ -159,10 +189,11 @@ export default function Home() {
         </button>
       </div>
 
-      {/* HERO */}
-      <section className={styles.hero}>
+      {/* HERO SECTION - REDESIGNED FOR IMPACT */}
+      <section className={styles.heroOuter}>
         <div className={styles.heroInner}>
           <div className={styles.heroText}>
+            <div className={styles.brandBadge}>ASB CRYSTAL • SACRED ENERGY</div>
             <h1 className={styles.h1}>Sacred Gifts. Healing Tools. Calm Living.</h1>
 
             <p className={styles.sub}>
@@ -180,36 +211,36 @@ export default function Home() {
             </div>
 
             <div className={styles.trustRow}>
-              <span className={styles.trustPill}>Premium Curation</span>
-              <span className={styles.trustPill}>Gift-Ready Options</span>
-              <span className={styles.trustPill}>Calm Checkout</span>
+              <span className={styles.trustPill}>✨ Premium Curation</span>
+              <span className={styles.trustPill}>🎁 Gift-Ready</span>
+              <span className={styles.trustPill}>🛡️ Secure Checkout</span>
             </div>
           </div>
 
           <div className={styles.heroVisual}>
             <div className={styles.visualCard}>
-              <div className={styles.visualTitle}>Today’s Highlights</div>
+              <div className={styles.visualTitle}>Why Shop With Us</div>
 
               <div className={styles.visualGrid}>
                 <div className={styles.visualItem}>
-                  <span className={styles.visualLabel}>Featured</span>
-                  <strong>Healing Stones</strong>
+                  <span className={styles.visualLabel}>✨ Sacred</span>
+                  <strong>Blessed Products</strong>
                 </div>
                 <div className={styles.visualItem}>
-                  <span className={styles.visualLabel}>Gifting</span>
-                  <strong>Occasion Ready</strong>
+                  <span className={styles.visualLabel}>🔮 High-Vibe</span>
+                  <strong>Energized Crystals</strong>
                 </div>
                 <div className={styles.visualItem}>
-                  <span className={styles.visualLabel}>Trainings</span>
-                  <strong>Beginner → Advanced</strong>
+                  <span className={styles.visualLabel}>🎁 Gifting</span>
+                  <strong>Sacred Packaging</strong>
                 </div>
                 <div className={styles.visualItem}>
-                  <span className={styles.visualLabel}>Mood</span>
-                  <strong>Calm & Premium</strong>
+                  <span className={styles.visualLabel}>🚚 Delivery</span>
+                  <strong>Pan-India Shipping</strong>
                 </div>
               </div>
 
-              <p className={styles.visualNote}>A minimal, peaceful space designed for spiritual shopping — across all screens.</p>
+              <p className={styles.visualNote}>Authentic spiritual tools delivered with care to support your healing journey.</p>
             </div>
           </div>
         </div>
@@ -234,13 +265,19 @@ export default function Home() {
 
             const img = absUrl(p?.images?.[0]);
 
+            // --- CAMPAIGN OVERRIDE FOR KUBER POTLI (Consistency) ---
+            const isPotli = String(p.slug || "").toLowerCase() === "kuber-potli-healing" || (p.title || p.name || "").toLowerCase().includes("kuber potli");
+            const finalName = isPotli ? "Kuber Potli — Infused With Sacred Blessings" : name;
+            const finalPrice = isPotli ? 2100 : price;
+            const finalImg = isPotli ? `${process.env.PUBLIC_URL}/navratri-poster.jpg` : img;
+
             return (
               <div key={id} className={styles.card}>
                 <div className={styles.cardMedia}>
-                  {img ? (
+                  {finalImg ? (
                     <img
-                      src={img}
-                      alt={name}
+                      src={finalImg}
+                      alt={finalName}
                       style={{ width: "100%", height: "180px", objectFit: "cover", display: "block" }}
                       onError={(e) => {
                         e.currentTarget.style.display = "none";
@@ -252,10 +289,10 @@ export default function Home() {
                 </div>
 
                 <div className={styles.cardBody}>
-                  <h3 className={styles.cardTitle}>{name}</h3>
+                  <h3 className={styles.cardTitle}>{finalName}</h3>
 
                   <div className={styles.cardMeta}>
-                    <span className={styles.price}>₹{price}</span>
+                    <span className={styles.price}>₹{finalPrice}</span>
                     <span className={styles.rating}>★ {Number(rating).toFixed(1)}</span>
                   </div>
 
@@ -263,7 +300,17 @@ export default function Home() {
                     <Link to={`/product/${id}`} className="btn-outline">
                       View
                     </Link>
-                    <button className="btn-outline" type="button">
+                    <button
+                      className="btn-primary"
+                      type="button"
+                      onClick={() => {
+                        requireAuth(async () => {
+                          await addItem({ productId: id, qty: 1 });
+                          showToast();
+                          navigate("/cart");
+                        });
+                      }}
+                    >
                       Add to Cart
                     </button>
                   </div>
@@ -369,6 +416,8 @@ export default function Home() {
           })}
         </div>
       </section>
+
+      <Toast open={toastOpen} message="Added to cart" />
     </div>
   );
 }

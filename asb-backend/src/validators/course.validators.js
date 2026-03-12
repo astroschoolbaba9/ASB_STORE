@@ -12,7 +12,7 @@ const coursesQuerySchema = z.object({
   search: z.string().trim().optional(),
   sort: z.enum(["newest", "price_asc", "price_desc", "rating_desc"]).optional().default("newest"),
   page: z.coerce.number().int().min(1).optional().default(1),
-  limit: z.coerce.number().int().min(1).max(50).optional().default(12),
+  limit: z.coerce.number().int().min(1).max(100).optional().default(12),
 
   // ✅ NEW
   featured: z.preprocess((v) => {

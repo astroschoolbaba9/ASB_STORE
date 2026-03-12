@@ -3,8 +3,15 @@ import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./NavratriPopup.module.css";
 import { useCart } from "../../context/CartContext";
-import { api } from "../../lib/api";
+import { api, API_BASE } from "../../lib/api";
 import useRequireAuth from "../../hooks/useRequireAuth";
+
+function absUrl(u) {
+    if (!u) return "";
+    if (u.startsWith("http://") || u.startsWith("https://")) return u;
+    if (u.startsWith("/banners/") || u.startsWith("/assets/")) return u;
+    return `${API_BASE}${u.startsWith("/") ? "" : "/"}${u}`;
+}
 
 const POPUP_SESSION_KEY = "asb_navratri_popup_shown";
 const POPUP_DELAY_MS = 3000;
@@ -16,24 +23,27 @@ function NavratriPopup() {
     const [loading, setLoading] = useState(false);
     const [productId, setProductId] = useState(null);
     const [product, setProduct] = useState(null);
+    const [potliBannerImage, setPotliBannerImage] = useState(null);
+
+    const { addItem, addToCart } = useCart();
+    const handleAdd = addItem || addToCart;
 
     const navigate = useNavigate();
-    const { addToCart } = useCart();
     const requireAuth = useRequireAuth();
 
-    // ── Fetch product ID by slug on mount ──
+    // ── Fetch product & banner on mount ──
     useEffect(() => {
         let mounted = true;
 
         (async () => {
             try {
-                // Try fetching the product by slug to get its _id
+                // 1. Fetch products with a generic search to support older backends
                 const res = await api.get("/api/products", {
-                    query: { search: PRODUCT_SLUG, limit: 1 },
+                    query: { search: "potli", limit: 50 },
                 });
 
-                const items =
-                    res?.items || res?.products || res?.data || [];
+                const items = res?.items || res?.products || res?.data || [];
+                // Look for direct slug match OR title match
                 const foundProduct = items.find(
                     (p) => p.slug === PRODUCT_SLUG || p.title?.toLowerCase().includes("kuber potli")
                 );
@@ -41,9 +51,35 @@ function NavratriPopup() {
                 if (mounted && foundProduct) {
                     setProductId(foundProduct._id || foundProduct.id);
                     setProduct(foundProduct);
+                } else {
+                    // One more try with direct slug if not found in search results
+                    try {
+                        const directRes = await api.get("/api/products", {
+                            query: { slug: PRODUCT_SLUG, limit: 1 }
+                        });
+                        const directItem = directRes?.items?.[0] || directRes?.products?.[0];
+                        if (mounted && directItem) {
+                            setProductId(directItem._id || directItem.id);
+                            setProduct(directItem);
+                        }
+                    } catch { /* ignore fallback error */ }
+                }
+
+                // 2. Try fetching banners for a "Potli" specific image
+                const bRes = await api.get("/api/banners");
+                const bList = bRes?.banners || bRes?.data || [];
+                const potliBanner = bList.find(b =>
+                    b.title?.toLowerCase().includes("potli") ||
+                    b.subtitle?.toLowerCase().includes("potli")
+                );
+
+                if (mounted && potliBanner) {
+                    // If we found a specific banner for the potli, we can use its image
+                    // We'll store it in a state or just use it in displayImage logic
+                    setPotliBannerImage(potliBanner.imageUrl);
                 }
             } catch {
-                // silently ignore — popup still shows, CTA navigates to product page
+                // silently ignore
             }
         })();
 
@@ -52,10 +88,8 @@ function NavratriPopup() {
         };
     }, []);
 
-    // ── Show popup after delay (once per session) ──
+    // ── Show popup after delay ──
     useEffect(() => {
-        if (sessionStorage.getItem(POPUP_SESSION_KEY)) return;
-
         const timer = setTimeout(() => {
             setVisible(true);
         }, POPUP_DELAY_MS);
@@ -65,7 +99,6 @@ function NavratriPopup() {
 
     const closePopup = useCallback(() => {
         setVisible(false);
-        sessionStorage.setItem(POPUP_SESSION_KEY, "1");
     }, []);
 
     // ── Escape key closes popup ──
@@ -90,7 +123,7 @@ function NavratriPopup() {
 
             setLoading(true);
             try {
-                await addToCart({ productId, qty: 1 });
+                await handleAdd({ productId, qty: 1 });
                 closePopup();
                 navigate("/cart");
             } catch (err) {
@@ -102,7 +135,12 @@ function NavratriPopup() {
                 setLoading(false);
             }
         });
-    }, [productId, addToCart, navigate, closePopup, requireAuth]);
+    }, [productId, handleAdd, navigate, closePopup, requireAuth]);
+
+    const handleContinueShopping = useCallback(() => {
+        closePopup();
+        navigate("/shop");
+    }, [closePopup, navigate]);
 
     // ── Backdrop click ──
     const handleBackdropClick = useCallback(
@@ -112,9 +150,14 @@ function NavratriPopup() {
         [closePopup]
     );
 
-    if (!visible || !product) return null;
+    const isOutOfStock = product?.stock <= 0;
+    const displayTitle = product?.title || "Kuber Potli - Sacred Healing";
+    const displayPrice = product?.price || 2100;
+    const displayMrp = product?.mrp || 7500;
+    const isMobile = window.innerWidth <= 480;
+    const displayImage = "/navratri-poster.jpg"; // Using the public asset for reliable cross-browser loading.
 
-    const isOutOfStock = product.stock <= 0;
+    if (!visible) return null;
 
     return (
         <div className={styles.backdrop} onClick={handleBackdropClick}>
@@ -136,8 +179,8 @@ function NavratriPopup() {
 
                 <div style={{ position: 'relative' }}>
                     <img
-                        src={product.images?.[0] || "/banners/navratri-kuber-potli.jpg"}
-                        alt={product.title}
+                        src={displayImage}
+                        alt={displayTitle}
                         className={`${styles.offerImage} ${isOutOfStock ? styles.greyscale : ""}`}
                     />
                     {isOutOfStock && (
@@ -148,33 +191,25 @@ function NavratriPopup() {
                 </div>
 
                 <div className={styles.actionArea}>
-                    <h2 id="navratri-offer-title" style={{ margin: '0 0 8px', fontSize: '22px', color: '#fff' }}>
-                        {product.title}
-                    </h2>
-                    <div style={{ margin: '0 0 16px', fontSize: '14px', color: 'rgba(255, 255, 255, 0.7)' }}>
-                        Invite health, wealth & abundance into your home this festive season.
-                        <div style={{ marginTop: '10px' }}>
-                            <span style={{ textDecoration: 'line-through', marginRight: '8px', color: 'rgba(255, 255, 255, 0.5)' }}>₹{product.mrp}</span>
-                            <span style={{ color: '#f59e0b', fontSize: '18px', fontWeight: 'bold' }}>₹{product.price}</span>
-                        </div>
-                    </div>
-
-                    <button
-                        type="button"
-                        className={styles.ctaBtn}
-                        onClick={handleClaimOffer}
-                        disabled={loading || isOutOfStock}
-                    >
-                        {loading ? "Adding..." : (isOutOfStock ? "Sold Out" : `Claim Offer @ ₹${OFFER_PRICE}`)}
-                    </button>
-                    <button
-                        type="button"
-                        className={styles.continueBtn}
-                        onClick={closePopup}
-                    >
-                        Continue Shopping
-                    </button>
+                    {/* Redundant text removed to let the poster design shine */}
                 </div>
+
+                <button
+                    type="button"
+                    className={styles.ctaBtn}
+                    style={{ background: "linear-gradient(45deg, #FF8C00, #FFD700)", border: "none", color: "#000", fontWeight: "bold" }}
+                    onClick={handleClaimOffer}
+                    disabled={loading || isOutOfStock}
+                >
+                    {loading ? "Adding to Cart..." : (isOutOfStock ? "Sold Out" : `Claim Offer @ ₹${OFFER_PRICE} + ₹150 Charges`)}
+                </button>
+                <button
+                    type="button"
+                    className={styles.continueBtn}
+                    onClick={handleContinueShopping}
+                >
+                    Continue Shopping
+                </button>
             </div>
         </div>
     );

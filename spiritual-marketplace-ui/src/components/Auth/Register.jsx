@@ -73,9 +73,7 @@ export default function Register() {
           </div>
         </form>
 
-        <div className={styles.note}>
-          UI-only register. Backend will create user later.
-        </div>
+
       </div>
     </div>
   );

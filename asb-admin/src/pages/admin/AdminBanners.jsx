@@ -381,6 +381,11 @@ export default function AdminBanners() {
             <input className={styles.input} value={subtitle} onChange={(e) => setSubtitle(e.target.value)} />
           </div>
 
+          <div className={styles.field}>
+            <label className={styles.label}>Click Redirect URL</label>
+            <input className={styles.input} value={clickUrl} placeholder="e.g. https://asbcrystal.in/product/..." onChange={(e) => setClickUrl(e.target.value)} />
+          </div>
+
           <div className={styles.row2}>
             <div className={styles.field}>
               <label className={styles.label}>Start At (optional)</label>

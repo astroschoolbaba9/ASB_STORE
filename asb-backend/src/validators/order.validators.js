@@ -3,7 +3,7 @@ const { z } = require("zod");
 
 const orderItemInput = z.object({
   productId: z.string().min(1),
-  qty: z.number().int().min(1).max(50),
+  qty: z.number().int().min(1).max(100),
 
   // optional snapshots / gift fields coming from client cart
   categoryName: z.string().optional().default(""),
@@ -32,7 +32,7 @@ const shippingAddressSchema = z.object({
 });
 
 const paymentSchema = z.object({
-  method: z.enum(["COD", "ONLINE_PENDING"]).optional().default("COD"),
+  method: z.enum(["ONLINE_PENDING"]).optional().default("ONLINE_PENDING"),
   provider: z.string().optional().default(""),
   transactionId: z.string().optional().default("")
 }).optional();

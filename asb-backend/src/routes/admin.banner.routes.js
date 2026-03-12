@@ -30,7 +30,7 @@ function fileFilter(req, file, cb) {
   cb(null, true);
 }
 
-const upload = multer({ storage, fileFilter, limits: { fileSize: 4 * 1024 * 1024 } });
+const upload = multer({ storage, fileFilter, limits: { fileSize: 50 * 1024 * 1024 } }); // 50MB
 
 router.use(requireAuth, requireAdmin);
 

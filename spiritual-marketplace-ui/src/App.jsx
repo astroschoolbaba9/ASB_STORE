@@ -7,6 +7,7 @@ import { useLocation } from "react-router-dom";
 import WhatsAppFloat from "./components/whatsapp/WhatsAppFloat";
 import InstagramFloat from "./components/insta/InstagramFloat";
 import ScrollToTop from "./components/common/ScrollToTop";
+import NavratriPopup from "./components/NavratriPopup/NavratriPopup";
 
 export default function App() {
   const location = useLocation();
@@ -15,6 +16,7 @@ export default function App() {
   return (
     <>
       <ScrollToTop />
+      <NavratriPopup />
 
       {/* ✅ Sticky Header (TopBar + Navbar fixed while scrolling) */}
       <div

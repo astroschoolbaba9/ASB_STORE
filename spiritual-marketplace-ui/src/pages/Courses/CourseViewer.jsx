@@ -400,7 +400,7 @@ export default function CourseViewer() {
                 <div style={{ display: "grid", placeItems: "center", height: "100%" }}>
                   <div className={styles.playIcon}>▶</div>
                   <div className={styles.videoText}>Video not available</div>
-                  <div className={styles.videoHint}>Admin didn’t add videoUrl for this lesson.</div>
+                  <div className={styles.videoHint}>Video content for this lesson is coming soon.</div>
                 </div>
               ) : isDirectVideo(video) ? (
                 <video controls style={{ width: "100%", height: "100%", objectFit: "cover" }} src={video} />

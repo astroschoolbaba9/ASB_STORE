@@ -33,6 +33,16 @@ export default function Navbar() {
   const navigate = useNavigate();
   const { user, openAuthModal } = useAuth();
 
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (!searchTerm.trim()) return;
+    navigate(`/shop?search=${encodeURIComponent(searchTerm.trim())}`);
+    setSearchTerm("");
+    setMobileOpen(false);
+  };
+
   const handleProfileClick = () => {
     if (user) {
       navigate("/dashboard/profile");
@@ -153,6 +163,19 @@ export default function Navbar() {
               <div className={styles.brandTag}>Spiritual Store &amp; Gifting</div>
             </div>
           </Link>
+
+          <form className={styles.searchBar} onSubmit={handleSearch}>
+            <input
+              type="text"
+              className={styles.searchInput}
+              placeholder="Search sacred items..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <button type="submit" className={styles.searchIcon} aria-label="Search">
+              🔍
+            </button>
+          </form>
 
           <nav className={styles.nav} aria-label="Main navigation">
             {itemsForNavbar.map((item) => (

@@ -64,9 +64,7 @@ export default function Login() {
           </div>
         </form>
 
-        <div className={styles.note}>
-          UI-only auth. Backend will validate credentials later.
-        </div>
+
       </div>
     </div>
   );

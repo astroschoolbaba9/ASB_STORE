@@ -10,7 +10,7 @@ const EMPTY_CART = {
     subtotal: 0,
     discount: 0,
     tax: 0,
-    shipping: 0,
+    shipping: 150,
     giftWrapTotal: 0,
     grandTotal: 0
   }

@@ -27,6 +27,7 @@ const productsQuerySchema = z
     group: z.enum(["shop", "gifts"]).optional(),
 
     search: z.string().trim().optional(),
+    slug: z.string().trim().optional(),
     category: z.string().trim().optional(), // can be categoryId OR categorySlug
 
     priceMin: z.preprocess(toNumberOrUndef, z.number().min(0).optional()),
@@ -39,7 +40,7 @@ const productsQuerySchema = z
 
     // ✅ IMPORTANT: empty string won't break these now
     page: z.preprocess(toIntOrUndef, z.number().int().min(1).optional()).default(1),
-    limit: z.preprocess(toIntOrUndef, z.number().int().min(1).max(50).optional()).default(12),
+    limit: z.preprocess(toIntOrUndef, z.number().int().min(1).max(100).optional()).default(50),
 
     featured: z.preprocess(toBool, z.boolean().optional()),
   })

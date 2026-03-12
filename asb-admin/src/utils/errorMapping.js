@@ -28,6 +28,7 @@ const ERROR_MAP = {
     "NETWORK_ERROR": "Network connection error. Please check your internet connectivity.",
     "HTTP_ERROR": "Internal server error. Our engineers are investigating. Please try again shortly.",
     "SERVER_ERROR": "The server encountered an unexpected condition. Please try again.",
+    "FILE_TOO_LARGE": "Image is too big (max 50MB). Please resize and try again.",
 };
 
 /**

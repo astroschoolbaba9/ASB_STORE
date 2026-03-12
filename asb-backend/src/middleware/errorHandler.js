@@ -21,6 +21,11 @@ function errorHandler(err, req, res, next) {
     err = new AppError("Validation error", 400, "VALIDATION_ERROR", { errors: err.errors });
   }
 
+  // Multer Errors
+  if (err?.code === "LIMIT_FILE_SIZE") {
+    err = new AppError("File is too large (max 50MB)", 413, "FILE_TOO_LARGE");
+  }
+
   const statusCode = err.statusCode || 500;
   const code = err.code || "INTERNAL_ERROR";
 

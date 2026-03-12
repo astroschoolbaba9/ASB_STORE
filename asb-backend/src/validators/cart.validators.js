@@ -2,7 +2,7 @@ const { z } = require("zod");
 
 const addItemSchema = z.object({
   productId: z.string().trim().min(1),
-  qty: z.coerce.number().int().min(1).max(50).default(1),
+  qty: z.coerce.number().int().min(1).max(100).default(1),
 
   isGift: z.coerce.boolean().optional().default(false),
   giftWrap: z.coerce.boolean().optional().default(false),
@@ -13,7 +13,7 @@ const addItemSchema = z.object({
 });
 
 const updateItemSchema = z.object({
-  qty: z.coerce.number().int().min(1).max(50).optional(),
+  qty: z.coerce.number().int().min(1).max(100).optional(),
 
   isGift: z.coerce.boolean().optional(),
   giftWrap: z.coerce.boolean().optional(),

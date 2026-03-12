@@ -23,7 +23,7 @@ async function readGiftConfig() {
 
 function computeShipping(subtotal, itemCount) {
   if (!itemCount) return 0;
-  return subtotal > 1499 ? 0 : 99;
+  return 150;
 }
 
 async function getCart(userId) {
@@ -31,7 +31,7 @@ async function getCart(userId) {
 
   await cart.populate({
     path: "items.productId",
-    select: "title price mrp stock images isActive categoryId category"
+    select: "title price mrp stock images isActive categoryId category slug"
   });
 
   const items = cart.items.filter((it) => it.productId && it.productId.isActive);

@@ -59,6 +59,68 @@
 }
 
 /* =========================
+   SEARCH BAR
+   ========================= */
+.searchBar {
+  flex: 1;
+  max-width: 400px;
+  display: flex;
+  align-items: center;
+  background: rgba(106, 92, 255, 0.05);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0 12px;
+  height: 42px;
+  transition: all 0.2s ease;
+  margin: 0 20px;
+}
+
+.searchBar:focus-within {
+  background: #ffffff;
+  border-color: var(--asb-violet);
+  box-shadow: 0 4px 12px rgba(106, 92, 255, 0.08);
+}
+
+.searchInput {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  padding: 8px 0;
+}
+
+.searchIcon {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  opacity: 0.6;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.searchIcon:hover {
+  opacity: 1;
+}
+
+@media (max-width: 1100px) {
+  .searchBar {
+    max-width: 280px;
+  }
+}
+
+@media (max-width: 980px) {
+  .searchBar {
+    display: none;
+  }
+}
+
+/* =========================
    NAVBAR
 ========================= */
 .nav {
@@ -73,12 +135,13 @@
   display: flex;
   align-items: center;
 }
+
 /* label + caret layout */
-.navLabel{
+.navLabel {
   display: inline-block;
 }
 
-.caret{
+.caret {
   display: inline-block;
   margin-left: 7px;
   font-size: 10px;
@@ -87,7 +150,7 @@
   transition: transform 180ms ease, opacity 180ms ease;
 }
 
-.caretOpen{
+.caretOpen {
   transform: translateY(-1px) rotate(180deg);
   opacity: 0.95;
 }
@@ -120,7 +183,7 @@
 /* =========================
    DROPDOWN
 ========================= */
-.dropdown{
+.dropdown {
   position: absolute;
   top: calc(100% + 10px);
   left: 0;
@@ -140,21 +203,23 @@
   animation: dropdownIn 160ms ease-out;
 }
 
-@keyframes dropdownIn{
-  from{
+@keyframes dropdownIn {
+  from {
     opacity: 0;
     transform: translateY(6px) scale(0.98);
   }
-  to{
+
+  to {
     opacity: 1;
     transform: translateY(0) scale(1);
   }
 }
-.dropItem{
+
+.dropItem {
   transition: background 160ms ease, color 160ms ease, transform 160ms ease;
 }
 
-.dropItem:hover{
+.dropItem:hover {
   transform: translateX(2px);
 }
 
@@ -257,7 +322,8 @@
 
   /* ✅ KEY FIX */
   display: grid;
-  grid-template-rows: auto 1fr; /* top + scroll area */
+  grid-template-rows: auto 1fr;
+  /* top + scroll area */
   gap: 12px;
 
   /* optional (helps on iOS) */
@@ -294,7 +360,8 @@
 
   /* ✅ KEY FIX */
   overflow-y: auto;
-  min-height: 0; /* IMPORTANT for grid children */
+  min-height: 0;
+  /* IMPORTANT for grid children */
   -webkit-overflow-scrolling: touch;
 }
 
@@ -334,7 +401,7 @@
   color: #ffffff;
 }
 
-.badgeCount{
+.badgeCount {
   position: absolute;
   transform: translate(14px, -12px);
   min-width: 18px;
@@ -347,17 +414,18 @@
   font-weight: 900;
   color: #fff;
   background: linear-gradient(90deg, var(--asb-magenta), var(--asb-violet));
-  border: 1px solid rgba(255,255,255,0.75);
+  border: 1px solid rgba(255, 255, 255, 0.75);
 }
 
-.iconBtn{
-  position: relative;
-}
-.cartBtn{
+.iconBtn {
   position: relative;
 }
 
-.badge{
+.cartBtn {
+  position: relative;
+}
+
+.badge {
   position: absolute;
   top: -6px;
   right: -6px;
@@ -370,9 +438,10 @@
   font-size: 11px;
   font-weight: 900;
   color: #fff;
-  border: 1px solid rgba(255,255,255,0.65);
+  border: 1px solid rgba(255, 255, 255, 0.65);
   background: linear-gradient(90deg, var(--asb-magenta), var(--asb-violet));
 }
+
 /* =========================
    EXTERNAL NAV TRANSITION
 ========================= */
@@ -392,6 +461,7 @@
     opacity: 0;
     transform: translateY(6px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0px);
@@ -440,16 +510,24 @@
 }
 
 @keyframes xbar {
-  0% { transform: translateX(-70%); }
-  50% { transform: translateX(0%); }
-  100% { transform: translateX(70%); }
+  0% {
+    transform: translateX(-70%);
+  }
+
+  50% {
+    transform: translateX(0%);
+  }
+
+  100% {
+    transform: translateX(70%);
+  }
 }
-.navbar{
+
+.navbar {
   position: sticky;
   top: 0;
   z-index: 1000;
-  background: rgba(255,255,255,0.92);
+  background: rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(0,0,0,0.06);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
 }
-

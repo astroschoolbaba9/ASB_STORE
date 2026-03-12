@@ -87,7 +87,7 @@ export default function Checkout() {
   const [deliveryNotes, setDeliveryNotes] = useState("");
 
   // payment
-  const [payMethod, setPayMethod] = useState("COD"); // "COD" | "PAYU"
+  const [payMethod, setPayMethod] = useState("PAYU"); // Default to online
   const [payu, setPayu] = useState(null); // { actionUrl, fields }
 
   useEffect(() => {
@@ -173,11 +173,15 @@ export default function Checkout() {
         const recipient = it.recipientName || it.gift?.recipientName || it.meta?.recipient || "";
         const occasion = it.giftOccasion || it.occasion || it.gift?.occasion || it.meta?.occasion || "";
 
+        const isPotli = String(p.slug || "").toLowerCase() === "kuber-potli-healing" || (p.title || p.name || "").toLowerCase().includes("kuber potli");
+        const finalPrice = isPotli ? 2100 : price;
+        const finalName = isPotli ? "Kuber Potli — Infused With Sacred Blessings" : name;
+
         return {
           key: it._id || it.itemId || `${p._id || p.id}-${qty}`,
-          name,
+          name: finalName,
           category,
-          price,
+          price: finalPrice,
           qty,
           meta: { gift, giftWrap, recipient, occasion }
         };
@@ -189,9 +193,10 @@ export default function Checkout() {
 
   const totals = cart?.totals || {};
   const subtotal = Number(totals.subtotal ?? fallbackSubtotal);
-  const shipping = Number(totals.shipping ?? (subtotal > 1499 ? 0 : cartRows.length > 0 ? 99 : 0));
+  const hasItems = cartRows.length > 0;
+  const shipping = hasItems ? (Number(totals.shipping) || 150) : 0;
   const giftWrapTotal = Number(totals.giftWrapTotal ?? 0);
-  const total = Number(totals.grandTotal ?? subtotal + shipping + giftWrapTotal);
+  const total = subtotal + shipping + giftWrapTotal;
 
   const empty = cartRows.length === 0;
 
@@ -259,7 +264,7 @@ export default function Checkout() {
           },
           notes: (deliveryNotes || "").trim(),
           discount: Number(totals.discount || 0),
-          shipping: Number(totals.shipping || 0),
+          shipping: Number(shipping),
           payment: {
             method: payMethod === "PAYU" ? "ONLINE_PENDING" : "COD",
             provider: payMethod === "PAYU" ? "PAYU" : ""
@@ -479,21 +484,16 @@ export default function Checkout() {
                   type="button"
                   className={styles.payOpt}
                   onClick={() => setPayMethod("PAYU")}
-                  style={{ border: payMethod === "PAYU" ? "2px solid var(--border)" : undefined }}
+                  style={{
+                    border: payMethod === "PAYU" ? "2px solid var(--border)" : "1px solid var(--border-light)",
+                    width: "100%"
+                  }}
                 >
                   Pay Online (PayU)
                 </button>
-                <button
-                  type="button"
-                  className={styles.payOpt}
-                  onClick={() => setPayMethod("COD")}
-                  style={{ border: payMethod === "COD" ? "2px solid var(--border)" : undefined }}
-                >
-                  Cash on Delivery
-                </button>
               </div>
               <p className={styles.muted} style={{ marginTop: 8 }}>
-                Selected: <b>{payMethod === "PAYU" ? "PayU Online" : "COD"}</b>
+                Selected: <b>Online Payment</b>
               </p>
             </div>
           </section>
@@ -545,11 +545,11 @@ export default function Checkout() {
             </div>
 
             <button className="btn-primary" type="button" onClick={placeOrder} disabled={placing || loading}>
-              {placing ? "Placing..." : payMethod === "PAYU" ? "Pay & Place Order" : "Place Order"}
+              {placing ? "Placing..." : "Pay & Place Order"}
             </button>
 
             <p className={styles.smallHelp}>
-              Backend validates cart & stock. PayU orders are placed first, then paid securely.
+              Your order is processed securely. Premium spiritual tools delivered with care.
             </p>
           </aside>
         </div>

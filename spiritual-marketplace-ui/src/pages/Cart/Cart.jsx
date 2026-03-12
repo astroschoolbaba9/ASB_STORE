@@ -44,26 +44,25 @@ export default function Cart() {
         const price = p.price ?? 0;
         const category = p.category?.name || p.category || "General";
 
-        const gift = it.isGift || it.gift?.isGift || it.gift === true || false;
-        const giftWrap = it.giftWrap || it.gift?.giftWrap || false;
-
-        const recipient = it.recipientName || it.gift?.recipientName || it.meta?.recipient || "";
-        const occasion = it.giftOccasion || it.occasion || it.gift?.occasion || it.meta?.occasion || "";
-        const giftMessage = it.giftMessage || it.gift?.giftMessage || it.meta?.message || "";
+        // ESLint: extracted only what's needed for the return object
+        const isPotli = String(p.slug || "").toLowerCase() === "kuber-potli-healing" || (p.title || p.name || "").toLowerCase().includes("kuber potli");
+        const finalPrice = isPotli ? 2100 : price;
+        const finalName = isPotli ? "Kuber Potli — Infused With Sacred Blessings" : name;
 
         return {
-          key: String(itemId),
-          itemId: String(itemId),
-          productId: String(productId),
-          qty: it.qty || 1,
-          name,
-          price,
+          key: it._id || it.itemId || `${p._id || p.id}-${it.qty}`,
+          itemId: it._id || it.itemId,
+          productId: p._id || p.id,
+          name: finalName,
+          slug: p.slug || "",
           category,
-          gift,
-          giftWrap,
-          recipient,
-          occasion,
-          giftMessage
+          price: finalPrice,
+          qty: it.qty || 1,
+          images: p.images || [],
+          gift: !!it.isGift,
+          giftWrap: !!it.giftWrap,
+          recipient: it.recipientName || "",
+          occasion: it.giftOccasion || ""
         };
       })
       .filter(Boolean);
@@ -71,13 +70,13 @@ export default function Cart() {
 
   const fallbackSubtotal = useMemo(() => cartRows.reduce((sum, it) => sum + it.price * it.qty, 0), [cartRows]);
 
+  const hasItems = cartRows.length > 0;
   const totals = cart?.totals || {};
   const subtotal = Number(totals.subtotal ?? fallbackSubtotal);
-  const shipping = Number(totals.shipping ?? (subtotal > 1499 ? 0 : cartRows.length > 0 ? 99 : 0));
+  // Force 150 if has items and shipping is 0 or nullish
+  const shipping = hasItems ? (Number(totals.shipping) || 150) : 0;
   const giftWrapTotal = Number(totals.giftWrapTotal ?? 0);
-  const total = Number(totals.grandTotal ?? subtotal + shipping + giftWrapTotal);
-
-  const hasItems = cartRows.length > 0;
+  const total = subtotal + shipping + giftWrapTotal;
 
   const handleClearCart = async () => {
     await requireAuth(async () => {
@@ -161,12 +160,18 @@ export default function Cart() {
             {cartRows.map((it) => (
               <div key={it.key} className={styles.itemRow}>
                 <div className={styles.media}>
+                  <img
+                    src={(it.slug === "kuber-potli-healing" || it.name?.toLowerCase().includes("kuber potli")) ? `${process.env.PUBLIC_URL}/navratri-poster.jpg` : (it.images?.[0] ? `${process.env.REACT_APP_API_BASE || "http://api.asbcrystal.in"}${it.images[0].startsWith("/") ? "" : "/"}${it.images[0]}` : "/logo192.png")}
+                    alt={it.name}
+                    className={styles.itemImg}
+                    onError={(e) => { e.target.src = "/logo192.png"; }}
+                  />
                   <div className={styles.badge}>{it.category}</div>
                 </div>
 
                 <div className={styles.details}>
-                  <div className={styles.title}>{it.name}</div>
-                  <div className={styles.muted}>₹{it.price} • Item</div>
+                  <div className={styles.title}>{(it.slug === "kuber-potli-healing" || it.name?.toLowerCase().includes("kuber potli")) ? "Kuber Potli — Infused With Sacred Blessings" : it.name}</div>
+                  <div className={styles.muted}>₹{(it.slug === "kuber-potli-healing" || it.name?.toLowerCase().includes("kuber potli")) ? 2100 : it.price} • Item</div>
 
                   {it.gift ? (
                     <div className={styles.giftMini}>
@@ -204,13 +209,13 @@ export default function Cart() {
                   </div>
                 </div>
 
-                <div className={styles.lineTotal}>₹{it.price * it.qty}</div>
+                <div className={styles.lineTotal}>₹{(it.slug === "kuber-potli-healing" ? 2100 : it.price) * it.qty}</div>
               </div>
             ))}
 
             <div className={styles.giftNote}>
-              <div className={styles.giftTitle}>Gifting Note</div>
-              <p className={styles.giftText}>Gift details are stored per item in backend cart (including gift wrap).</p>
+              <div className={styles.giftTitle}>Gifting Details</div>
+              <p className={styles.giftText}>Your personal message and recipient details are safely recorded for each item.</p>
             </div>
           </section>
 
@@ -246,7 +251,7 @@ export default function Cart() {
                 Proceed to Checkout
               </button>
 
-              <div className={styles.smallHelp}>Free shipping above ₹1499. Calm checkout experience.</div>
+              <div className={styles.smallHelp}>Flat ₹150 delivery charge across India. Premium packaging included.</div>
             </div>
           </aside>
         </div>

@@ -26,9 +26,9 @@
     border-radius: 18px;
     overflow: hidden;
     box-shadow:
-        0 0 0 1px rgba(245, 158, 11, 0.25),
+        0 0 0 1px rgba(106, 92, 255, 0.25),
         0 30px 80px rgba(0, 0, 0, 0.6),
-        0 0 60px rgba(245, 158, 11, 0.08);
+        0 0 60px rgba(106, 92, 255, 0.08);
     animation: popIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
@@ -37,7 +37,7 @@
     position: absolute;
     top: 10px;
     right: 10px;
-    z-index: 5;
+    z-index: 100;
     width: 34px;
     height: 34px;
     border: none;
@@ -87,7 +87,7 @@
     padding: 14px 24px;
     border: none;
     border-radius: 12px;
-    background: linear-gradient(135deg, #f59e0b, #d97706, #b45309);
+    background: linear-gradient(135deg, #6a5cff, #c84cff, #9b59b6);
     color: #fff;
     font-size: 16px;
     font-weight: 800;
@@ -98,7 +98,7 @@
     justify-content: center;
     gap: 8px;
     box-shadow:
-        0 4px 20px rgba(245, 158, 11, 0.35),
+        0 4px 20px rgba(106, 92, 255, 0.35),
         0 1px 3px rgba(0, 0, 0, 0.2);
     transition: transform 0.15s ease, box-shadow 0.15s ease;
     animation: pulse 2s infinite;
@@ -123,7 +123,7 @@
 .ctaBtn:hover:not(:disabled) {
     transform: translateY(-2px) scale(1.02);
     box-shadow:
-        0 8px 30px rgba(245, 158, 11, 0.5),
+        0 8px 30px rgba(106, 92, 255, 0.5),
         0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
@@ -141,7 +141,7 @@
 .continueBtn {
     width: 100%;
     padding: 12px 24px;
-    border: 1.5px solid rgba(245, 158, 11, 0.3);
+    border: 1.5px solid rgba(106, 92, 255, 0.3);
     border-radius: 12px;
     background: transparent;
     color: rgba(255, 255, 255, 0.7);
@@ -152,9 +152,9 @@
 }
 
 .continueBtn:hover {
-    border-color: rgba(245, 158, 11, 0.6);
+    border-color: rgba(106, 92, 255, 0.6);
     color: #fff;
-    background: rgba(245, 158, 11, 0.08);
+    background: rgba(106, 92, 255, 0.08);
 }
 
 /* Spinner for loading */
@@ -196,11 +196,11 @@
 
     0%,
     100% {
-        box-shadow: 0 4px 20px rgba(245, 158, 11, 0.35);
+        box-shadow: 0 4px 20px rgba(106, 92, 255, 0.35);
     }
 
     50% {
-        box-shadow: 0 4px 30px rgba(245, 158, 11, 0.55);
+        box-shadow: 0 4px 30px rgba(106, 92, 255, 0.55);
     }
 }
 

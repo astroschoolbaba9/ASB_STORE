@@ -61,6 +61,7 @@ async function listProducts(q) {
   const {
     group,
     search,
+    slug,
     category,
     priceMin,
     priceMax,
@@ -82,6 +83,10 @@ async function listProducts(q) {
   }
 
   if (featured === true) filter.isFeatured = true;
+
+  if (slug) {
+    filter.slug = String(slug).toLowerCase();
+  }
 
   if (priceMin != null || priceMax != null) {
     filter.price = {};
