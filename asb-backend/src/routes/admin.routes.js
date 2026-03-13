@@ -17,6 +17,7 @@ router.put("/categories/:id", adminController.updateCategory);
 router.delete("/categories/:id", adminController.deleteCategory);
 
 // PRODUCT
+router.get("/products", adminController.listProducts);
 router.post("/products", adminController.createProduct);
 router.put("/products/:id", adminController.updateProduct);
 router.delete("/products/:id", adminController.deleteProduct);

@@ -33,6 +33,7 @@ const productCreateSchema = z.object({
   images: z.array(z.string().trim().min(1)).max(4).optional().default([]),
 
   price: z.coerce.number().min(0),
+  purchasePrice: z.coerce.number().min(0).optional().default(0),
   mrp: z.coerce.number().min(0).optional().default(0),
   stock: z.coerce.number().int().min(0).optional().default(0),
 
@@ -57,6 +58,7 @@ const productUpdateSchema = z.object({
   images: z.array(z.string().trim().min(1)).max(4).optional(),
 
   price: z.coerce.number().min(0).optional(),
+  purchasePrice: z.coerce.number().min(0).optional(),
   mrp: z.coerce.number().min(0).optional(),
   stock: z.coerce.number().int().min(0).optional(),
 

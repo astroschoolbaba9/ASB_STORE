@@ -30,6 +30,11 @@ const deleteCategory = asynchandler(async (req, res) => {
 });
 
 // PRODUCT
+const listProducts = asynchandler(async (req, res) => {
+  const result = await adminService.listProducts(req.query || {});
+  res.json({ success: true, ...result });
+});
+
 const createProduct = asynchandler(async (req, res) => {
   const parsed = productCreateSchema.safeParse(req.body);
   if (!parsed.success)
@@ -92,6 +97,7 @@ module.exports = {
   createProduct,
   updateProduct,
   deleteProduct,
+  listProducts,
 
   // course
   createCourse,

@@ -52,6 +52,7 @@ function normalizeProduct(p) {
     categoryGroup: catObj ? String(catObj?.group || "shop").toLowerCase() : "",
 
     price: typeof p?.price === "number" ? p.price : p?.price ? Number(p.price) : 0,
+    purchasePrice: typeof p?.purchasePrice === "number" ? p.purchasePrice : p?.purchasePrice ? Number(p.purchasePrice) : 0,
     mrp: p?.mrp === null || p?.mrp === undefined ? "" : Number(p.mrp),
     stock: p?.stock === null || p?.stock === undefined ? "" : Number(p.stock),
 
@@ -114,6 +115,7 @@ export default function Products() {
   const [title, setTitle] = useState("");
   const [slug, setSlug] = useState("");
   const [price, setPrice] = useState("");
+  const [purchasePrice, setPurchasePrice] = useState("");
   const [mrp, setMrp] = useState("");
   const [stock, setStock] = useState("");
 
@@ -195,7 +197,7 @@ export default function Products() {
                 sort === "featured" ? "featured" : "newest"
       };
 
-      const res = await api.get("/api/products", { query: params });
+      const res = await api.get("/api/admin/products", { query: params });
 
       const arr = Array.isArray(res?.items) ? res.items :
         Array.isArray(res?.products) ? res.products :
@@ -254,6 +256,7 @@ export default function Products() {
     setTitle("");
     setSlug("");
     setPrice("");
+    setPurchasePrice("");
     setMrp("");
     setStock("");
 
@@ -292,6 +295,7 @@ export default function Products() {
     setSlug(row.slug || "");
 
     setPrice(row.price === 0 ? "0" : String(row.price || ""));
+    setPurchasePrice(row.purchasePrice === 0 ? "0" : String(row.purchasePrice || ""));
     setMrp(row.mrp === "" ? "" : String(row.mrp));
     setStock(row.stock === "" ? "" : String(row.stock));
 
@@ -325,6 +329,9 @@ export default function Products() {
     const pr = toNumberOrEmpty(price);
     if (pr === "" || pr < 0) return setFormErr("Price must be a valid number.");
 
+    const pPr = toNumberOrEmpty(purchasePrice);
+    if (pPr !== "" && pPr < 0) return setFormErr("Purchase price must be a valid number.");
+
     const mrpN = toNumberOrEmpty(mrp);
     if (mrpN !== "" && mrpN < 0) return setFormErr("MRP must be a valid number.");
 
@@ -337,6 +344,7 @@ export default function Products() {
       categoryId,
 
       price: Number(pr),
+      purchasePrice: pPr === "" ? 0 : Number(pPr),
       mrp: mrpN === "" ? 0 : Number(mrpN),
       stock: stockN === "" ? 0 : Number(stockN),
 
@@ -410,6 +418,11 @@ export default function Products() {
           </div>
         </div>
       ),
+    },
+    {
+      key: "purchasePrice",
+      title: "Cost (₹)",
+      render: (r) => `₹${Number(r.purchasePrice || 0)}`,
     },
     { key: "group", title: "Group", render: (r) => (r.categoryGroup || "shop") },
     {
@@ -600,8 +613,9 @@ export default function Products() {
             </div>
 
             <div className={styles.field}>
-              <label className={styles.label}>Stock</label>
-              <input className={styles.input} value={stock} onChange={(e) => setStock(e.target.value)} inputMode="numeric" />
+              <label className={styles.label}>Purchase Price (₹)</label>
+              <input className={styles.input} value={purchasePrice} onChange={(e) => setPurchasePrice(e.target.value)} inputMode="numeric" />
+              <div className={styles.muted}>Cost at which you bought it.</div>
             </div>
           </div>
 
@@ -611,17 +625,22 @@ export default function Products() {
               <input className={styles.input} value={mrp} onChange={(e) => setMrp(e.target.value)} inputMode="numeric" />
             </div>
 
-            <div className={styles.fieldRow} style={{ display: "flex", gap: 18, alignItems: "center", marginTop: 18 }}>
-              <label className={styles.checkRow}>
-                <input type="checkbox" checked={isActive} onChange={(e) => setIsActive(e.target.checked)} />
-                <span>Active</span>
-              </label>
-
-              <label className={styles.checkRow}>
-                <input type="checkbox" checked={isFeatured} onChange={(e) => setIsFeatured(e.target.checked)} />
-                <span>Show on Home</span>
-              </label>
+            <div className={styles.field}>
+              <label className={styles.label}>Stock</label>
+              <input className={styles.input} value={stock} onChange={(e) => setStock(e.target.value)} inputMode="numeric" />
             </div>
+          </div>
+
+          <div className={styles.fieldRow} style={{ display: "flex", gap: 18, alignItems: "center", marginTop: 18 }}>
+            <label className={styles.checkRow}>
+              <input type="checkbox" checked={isActive} onChange={(e) => setIsActive(e.target.checked)} />
+              <span>Active</span>
+            </label>
+
+            <label className={styles.checkRow}>
+              <input type="checkbox" checked={isFeatured} onChange={(e) => setIsFeatured(e.target.checked)} />
+              <span>Show on Home</span>
+            </label>
           </div>
 
           <div className={styles.field}>
@@ -797,6 +816,6 @@ export default function Products() {
         onCancel={() => !confirmLoading && setConfirmOpen(false)}
         onConfirm={confirmDelete}
       />
-    </div>
+    </div >
   );
 }

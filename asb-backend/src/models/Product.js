@@ -11,6 +11,7 @@ const productSchema = new mongoose.Schema(
 
     images: [{ type: String }], // store URLs/paths (your UI can render)
 
+    purchasePrice: { type: Number, default: 0, min: 0, select: false },
     price: { type: Number, required: true, min: 0 },
     mrp: { type: Number, default: 0, min: 0 },
     spiritualUse: { type: String, default: "" },

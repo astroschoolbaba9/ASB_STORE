@@ -109,6 +109,47 @@ async function deleteProduct(id) {
   return true;
 }
 
+// ADMIN: Products list with purchasePrice
+async function listProducts(q) {
+  const { page = 1, limit = 20, group, category, search, sort } = q || {};
+  const filter = {};
+
+  if (group) {
+    const Category = require("../models/Category");
+    const cats = await Category.find({ group: String(group).toLowerCase() }).select("_id").lean();
+    filter.categoryId = { $in: cats.map(c => c._id) };
+  }
+
+  if (category && mongoose.Types.ObjectId.isValid(category)) {
+    filter.categoryId = category;
+  }
+
+  const searchTrim = String(search || "").trim();
+  if (searchTrim) {
+    filter.$or = [
+      { title: { $regex: searchTrim, $options: "i" } },
+      { slug: { $regex: searchTrim, $options: "i" } },
+    ];
+  }
+
+  const skip = (parseInt(page, 10) - 1) * parseInt(limit, 10);
+  const sortObj = sort === "price_asc" ? { price: 1 } :
+    sort === "price_desc" ? { price: -1 } : { createdAt: -1 };
+
+  const [items, total] = await Promise.all([
+    Product.find(filter)
+      .select("+purchasePrice") // ✅ explicitly include
+      .sort(sortObj)
+      .skip(skip)
+      .limit(parseInt(limit, 10))
+      .populate("categoryId", "name slug group")
+      .lean(),
+    Product.countDocuments(filter),
+  ]);
+
+  return { items, total, page: parseInt(page, 10), limit: parseInt(limit, 10) };
+}
+
 // COURSE
 function cleanLessons(lessons) {
   const arr = Array.isArray(lessons) ? lessons : [];
