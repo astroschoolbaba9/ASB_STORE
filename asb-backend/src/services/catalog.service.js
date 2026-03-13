@@ -69,9 +69,13 @@ async function listProducts(q) {
     page = 1,
     limit = 12,
     featured,
+    all,
   } = q || {};
 
-  const filter = { isActive: true };
+  const filter = {};
+  if (all !== true) {
+    filter.isActive = true;
+  }
 
   // ✅ group/category filtering via Category
   const { categoryIds } = await resolveCategoryIds({ group, category });

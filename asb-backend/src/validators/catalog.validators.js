@@ -43,6 +43,7 @@ const productsQuerySchema = z
     limit: z.preprocess(toIntOrUndef, z.number().int().min(1).max(100).optional()).default(50),
 
     featured: z.preprocess(toBool, z.boolean().optional()),
+    all: z.preprocess(toBool, z.boolean().optional()), // ✅ allow admin to see inactive
   })
   .refine(
     (d) => {

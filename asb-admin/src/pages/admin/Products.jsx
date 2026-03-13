@@ -95,6 +95,9 @@ export default function Products() {
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState("");
   const [items, setItems] = useState([]);
+  const [total, setTotal] = useState(0);
+  const [page, setPage] = useState(1);
+  const LIMIT = 20;
 
   const [cats, setCats] = useState([]);
   const [catsLoading, setCatsLoading] = useState(true);
@@ -178,39 +181,50 @@ export default function Products() {
     setErr("");
 
     try {
-      // ✅ backend limit max = 50
-      const limit = 50;
+      const params = {
+        all: true,
+        page,
+        limit: LIMIT,
+        group: groupFilter || undefined,
+        category: categoryFilter || undefined,
+        search: search.trim() || undefined,
+        sort: sort === "newest" ? "newest" :
+          sort === "priceAsc" ? "price_asc" :
+            sort === "priceDesc" ? "price_desc" :
+              sort === "nameAsc" ? "newest" : // Backend doesn't have name_asc yet, default to newest
+                sort === "featured" ? "featured" : "newest"
+      };
 
-      // ✅ fetch both groups so admin can filter locally
-      const [shopRes, giftRes] = await Promise.all([
-        api.get("/api/products", { query: { group: "shop", page: 1, limit, sort: "newest" } }),
-        api.get("/api/products", { query: { group: "gifts", page: 1, limit, sort: "newest" } }),
-      ]);
+      const res = await api.get("/api/products", { query: params });
 
-      const toArr = (data) =>
-        Array.isArray(data) ? data :
-          Array.isArray(data?.items) ? data.items :
-            Array.isArray(data?.products) ? data.products :
-              Array.isArray(data?.data) ? data.data : [];
+      const arr = Array.isArray(res?.items) ? res.items :
+        Array.isArray(res?.products) ? res.products :
+          Array.isArray(res) ? res : [];
 
-      const merged = [...toArr(shopRes), ...toArr(giftRes)]
-        .map(normalizeProduct)
-        .filter((x) => x._id);
-
-      setItems(merged);
+      setItems(arr.map(normalizeProduct).filter(x => x._id));
+      setTotal(res?.total || arr.length);
     } catch (e) {
       setErr(getFriendlyMessage(e));
       setItems([]);
-
+      setTotal(0);
     } finally {
       setLoading(false);
     }
   }
 
+  // Handle filter changes - reset to page 1
   useEffect(() => {
-    loadCategories();
+    setPage(1);
+  }, [groupFilter, search, categoryFilter, sort]);
+
+  // Load products when page changes or initial load
+  useEffect(() => {
     loadProducts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, groupFilter, search, categoryFilter, sort]);
+
+  useEffect(() => {
+    loadCategories();
   }, []);
 
   const categoryMap = useMemo(() => {
@@ -231,33 +245,7 @@ export default function Products() {
     if (!stillValid) setCategoryId(list[0]?._id || "");
   }, [group, catsByGroup, categoryId, modalOpen]);
 
-  const filteredClient = useMemo(() => {
-    const s = search.trim().toLowerCase();
-    let arr = [...items];
-
-    if (groupFilter) {
-      arr = arr.filter((p) => (p.categoryGroup || "shop") === groupFilter);
-    }
-
-    if (s) {
-      arr = arr.filter((p) => {
-        const t = (p.title || "").toLowerCase();
-        const sl = (p.slug || "").toLowerCase();
-        return t.includes(s) || sl.includes(s);
-      });
-    }
-
-    if (categoryFilter) {
-      arr = arr.filter((p) => String(p.categoryId || "") === String(categoryFilter));
-    }
-
-    if (sort === "priceAsc") arr.sort((a, b) => (a.price || 0) - (b.price || 0));
-    if (sort === "priceDesc") arr.sort((a, b) => (b.price || 0) - (a.price || 0));
-    if (sort === "nameAsc") arr.sort((a, b) => (a.title || "").localeCompare(b.title || ""));
-    if (sort === "featured") arr.sort((a, b) => (a.featuredOrder - b.featuredOrder) || (b.isFeatured - a.isFeatured));
-
-    return arr;
-  }, [items, search, categoryFilter, sort, groupFilter]);
+  const filteredClient = items; // Already filtered server-side
 
   function resetForm() {
     setGroup("shop");
@@ -511,7 +499,33 @@ export default function Products() {
           <div className={styles.errorMsg}>{err}</div>
         </div>
       ) : (
-        <Table columns={columns} rows={filteredClient} keyField="_id" emptyText="No products found." />
+        <>
+          <Table columns={columns} rows={filteredClient} keyField="_id" emptyText="No products found." />
+
+          {total > LIMIT && (
+            <div className={styles.pagination}>
+              <div className={styles.pageLine}>
+                Showing {(page - 1) * LIMIT + 1} to {Math.min(page * LIMIT, total)} of {total} products
+              </div>
+              <div className={styles.pageActions}>
+                <button
+                  className={styles.pageBtn}
+                  disabled={page <= 1 || loading}
+                  onClick={() => setPage(p => p - 1)}
+                >
+                  Previous
+                </button>
+                <button
+                  className={styles.pageBtn}
+                  disabled={page * LIMIT >= total || loading}
+                  onClick={() => setPage(p => p + 1)}
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          )}
+        </>
       )}
 
       <Modal
