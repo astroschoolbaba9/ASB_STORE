@@ -115,7 +115,6 @@ async function listProducts(q) {
   const filter = {};
 
   if (group) {
-    const Category = require("../models/Category");
     const cats = await Category.find({ group: String(group).toLowerCase() }).select("_id").lean();
     filter.categoryId = { $in: cats.map(c => c._id) };
   }
@@ -369,6 +368,7 @@ module.exports = {
   createProduct,
   updateProduct,
   deleteProduct,
+  listProducts,
 
   // course
   createCourse,
