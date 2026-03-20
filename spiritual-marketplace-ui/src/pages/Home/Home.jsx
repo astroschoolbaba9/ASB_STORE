@@ -7,6 +7,7 @@ import useRequireAuth from "../../hooks/useRequireAuth";
 import { useCart } from "../../context/CartContext";
 import Toast from "../../components/ui/Toast";
 import { buildSsoUrl } from "../../utils/ssoUrl";
+import JsonLd from "../../components/common/JsonLd";
 
 // Fallback (your current dummy data)
 import { FEATURED_PRODUCTS } from "../../data/products";
