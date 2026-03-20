@@ -177,6 +177,64 @@ export default function Home() {
 
   return (
     <div className={styles.page}>
+      <JsonLd
+        id="home-schema"
+        data={{
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "Organization",
+              "@id": "https://asbcrystal.in/#organization",
+              "name": "ASB Crystal Store",
+              "url": "https://asbcrystal.in/",
+              "logo": {
+                "@type": "ImageObject",
+                "url": "https://asbcrystal.in/logo.png"
+              },
+              "sameAs": [
+                "https://www.instagram.com/",
+                "https://www.facebook.com/"
+              ]
+            },
+            {
+              "@type": "WebSite",
+              "@id": "https://asbcrystal.in/#website",
+              "url": "https://asbcrystal.in/",
+              "name": "ASB Crystal Store",
+              "publisher": {
+                "@id": "https://asbcrystal.in/#organization"
+              },
+              "inLanguage": "en"
+            },
+            {
+              "@type": "WebPage",
+              "@id": "https://asbcrystal.in/#webpage",
+              "url": "https://asbcrystal.in/",
+              "name": "ASB Crystal Store - Healing Crystals & Spiritual Products",
+              "isPartOf": {
+                "@id": "https://asbcrystal.in/#website"
+              },
+              "about": {
+                "@id": "https://asbcrystal.in/#organization"
+              },
+              "description": "Buy healing crystals, spiritual products, and energy tools for positivity, clarity, and peaceful living.",
+              "inLanguage": "en"
+            },
+            {
+              "@type": "BreadcrumbList",
+              "@id": "https://asbcrystal.in/#breadcrumb",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Home",
+                  "item": "https://asbcrystal.in/"
+                }
+              ]
+            }
+          ]
+        }}
+      />
       {/* ✅ Floating pill between banner (slider) and hero */}
       <div className={styles.floatingToolWrap}>
         <button

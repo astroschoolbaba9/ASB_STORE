@@ -7,6 +7,7 @@ import Toast from "../../components/ui/Toast";
 import { api } from "../../lib/api";
 import { getFriendlyMessage } from "../../utils/errorMapping";
 import { normalizeList, normalizeCategory, normalizeProduct } from "../../lib/normalize";
+import JsonLd from "../../components/common/JsonLd";
 
 const API_BASE = process.env.REACT_APP_API_BASE || "http://api.asbcrystal.in";
 
@@ -273,6 +274,43 @@ export default function Shop() {
 
   return (
     <>
+      <JsonLd
+        id="shop-breadcrumb"
+        data={group === "gifts" ? {
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://asbcrystal.in"
+          }, {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Shop",
+            "item": "https://asbcrystal.in/shop"
+          }, {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "Gifts",
+            "item": "https://asbcrystal.in/shop?group=gifts"
+          }]
+        } : {
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://asbcrystal.in"
+          }, {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Shop",
+            "item": "https://asbcrystal.in/shop"
+          }]
+        }}
+      />
       <div className={styles.page}>
         <div className={styles.head}>
           <div>

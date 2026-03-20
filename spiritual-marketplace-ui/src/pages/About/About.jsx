@@ -1,11 +1,73 @@
 import { useNavigate } from "react-router-dom";
 import styles from "./About.module.css";
+import JsonLd from "../../components/common/JsonLd";
 
 export default function About() {
   const navigate = useNavigate();
 
   return (
     <div className={styles.page}>
+      <JsonLd
+        id="about-schema"
+        data={{
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "AboutPage",
+              "@id": "https://asbcrystal.in/about#webpage",
+              "url": "https://asbcrystal.in/about",
+              "name": "About ASB Crystal Store",
+              "description": "Learn about ASB Crystal Store, a trusted destination for crystal products including crystal bracelets, anklets, pyrite, pyramids, healing stones, and crystal tumblers for positive energy and spiritual growth.",
+              "inLanguage": "en",
+              "isPartOf": {
+                "@id": "https://asbcrystal.in/#website"
+              },
+              "about": {
+                "@id": "https://asbcrystal.in/#organization"
+              }
+            },
+            {
+              "@type": "Organization",
+              "@id": "https://asbcrystal.in/#organization",
+              "name": "ASB Crystal Store",
+              "url": "https://asbcrystal.in/",
+              "logo": {
+                "@type": "ImageObject",
+                "url": "https://asbcrystal.in/logo.png"
+              },
+              "description": "ASB Crystal Store specializes in crystal products such as crystal bracelets, anklets, pyrite, pyramids, healing stones, and crystal tumblers designed for positivity, clarity, and spiritual well-being.",
+              "sameAs": [
+                "https://www.instagram.com/",
+                "https://www.facebook.com/"
+              ]
+            },
+            {
+              "@type": "WebSite",
+              "@id": "https://asbcrystal.in/#website",
+              "url": "https://asbcrystal.in/",
+              "name": "ASB Crystal Store"
+            },
+            {
+              "@type": "BreadcrumbList",
+              "@id": "https://asbcrystal.in/about#breadcrumb",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Home",
+                  "item": "https://asbcrystal.in/"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 2,
+                  "name": "About Us",
+                  "item": "https://asbcrystal.in/about"
+                }
+              ]
+            }
+          ]
+        }}
+      />
       <div className={styles.hero}>
         <div className={styles.tag}>About ASB - AGPK Academy</div>
 

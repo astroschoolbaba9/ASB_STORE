@@ -13,6 +13,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#1a0a2e" />
 
+  <!-- Google Tag Manager (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-00XCZDVDX6"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-00XCZDVDX6');
+  </script>
+
   <!-- Primary SEO -->
   <title>ASB Crystal Store | Spiritual Crystals, Gifts & Courses</title>
   <meta name="description"
@@ -38,11 +47,76 @@
   <meta name="twitter:description" content="Shop authentic spiritual crystals, healing stones, and sacred gifts." />
   <meta name="twitter:image" content="https://asbcrystal.in/og-image.jpg" />
 
+  <!-- Organization Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "ASB Crystal Store",
+    "url": "https://asbcrystal.in/",
+    "logo": "https://asbcrystal.in/logo.png",
+    "description": "ASB Crystal Store offers spiritual crystals, healing stones, sacred gifts, and courses designed for calm living, clarity, and positive energy.",
+    "sameAs": [
+      "https://www.instagram.com/",
+      "https://www.facebook.com/"
+    ],
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "contactType": "customer support",
+      "areaServed": "IN",
+      "availableLanguage": ["English", "Hindi"]
+    }
+  }
+  </script>
+
+  <!-- Local Business Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Store",
+    "@id": "https://asbcrystal.in/#localbusiness",
+    "name": "ASB Crystal Store",
+    "image": "https://asbcrystal.in/logo.png",
+    "url": "https://asbcrystal.in/",
+    "telephone": "+91-9911299631",
+    "priceRange": "₹399",
+    "description": "ASB Crystal Store offers healing crystals, spiritual products, and energy tools for positivity, clarity, and peaceful living.",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "S7 RPS MALL, RPS SAVANA, SEC-88 Faridabad",
+      "addressLocality": "Faridabad",
+      "addressRegion": "Haryana",
+      "postalCode": "121002",
+      "addressCountry": "IN"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": "28.4089",
+      "longitude": "77.3178"
+    },
+    "openingHoursSpecification": {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": [
+        "Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"
+      ],
+      "opens": "10:00",
+      "closes": "19:00"
+    },
+    "sameAs": [
+      "https://www.instagram.com/",
+      "https://www.facebook.com/"
+    ]
+  }
+  </script>
+
   <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png?v=2" />
   <link rel="manifest" href="%PUBLIC_URL%/manifest.json?v=2" />
 </head>
 
 <body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=G-00XCZDVDX6" height="0" width="0"
+      style="display:none;visibility:hidden"></iframe></noscript>
   <noscript>You need to enable JavaScript to run this app.</noscript>
   <div id="root"></div>
   <!--
