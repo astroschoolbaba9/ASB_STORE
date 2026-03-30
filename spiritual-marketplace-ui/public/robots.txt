@@ -1,0 +1,43 @@
+User-agent: *
+Allow: /
+
+# Block sensitive pages
+Disallow: /admin
+Disallow: /cart
+Disallow: /checkout
+Disallow: /account
+Disallow: /orders
+
+# Block duplicate & filter URLs
+Disallow: /search
+Disallow: /*?*
+Disallow: /*sort_by=
+Disallow: /*filter=
+
+# Block system folders
+Disallow: /assets/
+Disallow: /manual/
+Disallow: /private/
+
+# Allow important resources
+Allow: /*.css$
+Allow: /*.js$
+Allow: /*.jpg$
+Allow: /*.png$
+Allow: /*.webp$
+
+# Sitemap
+Sitemap: https://asbcrystal.in/sitemap.xml
+
+# Block bad bots
+User-agent: WebZip
+Disallow: /
+
+User-agent: HTTrack
+Disallow: /
+
+User-agent: Teleport
+Disallow: /
+
+User-agent: SiteSnagger
+Disallow: /

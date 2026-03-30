@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+        http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+
+  <!-- Homepage -->
+  <url>
+    <loc>https://asbcrystal.in/</loc>
+    <lastmod>2026-03-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- Shop page -->
+  <url>
+    <loc>https://asbcrystal.in/shop</loc>
+    <lastmod>2026-03-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Product 1: Crystal Bracelet / Pyrite -->
+  <url>
+    <loc>https://asbcrystal.in/product/69b3dd08786a84e0aee6c18d</loc>
+    <lastmod>2026-03-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Product 2: Turquoise Protection Bracelet -->
+  <url>
+    <loc>https://asbcrystal.in/product/69b2a38bc2804d870a45277b</loc>
+    <lastmod>2026-03-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Product 3: Skin Harmony Crystal Bracelet -->
+  <url>
+    <loc>https://asbcrystal.in/product/69b29538c2804d870a4521f0</loc>
+    <lastmod>2026-03-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Product 4: Red Jasper Strength Bracelet -->
+  <url>
+    <loc>https://asbcrystal.in/product/69b293f2c2804d870a4521c1</loc>
+    <lastmod>2026-03-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Product 5: Rainbow Moonstone Intuition Bracelet -->
+  <url>
+    <loc>https://asbcrystal.in/product/69b29321c2804d870a45214d</loc>
+    <lastmod>2026-03-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Product 6: Natural Amethyst Healing Bracelet -->
+  <url>
+    <loc>https://asbcrystal.in/product/69b2916fc2804d870a4520e3</loc>
+    <lastmod>2026-03-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Product 7: Pyrite Prosperity Bracelet -->
+  <url>
+    <loc>https://asbcrystal.in/product/69b29209c2804d870a4520f7</loc>
+    <lastmod>2026-03-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Product 8: Moonstone Harmony Bracelet -->
+  <url>
+    <loc>https://asbcrystal.in/product/69b28f86c2804d870a451fe8</loc>
+    <lastmod>2026-03-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Product 9: Malachite Protection Bracelet -->
+  <url>
+    <loc>https://asbcrystal.in/product/69b28ecbc2804d870a451f3c</loc>
+    <lastmod>2026-03-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Product 10: Confidence Bracelet -->
+  <url>
+    <loc>https://asbcrystal.in/product/69b28deec2804d870a451f17</loc>
+    <lastmod>2026-03-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Product 11: Carnelian Energy Bracelet -->
+  <url>
+    <loc>https://asbcrystal.in/product/69b28d0cc2804d870a451f04</loc>
+    <lastmod>2026-03-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Product 12: Career Growth Crystal Bracelet -->
+  <url>
+    <loc>https://asbcrystal.in/product/69b28c5bc2804d870a451ed4</loc>
+    <lastmod>2026-03-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Product 13: Safe Travel Protection Bracelet -->
+  <url>
+    <loc>https://asbcrystal.in/product/69b25e59c2804d870a4517bd</loc>
+    <lastmod>2026-03-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Product 14: Sulamani Protection Bracelet -->
+  <url>
+    <loc>https://asbcrystal.in/product/69b2557dc2804d870a4515fc</loc>
+    <lastmod>2026-03-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+</urlset>

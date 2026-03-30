@@ -188,6 +188,86 @@ export default function ProductDetail() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, reviewSort, reviewWithPhotos, reviewRatingFilter]);
 
+  // ── Dynamic Product JSON-LD Schema ──
+  useEffect(() => {
+    if (!product) return;
+
+    const productId = product._id || product.id;
+    const productName = product.title || product.name || "";
+    const productDesc = product.description || "";
+    const productPrice = product.price || 0;
+    const productSku = product.sku || `ASB-${productId}`;
+    const productCategory =
+      product.categoryId?.name || product.category?.name || product.category || "Healing Crystals";
+
+    // Build image URL
+    const imgs = product.images || [];
+    const productImage = imgs.length > 0 ? absUrl(imgs[0]) : `https://asbcrystal.in/product/${productId}`;
+
+    const schema = {
+      "@context": "https://schema.org/",
+      "@type": "Product",
+      "@id": `https://asbcrystal.in/product/${productId}`,
+      name: productName,
+      image: productImage,
+      description: productDesc,
+      brand: {
+        "@type": "Brand",
+        name: "ASB Crystal Store",
+      },
+      sku: productSku,
+      category: productCategory,
+      offers: {
+        "@type": "Offer",
+        url: `https://asbcrystal.in/product/${productId}`,
+        priceCurrency: "INR",
+        price: String(productPrice),
+        availability:
+          product.stock > 0
+            ? "https://schema.org/InStock"
+            : "https://schema.org/OutOfStock",
+        itemCondition: "https://schema.org/NewCondition",
+      },
+    };
+
+    // Add aggregate rating if available
+    const avg = Number(reviewsSummary?.avg || product?.ratingAvg || 0);
+    const total = Number(reviewsSummary?.total || product?.ratingCount || 0);
+    if (avg > 0 && total > 0) {
+      schema.aggregateRating = {
+        "@type": "AggregateRating",
+        ratingValue: avg.toFixed(1),
+        reviewCount: String(total),
+      };
+    }
+
+    // Add individual reviews if available
+    if (reviews.length > 0) {
+      schema.review = reviews.slice(0, 5).map((r) => ({
+        "@type": "Review",
+        author: {
+          "@type": "Person",
+          name: r?.userId?.name || "Customer",
+        },
+        reviewRating: {
+          "@type": "Rating",
+          ratingValue: String(r.rating || 5),
+        },
+        reviewBody: r.comment || r.title || "",
+      }));
+    }
+
+    const script = document.createElement("script");
+    script.type = "application/ld+json";
+    script.setAttribute("data-schema", "product");
+    script.textContent = JSON.stringify(schema);
+    document.head.appendChild(script);
+
+    return () => {
+      script.remove();
+    };
+  }, [product, reviews, reviewsSummary]);
+
   const ratingSummary = useMemo(() => {
     const avg = Number(reviewsSummary?.avg || product?.ratingAvg || 0);
     const total = Number(reviewsSummary?.total || product?.ratingCount || 0);
