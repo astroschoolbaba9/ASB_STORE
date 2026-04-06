@@ -1,13 +1,16 @@
+import React, { Suspense, lazy } from "react";
 import AppLayout from "./components/layout/AppLayout";
 import TopBar from "./components/topbar/TopBar";
 import AppRoutes from "./routes/AppRoutes";
 import HeroSlider from "./components/HeroSlider";
 import Navbar from "./components/navbar/Navbar";
 import { useLocation } from "react-router-dom";
-import WhatsAppFloat from "./components/whatsapp/WhatsAppFloat";
-import InstagramFloat from "./components/insta/InstagramFloat";
 import ScrollToTop from "./components/common/ScrollToTop";
-import NavratriPopup from "./components/NavratriPopup/NavratriPopup";
+
+// ✅ Lazy load floating/popup components (not needed for first paint)
+const WhatsAppFloat = lazy(() => import("./components/whatsapp/WhatsAppFloat"));
+const InstagramFloat = lazy(() => import("./components/insta/InstagramFloat"));
+const NavratriPopup = lazy(() => import("./components/NavratriPopup/NavratriPopup"));
 
 export default function App() {
   const location = useLocation();
@@ -16,7 +19,10 @@ export default function App() {
   return (
     <>
       <ScrollToTop />
-      <NavratriPopup />
+
+      <Suspense fallback={null}>
+        <NavratriPopup />
+      </Suspense>
 
       {/* ✅ Sticky Header (TopBar + Navbar fixed while scrolling) */}
       <div
@@ -44,8 +50,10 @@ export default function App() {
         <AppRoutes />
       </AppLayout>
 
-      <InstagramFloat />
-      <WhatsAppFloat />
+      <Suspense fallback={null}>
+        <InstagramFloat />
+        <WhatsAppFloat />
+      </Suspense>
     </>
   );
 }

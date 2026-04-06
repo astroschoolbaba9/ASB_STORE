@@ -1,15 +1,16 @@
-// src/components/ui/Skeleton.jsx
-import styles from "./Skeleton.module.css";
+import React from 'react';
+import styles from './Skeleton.module.css';
 
-export default function Skeleton({ width, height, borderRadius, className = "" }) {
+const Skeleton = () => {
     return (
-        <div
-            className={`${styles.skeleton} ${className}`}
-            style={{
-                width: width || "100%",
-                height: height || "20px",
-                borderRadius: borderRadius || "12px",
-            }}
-        />
+        <div className={styles.skeleton_container} aria-hidden="true">
+            <div className={`${styles.skeleton_box} ${styles.skeleton_title}`} />
+            <div className={`${styles.skeleton_box} ${styles.skeleton_rect}`} />
+            <div className={`${styles.skeleton_box} ${styles.skeleton_text}`} />
+            <div className={`${styles.skeleton_box} ${styles.skeleton_text}`} />
+            <div className={`${styles.skeleton_box} ${styles.skeleton_text}`} style={{ width: '60%' }} />
+        </div>
     );
-}
+};
+
+export default Skeleton;

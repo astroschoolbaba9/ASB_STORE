@@ -1,95 +1,101 @@
+import React, { Suspense, lazy } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
+import Skeleton from "../components/ui/Skeleton";
 
-import Home from "../pages/Home/Home";
-import Shop from "../pages/Shop/Shop";
-import ProductDetail from "../pages/ProductDetail/ProductDetail";
-import Cart from "../pages/Cart/Cart";
-import Checkout from "../pages/Checkout/Checkout";
+// ✅ Lazy load all pages for better performance
+const Home = lazy(() => import("../pages/Home/Home"));
+const Shop = lazy(() => import("../pages/Shop/Shop"));
+const ProductDetail = lazy(() => import("../pages/ProductDetail/ProductDetail"));
+const Cart = lazy(() => import("../pages/Cart/Cart"));
+const Checkout = lazy(() => import("../pages/Checkout/Checkout"));
 
-import Courses from "../pages/Courses/Course";
-import CourseDetail from "../pages/Courses/CourseDetail";
-import CourseViewer from "../pages/Courses/CourseViewer";
+const Courses = lazy(() => import("../pages/Courses/Course"));
+const CourseDetail = lazy(() => import("../pages/Courses/CourseDetail"));
+const CourseViewer = lazy(() => import("../pages/Courses/CourseViewer"));
 
-import DashboardLayout from "../pages/Dashboard/DashboardLayout";
-import Profile from "../pages/Dashboard/Profile";
-import Orders from "../pages/Dashboard/Orders";
-import OrderDetail from "../pages/Dashboard/OrderDetail";
-import GiftOrders from "../pages/Dashboard/GiftOrders";
-import MyCourses from "../pages/Dashboard/MyCourses";
+const DashboardLayout = lazy(() => import("../pages/Dashboard/DashboardLayout"));
+const Profile = lazy(() => import("../pages/Dashboard/Profile"));
+const Orders = lazy(() => import("../pages/Dashboard/Orders"));
+const OrderDetail = lazy(() => import("../pages/Dashboard/OrderDetail"));
+const GiftOrders = lazy(() => import("../pages/Dashboard/GiftOrders"));
+const MyCourses = lazy(() => import("../pages/Dashboard/MyCourses"));
 
-import Login from "../components/Auth/Login";
-import Register from "../components/Auth/Register";
-import ForgotPassword from "../components/Auth/ForgotPassword";
+const Login = lazy(() => import("../components/Auth/Login"));
+const Register = lazy(() => import("../components/Auth/Register"));
+const ForgotPassword = lazy(() => import("../components/Auth/ForgotPassword"));
 
-import About from "../pages/About/About";
-import Contact from "../pages/Contact/Contact";
-import Services from "../pages/Services/Services";
-import SectionPage from "../pages/Section/SectionPage";
+const About = lazy(() => import("../pages/About/About"));
+const Contact = lazy(() => import("../pages/Contact/Contact"));
+const Services = lazy(() => import("../pages/Services/Services"));
+const SectionPage = lazy(() => import("../pages/Section/SectionPage"));
 
-import NotFound from "../pages/NotFound/NotFound";
+const NotFound = lazy(() => import("../pages/NotFound/NotFound"));
+
+// ✅ Payment pages (lazy)
+const PaymentSuccess = lazy(() => import("../pages/Payment/PaymentSuccess"));
+const PaymentFailed = lazy(() => import("../pages/Payment/PaymentFailed"));
+const PaymentRedirect = lazy(() => import("../pages/Payment/PaymentRedirect"));
+
 import { RequireAuth, RequireGuest } from "./guards";
-
-// ✅ Payment pages (top level)
-import PaymentSuccess from "../pages/Payment/PaymentSuccess";
-import PaymentFailed from "../pages/Payment/PaymentFailed";
-import PaymentRedirect from "../pages/Payment/PaymentRedirect";
 
 export default function AppRoutes() {
   return (
-    <Routes>
-      {/* Home */}
-      <Route path="/" element={<Home />} />
+    <Suspense fallback={<Skeleton />}>
+      <Routes>
+        {/* Home */}
+        <Route path="/" element={<Home />} />
 
-      {/* ✅ Payment routes must be TOP LEVEL (NOT inside /dashboard) */}
-      <Route path="/payment/success" element={<PaymentSuccess />} />
-      <Route path="/payment/failed" element={<PaymentFailed />} />
-      <Route path="/payment/redirect" element={<PaymentRedirect />} />
+        {/* ✅ Payment routes must be TOP LEVEL (NOT inside /dashboard) */}
+        <Route path="/payment/success" element={<PaymentSuccess />} />
+        <Route path="/payment/failed" element={<PaymentFailed />} />
+        <Route path="/payment/redirect" element={<PaymentRedirect />} />
 
-      {/* Core shop flow */}
-      <Route path="/shop" element={<Shop />} />
-      <Route path="/product/:id" element={<ProductDetail />} />
-      <Route path="/cart" element={<Cart />} />
+        {/* Core shop flow */}
+        <Route path="/shop" element={<Shop />} />
+        <Route path="/product/:id" element={<ProductDetail />} />
+        <Route path="/cart" element={<Cart />} />
 
-      {/* ✅ Checkout should be logged-in */}
-      <Route element={<RequireAuth />}>
-        <Route path="/checkout" element={<Checkout />} />
-      </Route>
-
-      {/* Courses / Trainings */}
-      <Route path="/courses" element={<Courses />} />
-      <Route path="/courses/:id" element={<CourseDetail />} />
-      <Route path="/viewer/:id" element={<CourseViewer />} />
-      <Route path="/trainings" element={<Courses />} />
-
-      {/* Static pages */}
-      <Route path="/about" element={<About />} />
-      <Route path="/contact" element={<Contact />} />
-      <Route path="/services" element={<Services />} />
-
-      {/* Section-based navigation */}
-      <Route path="/section/:key" element={<SectionPage />} />
-
-      {/* ✅ Dashboard requires auth */}
-      <Route element={<RequireAuth />}>
-        <Route path="/dashboard" element={<DashboardLayout />}>
-          <Route index element={<Navigate to="profile" replace />} />
-          <Route path="profile" element={<Profile />} />
-          <Route path="orders" element={<Orders />} />
-          <Route path="orders/:id" element={<OrderDetail />} />
-          <Route path="gift-orders" element={<GiftOrders />} />
-          <Route path="courses" element={<MyCourses />} />
+        {/* ✅ Checkout should be logged-in */}
+        <Route element={<RequireAuth />}>
+          <Route path="/checkout" element={<Checkout />} />
         </Route>
-      </Route>
 
-      {/* ✅ Auth pages should be guest-only */}
-      <Route element={<RequireGuest />}>
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-      </Route>
+        {/* Courses / Trainings */}
+        <Route path="/courses" element={<Courses />} />
+        <Route path="/courses/:id" element={<CourseDetail />} />
+        <Route path="/viewer/:id" element={<CourseViewer />} />
+        <Route path="/trainings" element={<Courses />} />
 
-      {/* Fallback */}
-      <Route path="*" element={<NotFound />} />
-    </Routes>
+        {/* Static pages */}
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/services" element={<Services />} />
+
+        {/* Section-based navigation */}
+        <Route path="/section/:key" element={<SectionPage />} />
+
+        {/* ✅ Dashboard requires auth */}
+        <Route element={<RequireAuth />}>
+          <Route path="/dashboard" element={<DashboardLayout />}>
+            <Route index element={<Navigate to="profile" replace />} />
+            <Route path="profile" element={<Profile />} />
+            <Route path="orders" element={<Orders />} />
+            <Route path="orders/:id" element={<OrderDetail />} />
+            <Route path="gift-orders" element={<GiftOrders />} />
+            <Route path="courses" element={<MyCourses />} />
+          </Route>
+        </Route>
+
+        {/* ✅ Auth pages should be guest-only */}
+        <Route element={<RequireGuest />}>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+        </Route>
+
+        {/* Fallback */}
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </Suspense>
   );
 }
