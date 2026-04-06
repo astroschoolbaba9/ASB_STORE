@@ -7,6 +7,7 @@ import { useCart } from "../../context/CartContext";
 import Toast from "../../components/ui/Toast";
 import { api } from "../../lib/api";
 import { getFriendlyMessage } from "../../utils/errorMapping";
+import Skeleton from "../../components/ui/Skeleton";
 
 const API_BASE = process.env.REACT_APP_API_BASE || "http://api.asbcrystal.in";
 
@@ -290,13 +291,54 @@ export default function ProductDetail() {
     return arr.map(absUrl);
   }, [product, isPotli]);
 
-  if (loading) {
+  function ProductSkeleton() {
     return (
-      <div className={styles.notFound}>
-        <h1>Loading...</h1>
-        <p className={styles.muted}>Please wait</p>
+      <div className={styles.page}>
+        <div className={styles.breadcrumb}>
+          <Skeleton width="100px" height="14px" />
+          <span className={styles.dot}>•</span>
+          <Skeleton width="60px" height="14px" />
+          <span className={styles.dot}>•</span>
+          <Skeleton width="120px" height="14px" />
+        </div>
+
+        <div className={styles.main}>
+          <section className={styles.gallery}>
+            <div className={styles.mainImg} style={{ aspectRatio: "1/1" }}>
+              <Skeleton width="100%" height="100%" borderRadius="16px" />
+            </div>
+            <div className={styles.thumbRow}>
+              {[1, 2, 3, 4].map((i) => (
+                <div key={i} className={styles.thumb}>
+                  <Skeleton width="100%" height="100%" borderRadius="14px" />
+                </div>
+              ))}
+            </div>
+          </section>
+
+          <section className={styles.info}>
+            <Skeleton width="80%" height="32px" />
+            <div className={styles.metaRow}>
+              <Skeleton width="100px" height="24px" />
+              <Skeleton width="80px" height="24px" />
+            </div>
+            <div style={{ display: "grid", gap: "8px", marginTop: "12px" }}>
+              <Skeleton width="100%" height="16px" />
+              <Skeleton width="95%" height="16px" />
+              <Skeleton width="90%" height="16px" />
+            </div>
+            <div className={styles.buyRow} style={{ marginTop: "20px" }}>
+              <Skeleton width="100%" height="48px" />
+              <Skeleton width="100%" height="48px" />
+            </div>
+          </section>
+        </div>
       </div>
     );
+  }
+
+  if (loading) {
+    return <ProductSkeleton />;
   }
 
   if (error) {
@@ -413,8 +455,19 @@ export default function ProductDetail() {
           <section className={styles.gallery}>
             <div className={styles.mainImg}>
               {mainImg ? (
-                <img src={mainImg} alt={overrideName} className={`${styles.mainImgFull} ${isOutOfStock ? styles.greyscale : ""}`} />
-              ) : null}
+                <img
+                  src={mainImg}
+                  alt={overrideName}
+                  className={`${styles.mainImgFull} ${isOutOfStock ? styles.greyscale : ""}`}
+                  fetchpriority="high"
+                  loading="eager"
+                  onLoad={(e) => e.target.setAttribute("data-loaded", "true")}
+                />
+              ) : (
+                <div className={styles.imgPlaceholder}>
+                  <Skeleton width="100%" height="100%" borderRadius="16px" />
+                </div>
+              )}
               <div className={styles.badge}>{categoryLabel}</div>
               {isOutOfStock && (
                 <div className={styles.outOfStockOverlay}>

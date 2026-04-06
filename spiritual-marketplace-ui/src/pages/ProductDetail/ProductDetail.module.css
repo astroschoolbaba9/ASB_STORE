@@ -44,6 +44,7 @@
 
 .mainImg {
   width: 100%;
+  aspect-ratio: 1 / 1;
   border-radius: 16px;
   background: linear-gradient(135deg, rgba(200, 76, 255, 0.10), rgba(230, 200, 122, 0.14));
   position: relative;
@@ -53,9 +54,14 @@
   justify-content: center;
 }
 
+.imgPlaceholder {
+  width: 100%;
+  height: 100%;
+}
+
 .mainImgFull {
   width: 100%;
-  aspect-ratio: 1 / 1;
+  height: 100%;
   display: block;
   object-fit: cover;
   max-height: 600px;
