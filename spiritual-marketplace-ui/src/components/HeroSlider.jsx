@@ -152,6 +152,8 @@ export default function HeroSlider() {
                 alt={s.title}
                 className="asb-slide-img"
                 loading={idx === 0 ? "eager" : "lazy"}
+                width="1200"
+                height="320"
               />
               <div className="asb-overlay" />
               <div className="asb-content" onClick={(e) => e.stopPropagation()}>

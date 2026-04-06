@@ -157,7 +157,7 @@ export default function Navbar() {
       <Container>
         <div className={styles.row}>
           <Link to="/" className={styles.brand}>
-            <img className={styles.logo} src={logo} alt="ASB logo" />
+            <img className={styles.logo} src={logo} alt="ASB logo" width="140" height="40" />
             <div className={styles.brandText}>
               <div className={styles.brandName}>ASB</div>
               <div className={styles.brandTag}>Spiritual Store &amp; Gifting</div>

@@ -25,8 +25,14 @@
 }
 
 .skeleton_rect {
-    height: 200px;
+    height: 320px;
     width: 100%;
+}
+
+@media (max-width: 640px) {
+    .skeleton_rect {
+        height: 260px;
+    }
 }
 
 @keyframes loading {

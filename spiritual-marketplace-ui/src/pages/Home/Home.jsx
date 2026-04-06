@@ -338,6 +338,8 @@ export default function Home() {
                       src={finalImg}
                       alt={finalName}
                       loading="lazy"
+                      width="300"
+                      height="180"
                       style={{ width: "100%", height: "180px", objectFit: "cover", display: "block" }}
                       onError={(e) => {
                         e.currentTarget.style.display = "none";
@@ -439,6 +441,8 @@ export default function Home() {
                     src={img}
                     alt={title}
                     loading="lazy"
+                    width="300"
+                    height="140"
                     style={{
                       width: "100%",
                       height: 140,
