@@ -1,5 +1,6 @@
 import React, { Suspense, lazy } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
+import { RequireAuth, RequireGuest } from "./guards";
 import Skeleton from "../components/ui/Skeleton";
 
 // ✅ Lazy load all pages for better performance
@@ -35,8 +36,6 @@ const NotFound = lazy(() => import("../pages/NotFound/NotFound"));
 const PaymentSuccess = lazy(() => import("../pages/Payment/PaymentSuccess"));
 const PaymentFailed = lazy(() => import("../pages/Payment/PaymentFailed"));
 const PaymentRedirect = lazy(() => import("../pages/Payment/PaymentRedirect"));
-
-import { RequireAuth, RequireGuest } from "./guards";
 
 export default function AppRoutes() {
   return (
