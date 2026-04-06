@@ -143,11 +143,16 @@ export default function HeroSlider() {
           <SwiperSlide key={idx}>
             <div
               className="asb-slide"
-              style={{ backgroundImage: `url(${s.img})` }}
               onClick={() => onSlideClick(s)}
-              role="img"
+              role="group"
               aria-label={s.title || "banner"}
             >
+              <img
+                src={s.img}
+                alt={s.title}
+                className="asb-slide-img"
+                loading={idx === 0 ? "eager" : "lazy"}
+              />
               <div className="asb-overlay" />
               <div className="asb-content" onClick={(e) => e.stopPropagation()}>
                 <div className="asb-badge">ASB • Premium Guidance</div>
@@ -190,11 +195,16 @@ export default function HeroSlider() {
           height: 320px;
           border-radius: 18px;
           overflow: hidden;
-          background-size: cover;
-          background-position: center;
-          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-          border: 1px solid rgba(106, 92, 255, 0.2);
           cursor: pointer;
+        }
+
+        .asb-slide-img {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          z-index: 0;
         }
 
         .asb-overlay{
