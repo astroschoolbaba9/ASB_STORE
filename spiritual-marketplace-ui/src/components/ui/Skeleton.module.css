@@ -1,8 +1,31 @@
+.skeleton_page {
+    padding-top: 80px;
+    background: #0f051a;
+    min-height: 100vh;
+}
+
+.skeleton_hero {
+    height: 320px;
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto 40px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.05);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+}
+
+@media (max-width: 640px) {
+    .skeleton_hero {
+        height: 260px;
+        width: 95%;
+    }
+}
+
 .skeleton_container {
-    padding: 20px;
     max-width: 1200px;
     margin: 0 auto;
-    min-height: 50vh;
+    padding: 20px;
 }
 
 .skeleton_box {
