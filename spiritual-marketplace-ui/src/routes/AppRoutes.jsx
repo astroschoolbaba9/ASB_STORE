@@ -32,6 +32,12 @@ const SectionPage = lazy(() => import("../pages/Section/SectionPage"));
 
 const NotFound = lazy(() => import("../pages/NotFound/NotFound"));
 
+// ✅ Policy pages (lazy)
+const TermsAndConditions = lazy(() => import("../pages/Policies/TermsAndConditions"));
+const PrivacyPolicy = lazy(() => import("../pages/Policies/PrivacyPolicy"));
+const ShippingPolicy = lazy(() => import("../pages/Policies/ShippingPolicy"));
+const RefundPolicy = lazy(() => import("../pages/Policies/RefundPolicy"));
+
 // ✅ Payment pages (lazy)
 const PaymentSuccess = lazy(() => import("../pages/Payment/PaymentSuccess"));
 const PaymentFailed = lazy(() => import("../pages/Payment/PaymentFailed"));
@@ -69,6 +75,12 @@ export default function AppRoutes() {
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/services" element={<Services />} />
+
+        {/* Policy pages */}
+        <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="/shipping-policy" element={<ShippingPolicy />} />
+        <Route path="/refund-policy" element={<RefundPolicy />} />
 
         {/* Section-based navigation */}
         <Route path="/section/:key" element={<SectionPage />} />

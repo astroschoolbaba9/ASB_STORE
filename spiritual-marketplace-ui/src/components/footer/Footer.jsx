@@ -188,9 +188,10 @@ export default function Footer() {
       <div className={styles.bottom}>
         <span>© {new Date().getFullYear()} ASB. All rights reserved.</span>
         <div className={styles.legal}>
-          <span>Privacy</span>
-          <span>Terms</span>
-          <span>Refunds</span>
+          <Link to="/privacy-policy">Privacy</Link>
+          <Link to="/terms-and-conditions">Terms</Link>
+          <Link to="/refund-policy">Refunds</Link>
+          <Link to="/shipping-policy">Shipping</Link>
         </div>
       </div>
     </footer>
