@@ -10,7 +10,6 @@ import ScrollToTop from "./components/common/ScrollToTop";
 // ✅ Lazy load floating/popup components (not needed for first paint)
 const WhatsAppFloat = lazy(() => import("./components/whatsapp/WhatsAppFloat"));
 const InstagramFloat = lazy(() => import("./components/insta/InstagramFloat"));
-const NavratriPopup = lazy(() => import("./components/NavratriPopup/NavratriPopup"));
 
 export default function App() {
   const location = useLocation();
@@ -19,10 +18,6 @@ export default function App() {
   return (
     <>
       <ScrollToTop />
-
-      <Suspense fallback={null}>
-        <NavratriPopup />
-      </Suspense>
 
       {/* ✅ Sticky Header (TopBar + Navbar fixed while scrolling) */}
       <div
