@@ -107,11 +107,12 @@ function createApp() {
   // Contact
   app.use("/api", contactRoutes);
 
-  // Public catalog / courses / reviews
+  // Public catalog / courses / reviews / feed
   app.use("/api", catalogRoutes);
   app.use("/api", courseRoutes);
   app.use("/api", reviewRoutes);
   app.use("/api/payments/payu", require("./routes/payu.routes"));
+  app.use("/api", require("./routes/feed.routes"));
 
   // Protected user routes
   app.use("/api/cart", cartRoutes);
