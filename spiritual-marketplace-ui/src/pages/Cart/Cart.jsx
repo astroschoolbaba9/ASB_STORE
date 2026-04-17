@@ -44,19 +44,14 @@ export default function Cart() {
         const price = p.price ?? 0;
         const category = p.category?.name || p.category || "General";
 
-        // ESLint: extracted only what's needed for the return object
-        const isPotli = String(p.slug || "").toLowerCase() === "kuber-potli-healing" || (p.title || p.name || "").toLowerCase().includes("kuber potli");
-        const finalPrice = isPotli ? 2100 : price;
-        const finalName = isPotli ? "Kuber Potli — Infused With Sacred Blessings" : name;
-
         return {
           key: it._id || it.itemId || `${p._id || p.id}-${it.qty}`,
           itemId: it._id || it.itemId,
           productId: p._id || p.id,
-          name: finalName,
+          name,
           slug: p.slug || "",
           category,
-          price: finalPrice,
+          price,
           qty: it.qty || 1,
           images: p.images || [],
           gift: !!it.isGift,
@@ -161,7 +156,7 @@ export default function Cart() {
               <div key={it.key} className={styles.itemRow}>
                 <div className={styles.media}>
                   <img
-                    src={(it.slug === "kuber-potli-healing" || it.name?.toLowerCase().includes("kuber potli")) ? `${process.env.PUBLIC_URL}/navratri-poster.jpg` : (it.images?.[0] ? `${process.env.REACT_APP_API_BASE || "http://api.asbcrystal.in"}${it.images[0].startsWith("/") ? "" : "/"}${it.images[0]}` : "/logo192.png")}
+                    src={it.images?.[0] ? `${process.env.REACT_APP_API_BASE || "http://api.asbcrystal.in"}${it.images[0].startsWith("/") ? "" : "/"}${it.images[0]}` : "/logo192.png"}
                     alt={it.name}
                     className={styles.itemImg}
                     onError={(e) => { e.target.src = "/logo192.png"; }}
@@ -170,8 +165,8 @@ export default function Cart() {
                 </div>
 
                 <div className={styles.details}>
-                  <div className={styles.title}>{(it.slug === "kuber-potli-healing" || it.name?.toLowerCase().includes("kuber potli")) ? "Kuber Potli — Infused With Sacred Blessings" : it.name}</div>
-                  <div className={styles.muted}>₹{(it.slug === "kuber-potli-healing" || it.name?.toLowerCase().includes("kuber potli")) ? 2100 : it.price} • Item</div>
+                  <div className={styles.title}>{it.name}</div>
+                  <div className={styles.muted}>₹{it.price} • Item</div>
 
                   {it.gift ? (
                     <div className={styles.giftMini}>
@@ -209,7 +204,7 @@ export default function Cart() {
                   </div>
                 </div>
 
-                <div className={styles.lineTotal}>₹{(it.slug === "kuber-potli-healing" ? 2100 : it.price) * it.qty}</div>
+                <div className={styles.lineTotal}>₹{it.price * it.qty}</div>
               </div>
             ))}
 

@@ -10,6 +10,7 @@ import ScrollToTop from "./components/common/ScrollToTop";
 // ✅ Lazy load floating/popup components (not needed for first paint)
 const WhatsAppFloat = lazy(() => import("./components/whatsapp/WhatsAppFloat"));
 const InstagramFloat = lazy(() => import("./components/insta/InstagramFloat"));
+const PromoPopup = lazy(() => import("./components/PromoPopup/PromoPopup"));
 
 export default function App() {
   const location = useLocation();
@@ -49,6 +50,13 @@ export default function App() {
         <InstagramFloat />
         <WhatsAppFloat />
       </Suspense>
+
+      {/* ✅ Promo popup — only on Home */}
+      {isHome && (
+        <Suspense fallback={null}>
+          <PromoPopup />
+        </Suspense>
+      )}
     </>
   );
 }

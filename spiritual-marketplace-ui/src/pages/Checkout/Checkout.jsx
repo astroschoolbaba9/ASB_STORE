@@ -173,15 +173,11 @@ export default function Checkout() {
         const recipient = it.recipientName || it.gift?.recipientName || it.meta?.recipient || "";
         const occasion = it.giftOccasion || it.occasion || it.gift?.occasion || it.meta?.occasion || "";
 
-        const isPotli = String(p.slug || "").toLowerCase() === "kuber-potli-healing" || (p.title || p.name || "").toLowerCase().includes("kuber potli");
-        const finalPrice = isPotli ? 2100 : price;
-        const finalName = isPotli ? "Kuber Potli — Infused With Sacred Blessings" : name;
-
         return {
           key: it._id || it.itemId || `${p._id || p.id}-${qty}`,
-          name: finalName,
+          name,
           category,
-          price: finalPrice,
+          price,
           qty,
           meta: { gift, giftWrap, recipient, occasion }
         };

@@ -25,7 +25,7 @@ function absUrl(u) {
   if (!u) return "";
   if (u.startsWith("http://") || u.startsWith("https://")) return u;
   if (u.startsWith("/banners/") || u.startsWith("/assets/")) return u;
-  if (u === "/navratri-poster.jpg") return `${process.env.PUBLIC_URL}/navratri-poster.jpg`;
+
   return `${API_BASE}${u.startsWith("/") ? "" : "/"}${u}`;
 }
 
@@ -324,19 +324,13 @@ export default function Home() {
 
             const img = absUrl(p?.images?.[0]);
 
-            // --- CAMPAIGN OVERRIDE FOR KUBER POTLI (Consistency) ---
-            const isPotli = String(p.slug || "").toLowerCase() === "kuber-potli-healing" || (p.title || p.name || "").toLowerCase().includes("kuber potli");
-            const finalName = isPotli ? "Kuber Potli — Infused With Sacred Blessings" : name;
-            const finalPrice = isPotli ? 2100 : price;
-            const finalImg = isPotli ? `${process.env.PUBLIC_URL}/navratri-poster.jpg` : img;
-
             return (
               <div key={id} className={styles.card}>
                 <div className={styles.cardMedia}>
-                  {finalImg ? (
+                  {img ? (
                     <img
-                      src={finalImg}
-                      alt={finalName}
+                      src={img}
+                      alt={name}
                       loading="lazy"
                       width="300"
                       height="180"
@@ -351,10 +345,10 @@ export default function Home() {
                 </div>
 
                 <div className={styles.cardBody}>
-                  <h3 className={styles.cardTitle}>{finalName}</h3>
+                  <h3 className={styles.cardTitle}>{name}</h3>
 
                   <div className={styles.cardMeta}>
-                    <span className={styles.price}>₹{finalPrice}</span>
+                    <span className={styles.price}>₹{price}</span>
                     <span className={styles.rating}>★ {Number(rating).toFixed(1)}</span>
                   </div>
 

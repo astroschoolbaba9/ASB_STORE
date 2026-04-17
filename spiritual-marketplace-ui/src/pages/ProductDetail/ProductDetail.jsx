@@ -11,13 +11,13 @@ import Skeleton from "../../components/ui/Skeleton";
 
 const API_BASE = process.env.REACT_APP_API_BASE || "http://api.asbcrystal.in";
 
-// ESLint: removed unused isPotli helper from here as it's defined inside component
+
 
 function absUrl(u) {
   if (!u) return "";
   if (u.startsWith("http://") || u.startsWith("https://")) return u;
   if (u.startsWith("/banners/") || u.startsWith("/assets/")) return u;
-  if (u === "/navratri-poster.jpg") return `${process.env.PUBLIC_URL}/navratri-poster.jpg`;
+
   return `${API_BASE}${u.startsWith("/") ? "" : "/"}${u}`;
 }
 
@@ -276,20 +276,11 @@ export default function ProductDetail() {
     return { avg, total, counts };
   }, [reviewsSummary, product]);
 
-  // 1. Identify if this is the campaign product
-  const isPotli = useMemo(() => {
-    if (!product) return false;
-    const s = String(product.slug || "").toLowerCase();
-    const t = String(product.title || product.name || "").toLowerCase();
-    return s === "kuber-potli-healing" || t.includes("kuber potli");
-  }, [product]);
-
   const images = useMemo(() => {
     if (!product) return [];
-    if (isPotli) return [`${process.env.PUBLIC_URL}/navratri-poster.jpg`];
     const arr = product.images || [];
     return arr.map(absUrl);
-  }, [product, isPotli]);
+  }, [product]);
 
   function ProductSkeleton() {
     return (
@@ -364,11 +355,10 @@ export default function ProductDetail() {
       </div>
     );
   }
-  const overrideName = isPotli ? "Kuber Potli — Infused With Sacred Blessings" : (product.title || product.name);
-  const overridePrice = isPotli ? 2100 : (product.price || 0);
+  const productName = product.title || product.name;
+  const productPrice = product.price || 0;
 
   const productId = product._id || product.id;
-  // ESLint: removed unused name, price from here as we use overrideName and overridePrice
   const rating = product.ratingAvg ?? product.rating ?? 0;
   const categoryLabel = product.categoryId?.name || product.category?.name || product.category || "General";
 
@@ -447,7 +437,7 @@ export default function ProductDetail() {
           <span className={styles.dot}>•</span>
           <Link to="/shop" className={styles.bcrumbLink}>Shop</Link>
           <span className={styles.dot}>•</span>
-          <span className={styles.bcrumbCurrent}>{overrideName}</span>
+          <span className={styles.bcrumbCurrent}>{productName}</span>
         </div>
 
         <div className={styles.main}>
@@ -457,7 +447,7 @@ export default function ProductDetail() {
               {mainImg ? (
                 <img
                   src={mainImg}
-                  alt={overrideName}
+                  alt={productName}
                   className={`${styles.mainImgFull} ${isOutOfStock ? styles.greyscale : ""}`}
                   fetchpriority="high"
                   loading="eager"
@@ -497,10 +487,10 @@ export default function ProductDetail() {
 
           {/* Info */}
           <section className={styles.info}>
-            <h1 className={styles.h1}>{overrideName}</h1>
+            <h1 className={styles.h1}>{productName}</h1>
 
             <div className={styles.metaRow}>
-              <div className={styles.price}>₹{overridePrice}</div>
+              <div className={styles.price}>₹{productPrice}</div>
               <div className={styles.rating}>
                 <span className={styles.starsInline}><StarRow value={rating} /></span>
                 <span className={styles.ratingNum}>({Number(ratingSummary.total || 0)})</span>

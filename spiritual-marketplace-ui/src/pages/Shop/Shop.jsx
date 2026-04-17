@@ -16,7 +16,7 @@ function absUrl(u) {
   if (!s) return "";
   if (s.startsWith("http://") || s.startsWith("https://")) return s;
   if (s.startsWith("/banners/") || s.startsWith("/assets/")) return s;
-  if (s === "/navratri-poster.jpg") return `${process.env.PUBLIC_URL}/navratri-poster.jpg`;
+
   const withSlash = s.startsWith("/") ? s : `/${s}`;
   return `${API_BASE}${withSlash}`;
 }
@@ -154,32 +154,6 @@ export default function Shop() {
 
         const arr = normalizeList(res, ["items", "products", "data"]);
         let final = arr.map(normalizeProduct).filter((p) => p._id);
-
-        // --- STRIKT PINNING FOR KUBER POTLI (Force at index 0 on Page 1) ---
-        if (page === 1) {
-          const pinSlug = "kuber-potli-healing";
-          const isPotli = (p) => String(p.slug || "") === pinSlug;
-          const pinIdx = final.findIndex(isPotli);
-
-          if (pinIdx > -1) {
-            // Found in current results -> Move to top
-            const [pinned] = final.splice(pinIdx, 1);
-            final.unshift(pinned);
-          } else {
-            // NOT found in current results -> Fetch explicitly and prepend
-            try {
-              const singleRes = await api.get("/api/products", { query: { search: pinSlug, limit: 1 } });
-              const singleArr = normalizeList(singleRes);
-              const singlePotli = singleArr.map(normalizeProduct).find(p => p.slug === pinSlug || p.title?.toLowerCase().includes("kuber potli"));
-              if (singlePotli) {
-                final.unshift(singlePotli);
-                if (final.length > limit) final.pop(); // Keep list size within limit
-              }
-            } catch (err) {
-              console.warn("Force pinning Kuber Potli failed:", err);
-            }
-          }
-        }
 
         if (minRating > 0) final = final.filter((p) => (p.ratingAvg || 0) >= minRating);
 
@@ -364,19 +338,15 @@ export default function Shop() {
                 const catLabel = p.category?.name || "General";
                 const isOutOfStock = p.stock <= 0;
 
-                // --- CAMPAIGN OVERRIDE FOR KUBER POTLI (Consistency) ---
-                const isPotli = String(p.slug || "").toLowerCase() === "kuber-potli-healing" || (p.title || "").toLowerCase().includes("kuber potli");
-                const finalImg = isPotli ? `${process.env.PUBLIC_URL}/navratri-poster.jpg` : absUrl(p.images?.[0]);
-                const finalPrice = isPotli ? 2100 : price;
-                const finalTitle = isPotli ? "Kuber Potli — Infused With Sacred Blessings" : title;
+                const img = absUrl(p.images?.[0]);
 
                 return (
                   <div key={id} className={`${styles.card} ${isOutOfStock ? styles.outOfStockCard : ""}`}>
                     <div className={styles.media}>
-                      {finalImg ? (
+                      {img ? (
                         <img
-                          src={finalImg}
-                          alt={finalTitle}
+                          src={img}
+                          alt={title}
                           className={`${styles.mediaImg} ${isOutOfStock ? styles.greyscale : ""}`}
                           loading="lazy"
                           onError={(e) => { e.currentTarget.style.display = "none"; }}
@@ -391,10 +361,9 @@ export default function Shop() {
                     </div>
 
                     <div className={styles.body}>
-                      <div className={styles.title}>{finalTitle}</div>
+                      <div className={styles.title}>{title}</div>
                       <div className={styles.meta}>
-                        <span className={styles.price}>₹{finalPrice}</span>
-                        {isPotli && <span style={{ fontSize: '10px', color: '#6a5cff', marginLeft: '5px' }}>+ ₹150 Delivery</span>}
+                        <span className={styles.price}>₹{price}</span>
                         <span className={styles.rating}>★ {rating}</span>
                       </div>
 
