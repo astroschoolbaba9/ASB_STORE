@@ -43,8 +43,8 @@ export default function ProductDetail() {
   const { id } = useParams();
   const requireAuth = useRequireAuth();
   const navigate = useNavigate();
-  const cart = useCart();
-  const addItem = cart.addItem || cart.addToCart;
+  const { addItem: cart_addItem, addToCart, isPromoActive } = useCart();
+  const addItem = cart_addItem || addToCart;
 
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -459,6 +459,9 @@ export default function ProductDetail() {
                 </div>
               )}
               <div className={styles.badge}>{categoryLabel}</div>
+              {isPromoActive && (
+                <div className={styles.promoBadge}>25% OFF</div>
+              )}
               {isOutOfStock && (
                 <div className={styles.outOfStockOverlay}>
                   <span>OUT OF STOCK</span>
@@ -490,7 +493,14 @@ export default function ProductDetail() {
             <h1 className={styles.h1}>{productName}</h1>
 
             <div className={styles.metaRow}>
-              <div className={styles.price}>₹{productPrice}</div>
+              {isPromoActive ? (
+                <div className={styles.priceWrapper}>
+                  <div className={styles.originalPrice}>₹{productPrice}</div>
+                  <div className={styles.discountedPrice}>₹{Math.floor(productPrice * 0.75)}</div>
+                </div>
+              ) : (
+                <div className={styles.price}>₹{productPrice}</div>
+              )}
               <div className={styles.rating}>
                 <span className={styles.starsInline}><StarRow value={rating} /></span>
                 <span className={styles.ratingNum}>({Number(ratingSummary.total || 0)})</span>

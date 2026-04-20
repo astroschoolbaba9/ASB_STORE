@@ -671,3 +671,44 @@
   display: block;
   border-radius: inherit;
 }
+
+.promoBadge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  padding: 6px 12px;
+  background: linear-gradient(135deg, #ff4d4d, #f9cb28);
+  color: white;
+  font-weight: 950;
+  font-size: 14px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(255, 77, 77, 0.3);
+  z-index: 10;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); box-shadow: 0 4px 12px rgba(255, 77, 77, 0.3); }
+  50% { transform: scale(1.05); box-shadow: 0 4px 20px rgba(255, 77, 77, 0.5); }
+  100% { transform: scale(1); box-shadow: 0 4px 12px rgba(255, 77, 77, 0.3); }
+}
+
+.priceWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.originalPrice {
+  text-decoration: line-through;
+  color: var(--muted);
+  font-size: 16px;
+  font-weight: 800;
+  opacity: 0.7;
+}
+
+.discountedPrice {
+  color: #d112b3; /* ASB Magenta-ish */
+  font-weight: 950;
+  font-size: 24px;
+}

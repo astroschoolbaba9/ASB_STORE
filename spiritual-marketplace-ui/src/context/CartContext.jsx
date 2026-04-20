@@ -41,6 +41,25 @@ export function CartProvider({ children }) {
   const [cart, setCart] = useState(EMPTY_CART);
   const [loading, setLoading] = useState(false);
 
+  const [isPromoActive, setIsPromoActive] = useState(() => {
+    return localStorage.getItem("asb_promo_25_active") === "true";
+  });
+
+  // Sync with localStorage changes (e.g. from popup)
+  useEffect(() => {
+    const checkPromo = () => {
+      setIsPromoActive(localStorage.getItem("asb_promo_25_active") === "true");
+    };
+    checkPromo();
+    window.addEventListener("storage", checkPromo);
+    // Poll because storage event only fires for other tabs
+    const interval = setInterval(checkPromo, 1000); 
+    return () => {
+      window.removeEventListener("storage", checkPromo);
+      clearInterval(interval);
+    };
+  }, []);
+
   const cartIndex = useMemo(() => {
     const items = cart?.items || [];
     const byCartItemId = new Map();
@@ -68,7 +87,21 @@ export function CartProvider({ children }) {
       const nextCart = res?.cart || EMPTY_CART;
 
       // ✅ Ensure totals exist (backend now returns totals, but keep fallback)
-      const safeTotals = nextCart.totals || EMPTY_CART.totals;
+      let safeTotals = nextCart.totals || EMPTY_CART.totals;
+
+      // ✅ Apply 25% Akshaya Tritiya Discount if active
+      if (isPromoActive) {
+        const subtotal = Number(safeTotals.subtotal || 0);
+        const calculatedDiscount = Math.floor(subtotal * 0.25);
+        const shipping = Number(safeTotals.shipping || 150);
+        const giftWrap = Number(safeTotals.giftWrapTotal || 0);
+        
+        safeTotals = {
+          ...safeTotals,
+          discount: calculatedDiscount,
+          grandTotal: subtotal - calculatedDiscount + shipping + giftWrap
+        };
+      }
 
       setCart({
         ...nextCart,
@@ -110,10 +143,24 @@ export function CartProvider({ children }) {
 
       const res = await api.post("/api/cart/items", payload);
       const nextCart = res?.cart || EMPTY_CART;
+      let safeTotals = nextCart.totals || EMPTY_CART.totals;
+
+      if (isPromoActive) {
+        const subtotal = Number(safeTotals.subtotal || 0);
+        const calculatedDiscount = Math.floor(subtotal * 0.25);
+        const shipping = Number(safeTotals.shipping || 150);
+        const giftWrap = Number(safeTotals.giftWrapTotal || 0);
+        
+        safeTotals = {
+          ...safeTotals,
+          discount: calculatedDiscount,
+          grandTotal: subtotal - calculatedDiscount + shipping + giftWrap
+        };
+      }
 
       setCart({
         ...nextCart,
-        totals: { ...EMPTY_CART.totals, ...(nextCart.totals || {}) }
+        totals: { ...EMPTY_CART.totals, ...safeTotals }
       });
 
       return nextCart;
@@ -176,10 +223,24 @@ export function CartProvider({ children }) {
     try {
       const res = await api.put(`/api/cart/items/${cartItemId}`, safePatch);
       const nextCart = res?.cart || EMPTY_CART;
+      let safeTotals = nextCart.totals || EMPTY_CART.totals;
+
+      if (isPromoActive) {
+        const subtotal = Number(safeTotals.subtotal || 0);
+        const calculatedDiscount = Math.floor(subtotal * 0.25);
+        const shipping = Number(safeTotals.shipping || 150);
+        const giftWrap = Number(safeTotals.giftWrapTotal || 0);
+        
+        safeTotals = {
+          ...safeTotals,
+          discount: calculatedDiscount,
+          grandTotal: subtotal - calculatedDiscount + shipping + giftWrap
+        };
+      }
 
       setCart({
         ...nextCart,
-        totals: { ...EMPTY_CART.totals, ...(nextCart.totals || {}) }
+        totals: { ...EMPTY_CART.totals, ...safeTotals }
       });
 
       return nextCart;
@@ -203,10 +264,24 @@ export function CartProvider({ children }) {
     try {
       const res = await api.del(`/api/cart/items/${cartItemId}`);
       const nextCart = res?.cart || EMPTY_CART;
+      let safeTotals = nextCart.totals || EMPTY_CART.totals;
+
+      if (isPromoActive) {
+        const subtotal = Number(safeTotals.subtotal || 0);
+        const calculatedDiscount = Math.floor(subtotal * 0.25);
+        const shipping = Number(safeTotals.shipping || 150);
+        const giftWrap = Number(safeTotals.giftWrapTotal || 0);
+        
+        safeTotals = {
+          ...safeTotals,
+          discount: calculatedDiscount,
+          grandTotal: subtotal - calculatedDiscount + shipping + giftWrap
+        };
+      }
 
       setCart({
         ...nextCart,
-        totals: { ...EMPTY_CART.totals, ...(nextCart.totals || {}) }
+        totals: { ...EMPTY_CART.totals, ...safeTotals }
       });
 
       return nextCart;
@@ -244,6 +319,8 @@ export function CartProvider({ children }) {
     cart,
     loading,
     refreshCart,
+
+    isPromoActive,
 
     addToCart,
     addItem,

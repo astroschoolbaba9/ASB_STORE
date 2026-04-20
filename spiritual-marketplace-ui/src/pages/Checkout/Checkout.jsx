@@ -192,7 +192,8 @@ export default function Checkout() {
   const hasItems = cartRows.length > 0;
   const shipping = hasItems ? (Number(totals.shipping) || 150) : 0;
   const giftWrapTotal = Number(totals.giftWrapTotal ?? 0);
-  const total = subtotal + shipping + giftWrapTotal;
+  const discount = Number(totals.discount ?? 0);
+  const total = totals.grandTotal ?? (subtotal + shipping + giftWrapTotal - discount);
 
   const empty = cartRows.length === 0;
 
@@ -259,6 +260,7 @@ export default function Checkout() {
             landmark: (landmark || "").trim()
           },
           notes: (deliveryNotes || "").trim(),
+          promoCode: isPromoActive ? "AKSHAYA25" : "",
           discount: Number(totals.discount || 0),
           shipping: Number(shipping),
           payment: {
@@ -532,6 +534,13 @@ export default function Checkout() {
               <span className={styles.muted}>Shipping</span>
               <span className={styles.value}>{shipping === 0 ? "Free" : `₹${shipping}`}</span>
             </div>
+
+            {discount > 0 ? (
+              <div className={styles.discountRow}>
+                <span>Akshaya Tritiya Discount (25%)</span>
+                <span className={styles.discountValue}>−₹{discount}</span>
+              </div>
+            ) : null}
 
             <div className={styles.divider} />
 

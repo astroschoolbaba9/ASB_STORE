@@ -58,6 +58,7 @@ export default function Shop() {
   const navigate = useNavigate();
   const query = useQuery();
   const cart = useCart();
+  const { isPromoActive } = cart;
   const addItem = cart.addItem || cart.addToCart;
 
   const groupFromUrl = String(query.get("group") || "shop").toLowerCase();
@@ -353,6 +354,9 @@ export default function Shop() {
                         />
                       ) : null}
                       <div className={styles.badge}>{catLabel}</div>
+                      {isPromoActive && !isOutOfStock && (
+                        <div className={styles.promoBadge}>25% OFF</div>
+                      )}
                       {isOutOfStock && (
                         <div className={styles.outOfStockOverlay}>
                           <span>OUT OF STOCK</span>
@@ -363,7 +367,18 @@ export default function Shop() {
                     <div className={styles.body}>
                       <div className={styles.title}>{title}</div>
                       <div className={styles.meta}>
-                        <span className={styles.price}>₹{price}</span>
+                        {isPromoActive ? (
+                          <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                            <span className={styles.price} style={{ color: "var(--text-muted)", textDecoration: "line-through", fontSize: "0.9rem" }}>
+                              ₹{price}
+                            </span>
+                            <span className={styles.price} style={{ color: "var(--accent)", fontWeight: 800 }}>
+                              ₹{Math.floor(price * 0.75)}
+                            </span>
+                          </div>
+                        ) : (
+                          <span className={styles.price}>₹{price}</span>
+                        )}
                         <span className={styles.rating}>★ {rating}</span>
                       </div>
 

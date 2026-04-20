@@ -34,6 +34,7 @@ function PromoPopup() {
 
     // ── CTA: navigate to shop ──
     const handleGoToShop = useCallback(() => {
+        localStorage.setItem("asb_promo_25_active", "true");
         closePopup();
         navigate("/shop");
     }, [closePopup, navigate]);

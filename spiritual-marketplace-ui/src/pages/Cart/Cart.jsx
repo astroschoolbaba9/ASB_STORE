@@ -71,7 +71,8 @@ export default function Cart() {
   // Force 150 if has items and shipping is 0 or nullish
   const shipping = hasItems ? (Number(totals.shipping) || 150) : 0;
   const giftWrapTotal = Number(totals.giftWrapTotal ?? 0);
-  const total = subtotal + shipping + giftWrapTotal;
+  const discount = Number(totals.discount ?? 0);
+  const total = totals.grandTotal ?? (subtotal + shipping + giftWrapTotal - discount);
 
   const handleClearCart = async () => {
     await requireAuth(async () => {
@@ -234,6 +235,13 @@ export default function Cart() {
                 <span className={styles.muted}>Shipping</span>
                 <span className={styles.value}>{shipping === 0 ? "Free" : `₹${shipping}`}</span>
               </div>
+
+              {discount > 0 ? (
+                <div className={styles.discountRow}>
+                  <span>Akshaya Tritiya Discount (25%)</span>
+                  <span className={styles.discountValue}>−₹{discount}</span>
+                </div>
+              ) : null}
 
               <div className={styles.divider} />
 

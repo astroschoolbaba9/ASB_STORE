@@ -243,3 +243,21 @@
   font-weight: 900;
   white-space: nowrap;
 }
+
+.discountRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  color: #d112b3; /* ASB Magenta */
+  font-weight: 800;
+  background: rgba(209, 18, 179, 0.05);
+  padding: 8px 10px;
+  border-radius: 12px;
+  border: 1px dashed rgba(209, 18, 179, 0.2);
+  margin: 4px 0;
+}
+
+.discountValue {
+  font-weight: 950;
+}

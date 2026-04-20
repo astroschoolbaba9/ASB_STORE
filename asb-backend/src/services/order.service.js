@@ -84,7 +84,12 @@ async function checkoutFromCart(userId, payload) {
     });
   }
 
-  const discount = num(payload.discount, 0);
+  let discount = 0;
+  const promoCode = String(payload.promoCode || "").trim().toUpperCase();
+  if (promoCode === "AKSHAYA25") {
+    discount = Math.floor(subtotal * 0.25);
+  }
+
   // SECURITY: Ignore frontend shipping; force 150 if items exist
   const shipping = orderItems.length > 0 ? 150 : 0;
   const total = Math.max(0, subtotal - discount + shipping + giftWrapTotal);
@@ -102,6 +107,7 @@ async function checkoutFromCart(userId, payload) {
 
     subtotal,
     discount,
+    promoCode,
     shipping,
     giftWrapTotal,
     total,

@@ -106,7 +106,8 @@ statusHistory: {
       paidAt: { type: Date }
     },
 
-    notes: { type: String, default: "", maxlength: 500 }
+    notes: { type: String, default: "", maxlength: 500 },
+    promoCode: { type: String, default: "" }
   },
   { timestamps: true }
 );
