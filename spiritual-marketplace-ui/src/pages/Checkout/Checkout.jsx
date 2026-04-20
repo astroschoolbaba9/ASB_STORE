@@ -57,7 +57,7 @@ export default function Checkout() {
   const navigate = useNavigate();
   const requireAuth = useRequireAuth();
 
-  const { cart, loading, refreshCart, clearCart } = useCart();
+  const { cart, loading, refreshCart, clearCart, isPromoActive } = useCart();
 
   const [toastOpen, setToastOpen] = useState(false);
   const [placing, setPlacing] = useState(false);
