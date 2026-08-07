@@ -37,20 +37,21 @@ async function resolveCategoryIds({ group, category }) {
     if (isObjectIdLike(category)) categoryDoc = await Category.findById(category).lean();
     if (!categoryDoc) categoryDoc = await Category.findOne({ slug: String(category).toLowerCase() }).lean();
 
-    if (!categoryDoc) return { categoryIds: [], categoryDoc: null };
+    if (!categoryDoc) return { categoryIds: null, categoryDoc: null };
 
     // if group also provided, ensure category belongs to that group
     if (group && String(categoryDoc.group).toLowerCase() !== String(group).toLowerCase()) {
-      return { categoryIds: [], categoryDoc };
+      return { categoryIds: null, categoryDoc };
     }
 
     return { categoryIds: [categoryDoc._id], categoryDoc };
   }
 
   if (group) {
-    const cats = await Category.find({ group: String(group).toLowerCase(), isActive: true })
+    const cats = await Category.find({ group: String(group).toLowerCase(), isActive: { $ne: false } })
       .select("_id")
       .lean();
+    if (!cats || cats.length === 0) return { categoryIds: null, categoryDoc: null };
     return { categoryIds: cats.map((c) => c._id), categoryDoc: null };
   }
 
@@ -67,22 +68,19 @@ async function listProducts(q) {
     priceMax,
     sort,
     page = 1,
-    limit = 12,
+    limit = 50,
     featured,
     all,
   } = q || {};
 
   const filter = {};
   if (all !== true) {
-    filter.isActive = true;
+    filter.isActive = { $ne: false };
   }
 
   // ✅ group/category filtering via Category
   const { categoryIds } = await resolveCategoryIds({ group, category });
-  if (Array.isArray(categoryIds)) {
-    if (categoryIds.length === 0) {
-      return { items: [], total: 0, page, limit };
-    }
+  if (Array.isArray(categoryIds) && categoryIds.length > 0) {
     filter.categoryId = { $in: categoryIds };
   }
 
