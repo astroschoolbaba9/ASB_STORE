@@ -32,6 +32,8 @@ const userSchema = new mongoose.Schema(
 
     addresses: { type: [addressSchema], default: [] },
 
+    pushToken: { type: String, default: "" },
+
     passwordHash: { type: String, default: null },
 
     isBlocked: { type: Boolean, default: false },

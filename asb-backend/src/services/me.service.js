@@ -72,6 +72,7 @@ async function updateMe(userId, patch = {}) {
 
   if (patch.dob != null) user.dob = cleanStr(patch.dob, 20);
   if (patch.gender != null) user.gender = cleanStr(patch.gender, 20);
+  if (patch.pushToken != null) user.pushToken = cleanStr(patch.pushToken, 200);
 
   await user.save();
 

@@ -50,6 +50,11 @@ export default function Sidebar() {
         <NavLink to="/admin/contact-messages" className={linkClass}>
           Contact Messages
         </NavLink>
+
+        {/* ✅ Push Notification Broadcast Center */}
+        <NavLink to="/admin/notifications" className={linkClass}>
+          📢 Push Notifications
+        </NavLink>
       </nav>
 
       <div className={styles.footer}>

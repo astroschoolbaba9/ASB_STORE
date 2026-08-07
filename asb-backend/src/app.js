@@ -118,6 +118,7 @@ function createApp() {
   app.use("/api/cart", cartRoutes);
   app.use("/api/orders", orderRoutes);
   app.use("/api/me", require("./routes/me.routes"));
+  app.use("/api/notifications", require("./routes/notification.routes"));
 
   // Protected admin routes
   app.use("/api/admin", adminRoutes);

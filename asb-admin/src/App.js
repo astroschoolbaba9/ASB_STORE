@@ -14,6 +14,7 @@ import OrderDetail from "./pages/admin/OrderDetail";
 import Gift from "./pages/admin/Gift/Gift";
 
 import ContactMessages from "./pages/admin/ContactMessages"; // ✅ NEW
+import AdminNotifications from "./pages/admin/AdminNotifications"; // ✅ Push Broadcast Center
 
 import { ToastProvider } from "./components/ToastProvider";
 
@@ -62,6 +63,9 @@ export default function App() {
 
             {/* ✅ NEW: Contact form leads */}
             <Route path="contact-messages" element={<ContactMessages />} />
+
+            {/* ✅ Push Notification Broadcast Center */}
+            <Route path="notifications" element={<AdminNotifications />} />
           </Route>
 
           {/* fallback */}
