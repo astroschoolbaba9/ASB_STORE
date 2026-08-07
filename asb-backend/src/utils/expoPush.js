@@ -1,40 +1,49 @@
 // asb-backend/src/utils/expoPush.js
-// 100% Free Expo Push Notification HTTP Gateway
+// 100% Free Expo Push Notification Gateway (Native Node.js https - Zero Dependencies)
 
-const axios = require("axios");
+const https = require("https");
 
-async function sendExpoPushNotification({ pushToken, title, body, data }) {
+function sendExpoPushNotification({ pushToken, title, body, data }) {
   if (!pushToken || typeof pushToken !== "string" || !pushToken.startsWith("ExponentPushToken")) {
-    return false;
+    return Promise.resolve(false);
   }
-  try {
-    await axios.post(
+
+  const payload = JSON.stringify({
+    to: pushToken,
+    sound: "default",
+    title,
+    body,
+    data: data || {},
+  });
+
+  return new Promise((resolve) => {
+    const req = https.request(
       "https://exp.host/--/api/v2/push/send",
       {
-        to: pushToken,
-        sound: "default",
-        title,
-        body,
-        data: data || {},
-      },
-      {
+        method: "POST",
         headers: {
-          Accept: "application/json",
-          "Accept-encoding": "gzip, deflate",
           "Content-Type": "application/json",
+          "Content-Length": Buffer.byteLength(payload),
         },
+      },
+      (res) => {
+        resolve(res.statusCode >= 200 && res.statusCode < 300);
       }
     );
-    return true;
-  } catch (e) {
-    console.warn("[EXPO PUSH API] Failed to send push notification:", e?.message);
-    return false;
-  }
+
+    req.on("error", (err) => {
+      console.warn("[EXPO PUSH API] Push request error:", err?.message);
+      resolve(false);
+    });
+
+    req.write(payload);
+    req.end();
+  });
 }
 
-async function sendExpoPushMultiple({ pushTokens, title, body, data }) {
+function sendExpoPushMultiple({ pushTokens, title, body, data }) {
   const validTokens = (pushTokens || []).filter((t) => typeof t === "string" && t.startsWith("ExponentPushToken"));
-  if (!validTokens.length) return false;
+  if (!validTokens.length) return Promise.resolve(false);
 
   const messages = validTokens.map((to) => ({
     to,
@@ -44,19 +53,31 @@ async function sendExpoPushMultiple({ pushTokens, title, body, data }) {
     data: data || {},
   }));
 
-  try {
-    await axios.post("https://exp.host/--/api/v2/push/send", messages, {
-      headers: {
-        Accept: "application/json",
-        "Accept-encoding": "gzip, deflate",
-        "Content-Type": "application/json",
+  const payload = JSON.stringify(messages);
+
+  return new Promise((resolve) => {
+    const req = https.request(
+      "https://exp.host/--/api/v2/push/send",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Content-Length": Buffer.byteLength(payload),
+        },
       },
+      (res) => {
+        resolve(res.statusCode >= 200 && res.statusCode < 300);
+      }
+    );
+
+    req.on("error", (err) => {
+      console.warn("[EXPO PUSH API] Broadcast push error:", err?.message);
+      resolve(false);
     });
-    return true;
-  } catch (e) {
-    console.warn("[EXPO PUSH API] Failed to send broadcast push notifications:", e?.message);
-    return false;
-  }
+
+    req.write(payload);
+    req.end();
+  });
 }
 
 module.exports = { sendExpoPushNotification, sendExpoPushMultiple };
