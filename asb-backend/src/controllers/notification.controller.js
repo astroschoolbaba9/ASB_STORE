@@ -3,7 +3,8 @@ const { asynchandler } = require("../utils/asyncHandler");
 const { AppError } = require("../utils/AppError");
 const Notification = require("../models/Notification");
 const User = require("../models/User");
-const { sendExpoPushMultiple } = require("../utils/expoPush");
+const DeviceToken = require("../models/DeviceToken");
+const { sendExpoPushMultiple, isExpoPushToken } = require("../utils/expoPush");
 
 // GET /api/notifications
 const listMyNotifications = asynchandler(async (req, res) => {
@@ -67,9 +68,19 @@ const adminSendBroadcast = asynchandler(async (req, res) => {
     link: link || "",
   });
 
-  // 2. Fetch all User Push Tokens for lockscreen push notifications
-  const usersWithTokens = await User.find({ pushToken: { $exists: true, $ne: "" } }).select("pushToken").lean();
-  const pushTokens = usersWithTokens.map((u) => u.pushToken).filter(Boolean);
+  // 2. Fetch all User & Guest Device Push Tokens for lockscreen push notifications
+  const [deviceRecords, userRecords] = await Promise.all([
+    DeviceToken.find({ pushToken: { $exists: true, $ne: "" } }).select("pushToken").lean(),
+    User.find({ pushToken: { $exists: true, $ne: "" } }).select("pushToken").lean(),
+  ]);
+
+  const rawTokens = [
+    ...deviceRecords.map((d) => d.pushToken),
+    ...userRecords.map((u) => u.pushToken),
+  ];
+
+  // Deduplicate and validate Expo Push Tokens
+  const pushTokens = Array.from(new Set(rawTokens.filter(isExpoPushToken)));
 
   if (pushTokens.length > 0) {
     // 3. Trigger 100% Free Expo Push Notification for Closed Apps
@@ -94,3 +105,4 @@ module.exports = {
   markRead,
   adminSendBroadcast,
 };
+

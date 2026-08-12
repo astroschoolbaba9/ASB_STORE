@@ -53,4 +53,24 @@ function requireAdmin(req, res, next) {
   });
 }
 
-module.exports = { requireAuth, requireAdmin };
+async function optionalAuth(req, res, next) {
+  if (req.method === "OPTIONS") return next();
+  const header = req.headers.authorization || req.headers["x-auth-token"] || "";
+  const token = header.replace(/^Bearer\s+/i, "").trim();
+
+  if (token) {
+    try {
+      const payload = jwt.verify(token, env.JWT_ACCESS_SECRET);
+      if (payload?.sub) {
+        const user = await User.findById(payload.sub).select("_id role name email phone createdAt isBlocked");
+        if (user) req.user = user;
+      }
+    } catch (e) {
+      // Ignored for optional auth
+    }
+  }
+  return next();
+}
+
+module.exports = { requireAuth, requireAdmin, optionalAuth };
+

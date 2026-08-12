@@ -64,4 +64,40 @@ console.log("✅ AUTH verifyOtp CONTROLLER HIT:", req.body);
   res.json({ success: true, ...result });
 });
 
-module.exports = { register, login, me, sendOtp, verifyOtp };
+const DeviceToken = require("../models/DeviceToken");
+const User = require("../models/User");
+
+const savePushToken = asynchandler(async (req, res) => {
+  const { pushToken, platform } = req.body || {};
+
+  if (!pushToken || typeof pushToken !== "string" || (!pushToken.startsWith("ExponentPushToken") && !pushToken.startsWith("ExpoPushToken"))) {
+    throw new AppError("Valid Expo pushToken is required", 400, "VALIDATION_ERROR");
+  }
+
+  const cleanToken = pushToken.trim();
+  const userId = req.user?._id || null;
+
+  // 1. Upsert in DeviceToken collection
+  await DeviceToken.findOneAndUpdate(
+    { pushToken: cleanToken },
+    {
+      pushToken: cleanToken,
+      userId,
+      platform: platform || "unknown",
+      lastActiveAt: new Date(),
+    },
+    { upsert: true, new: true }
+  );
+
+  // 2. If user is logged in, also update User model
+  if (userId) {
+    await User.findByIdAndUpdate(userId, { pushToken: cleanToken });
+  }
+
+  console.log(`📱 [PUSH TOKEN REGISTERED] Token: ${cleanToken} | User: ${userId || 'Guest'}`);
+
+  res.json({ success: true, message: "Push token registered successfully" });
+});
+
+module.exports = { register, login, me, sendOtp, verifyOtp, savePushToken };
+

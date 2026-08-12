@@ -3,8 +3,12 @@
 
 const https = require("https");
 
+function isExpoPushToken(token) {
+  return typeof token === "string" && (token.startsWith("ExponentPushToken") || token.startsWith("ExpoPushToken"));
+}
+
 function sendExpoPushNotification({ pushToken, title, body, data }) {
-  if (!pushToken || typeof pushToken !== "string" || !pushToken.startsWith("ExponentPushToken")) {
+  if (!isExpoPushToken(pushToken)) {
     return Promise.resolve(false);
   }
 
@@ -42,7 +46,7 @@ function sendExpoPushNotification({ pushToken, title, body, data }) {
 }
 
 function sendExpoPushMultiple({ pushTokens, title, body, data }) {
-  const validTokens = (pushTokens || []).filter((t) => typeof t === "string" && t.startsWith("ExponentPushToken"));
+  const validTokens = (pushTokens || []).filter(isExpoPushToken);
   if (!validTokens.length) return Promise.resolve(false);
 
   const messages = validTokens.map((to) => ({
@@ -80,4 +84,5 @@ function sendExpoPushMultiple({ pushTokens, title, body, data }) {
   });
 }
 
-module.exports = { sendExpoPushNotification, sendExpoPushMultiple };
+module.exports = { sendExpoPushNotification, sendExpoPushMultiple, isExpoPushToken };
+
