@@ -15,6 +15,8 @@ function sendExpoPushNotification({ pushToken, title, body, data }) {
   const payload = JSON.stringify({
     to: pushToken,
     sound: "default",
+    priority: "high",
+    channelId: "default",
     title,
     body,
     data: data || {},
@@ -52,6 +54,8 @@ function sendExpoPushMultiple({ pushTokens, title, body, data }) {
   const messages = validTokens.map((to) => ({
     to,
     sound: "default",
+    priority: "high",
+    channelId: "default",
     title,
     body,
     data: data || {},
